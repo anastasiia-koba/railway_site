@@ -1,4 +1,6 @@
-package accounts;
+package system.accounts;
+
+import system.entity.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;

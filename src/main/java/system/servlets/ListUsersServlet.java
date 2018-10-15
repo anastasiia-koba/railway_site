@@ -1,4 +1,4 @@
-package servlets;
+package system.servlets;
 
 public class ListUsersServlet {
 }

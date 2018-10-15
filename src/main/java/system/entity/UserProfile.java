@@ -1,10 +1,14 @@
-package accounts;
+package system.entity;
 
 public class UserProfile {
-    private final String login;
-    private final String pass;
+    private String login;
+    private String pass;
 
-    public UserProfile(String login, String pass, String email) {
+    public UserProfile(){
+
+    }
+
+    public UserProfile(String login, String pass) {
         this.login = login;
         this.pass = pass;
     }
@@ -22,4 +26,11 @@ public class UserProfile {
         return pass;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
 }
