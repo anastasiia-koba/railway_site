@@ -1,21 +1,15 @@
 package system.service;
 
-import system.dao.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import system.entity.UserProfile;
 
 /**
- *
+ * Service class for {@link system.entity.UserProfile}
  */
-@Service
-public class UserService {
 
-    @Autowired
-    private UserDao userDao;
+public interface UserService {
 
-    public List getAllUsers(){ //add validation
-        return userDao.getAllUsers();
-    }
+    void save(UserProfile user);
+
+    UserProfile findByUserName(String username);
+
 }
