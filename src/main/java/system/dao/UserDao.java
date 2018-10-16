@@ -1,21 +1,9 @@
 package system.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.User;
 import system.entity.UserProfile;
-import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
-import java.util.List;
-
-/**
- *
- */
-@Repository
-public class UserDao {
-
-    private List<UserProfile> users = Arrays.asList(new UserProfile("user1", "user1"),
-            new UserProfile("user2", "user2"));
-
-    public List<UserProfile> getAllUsers(){
-        return users;
-    }
+public interface UserDao extends JpaRepository<UserProfile, Long> {
+    UserProfile findByUserName(String username);
 }
