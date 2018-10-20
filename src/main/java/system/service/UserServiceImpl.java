@@ -1,6 +1,6 @@
 package system.service;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import system.dao.RoleDao;
 import system.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +19,26 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private RoleDao roleDao;
-
-    @Autowired
     private UserDao userDao;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private RoleDao roleDao;
+
+
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void save(UserProfile user){
-        user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(roleDao.getOne(1L));
         user.setRoles(roles);
     }
 
     @Override
-    public UserProfile findByUserName(String username){
-        return userDao.findByUserName(username);
+    public UserProfile findByUsername(String username){
+        return userDao.findByUsername(username);
     }
 
 

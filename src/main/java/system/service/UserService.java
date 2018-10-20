@@ -10,6 +10,6 @@ public interface UserService {
 
     void save(UserProfile user);
 
-    UserProfile findByUserName(String username);
+    UserProfile findByUsername(String username);
 
 }

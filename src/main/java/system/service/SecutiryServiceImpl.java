@@ -8,11 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link SecurityService} interface.
  */
 
+@Service
 public class SecutiryServiceImpl  implements SecurityService{
 
     private static final Logger logger = LoggerFactory.getLogger(SecutiryServiceImpl.class);

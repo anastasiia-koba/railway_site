@@ -1,11 +1,10 @@
 package system.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.Set;
 
 /**
- * Simple JavaBean domain object that represents a User
+ * Simple JavaBean domain object that represents a User.
  */
 
 @Entity
@@ -17,10 +16,10 @@ public class UserProfile {
     private Long id;
 
     @Column(name = "username")
-    private String login;
+    private String username;
 
     @Column(name = "password")
-    private String pass;
+    private String password;
 
     //private Date birthDate;
 
@@ -44,30 +43,30 @@ public class UserProfile {
         this.id = id;
     }
 
-    public UserProfile(String login, String pass) {
-        this.login = login;
-        this.pass = pass;
+    public UserProfile(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
-    public UserProfile(String login) {
-        this.login = login;
-        this.pass = login;
+    public UserProfile(String username) {
+        this.username = username;
+        this.password = username;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String pass) {
+        this.password = pass;
     }
 
     public Set<Role> getRoles() {

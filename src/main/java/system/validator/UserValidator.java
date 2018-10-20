@@ -13,7 +13,7 @@ import system.service.UserService;
  * implements {@link Validator} interface.
  */
 
-@Component
+@Component("userValidator")
 public class UserValidator implements Validator {
 
     @Autowired
@@ -29,20 +29,20 @@ public class UserValidator implements Validator {
         UserProfile user = (UserProfile) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
-        if (user.getLogin().length() < 8 || user.getLogin().length() > 32){
+        if (user.getUsername().length() < 8 || user.getUsername().length() > 32){
             errors.rejectValue("login", "Size.userForm.username");
         }
 
-        if (userService.findByUserName(user.getLogin()) != null) {
+        if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("login", "Duplicate.userForm.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
-        if (user.getPass().length() < 8 || user.getPass().length() > 32){
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 32){
             errors.rejectValue("pass", "Size.userForm.password");
         }
 
-        if (!user.getConfirmPassword().equals(user.getPass())){
+        if (!user.getConfirmPassword().equals(user.getPassword())){
             errors.rejectValue("confirmPassword", "Different.userForm.password");
         }
     }

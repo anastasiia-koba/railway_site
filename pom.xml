@@ -6,15 +6,22 @@
 
     <groupId>org.javaschool</groupId>
     <artifactId>railway-site</artifactId>
+    <packaging>war</packaging>
     <version>1.0</version>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -23,12 +30,16 @@
     <properties>
         <maven.compile.source>1.8</maven.compile.source>
         <maven.compile.target>1.8</maven.compile.target>
-        <spring-security.version>4.0.2.RELEASE</spring-security.version>
-        <spring-data-jpa.version>1.8.2.RELEASE</spring-data-jpa.version>
-        <spring-framework-version>5.0.0.RELEASE</spring-framework-version>
-        <mysql.mysql-connector-java.version>5.1.36</mysql.mysql-connector-java.version>
-        <org.hibernate.hibernate-core.version>4.3.11.Final</org.hibernate.hibernate-core.version>
-        <hibernate-validator.version>5.2.1.Final</hibernate-validator.version>
+        <spring-security.version>5.1.0.RELEASE</spring-security.version>
+        <spring-data-jpa.version>2.1.0.RELEASE</spring-data-jpa.version>
+        <spring-framework-version>5.1.1.RELEASE</spring-framework-version>
+        <mysql.mysql-connector-java.version>8.0.11</mysql.mysql-connector-java.version>
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <org.hibernate.hibernate-core.version>5.2.17.Final</org.hibernate.hibernate-core.version>
+        <hibernate-validator.version>6.0.11.Final</hibernate-validator.version>
+        <jstl.version>1.2</jstl.version>
+        <javax.servlet.version>4.0.0</javax.servlet.version>
+        <logback.version>1.1.3</logback.version>
     </properties>
 
     <dependencies>
@@ -62,20 +73,17 @@
             <version>${spring-security.version}</version>
         </dependency>
 
-        <!-- Servlet API 4.0 for tomcat 9 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.0</version>
-            <scope>provided</scope>
+            <version>${javax.servlet.version}</version>
         </dependency>
 
-        <!-- JavaServer Pages API 2.3 for tomcat 9 -->
+
         <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.1</version>
-            <scope>provided</scope>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
         </dependency>
 
         <dependency>
@@ -90,16 +98,61 @@
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
-        <dependency>
+       <!-- <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${org.hibernate.hibernate-core.version}</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${org.hibernate.hibernate-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <!-- Java 6 = JAX-B Version 2.0   -->
+        <!-- Java 7 = JAX-B Version 2.2.3 -->
+        <!-- Java 8 = JAX-B Version 2.2.8 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
     </dependencies>
