@@ -8,8 +8,8 @@ import system.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import system.service.SecurityService;
-import system.service.UserService;
+import system.service.api.SecurityService;
+import system.service.api.UserService;
 import system.validator.UserValidator;
 
 
@@ -65,10 +65,6 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public String welcome(Model model){
-        return "home";
-    }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String admin(Model model){
