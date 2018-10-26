@@ -20,7 +20,13 @@ public class Station {
     private String stationName;
 
 
-    //private Set<Rout> routs;
+    @OneToMany(mappedBy = "departure_id",
+               cascade = CascadeType.ALL)
+    private Set<RoutSection> routsFrom;
+
+    @OneToMany(mappedBy = "destination_id",
+            cascade = CascadeType.ALL)
+    private Set<RoutSection> routsTo;
 
     public Station() {
     }
@@ -43,5 +49,21 @@ public class Station {
 
     public Station(String stationName) {
         this.stationName = stationName;
+    }
+
+    public Set<RoutSection> getRoutsFrom() {
+        return routsFrom;
+    }
+
+    public void setRoutsFrom(Set<RoutSection> routsFrom) {
+        this.routsFrom = routsFrom;
+    }
+
+    public Set<RoutSection> getRoutsTo() {
+        return routsTo;
+    }
+
+    public void setRoutsTo(Set<RoutSection> routsTo) {
+        this.routsTo = routsTo;
     }
 }
