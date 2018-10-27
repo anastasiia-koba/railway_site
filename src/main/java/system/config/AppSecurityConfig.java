@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * Security-config.xml analogue.
  */
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled=true)
@@ -73,5 +72,4 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 }

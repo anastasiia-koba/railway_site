@@ -16,7 +16,6 @@ import system.validator.UserValidator;
 /**
  * Controller for {@link system.entity.UserProfile}'s pages.
  */
-
 @Controller
 public class UserController {
     @Autowired
@@ -29,14 +28,14 @@ public class UserController {
     private UserValidator userValidator;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Model model){
+    public String register(Model model){
         model.addAttribute("userForm", new UserProfile());
 
         return "registration";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") UserProfile userForm,
+    public String register(@ModelAttribute("userForm") UserProfile userForm,
                                BindingResult bindingResult, Model model){
 
         userValidator.validate(userForm, bindingResult);
@@ -64,11 +63,4 @@ public class UserController {
 
         return "login";
     }
-
-
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String admin(Model model){
-        return "admin";
-    }
-
 }

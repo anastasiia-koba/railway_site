@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import system.entity.UserProfile;
-import system.service.UserService;
+import system.service.api.UserService;
 
 /**
  * Validator for {@link system.entity.UserProfile} class;
@@ -29,17 +29,17 @@ public class UserValidator implements Validator {
         UserProfile user = (UserProfile) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
-        if (user.getUsername().length() < 8 || user.getUsername().length() > 32){
-            errors.rejectValue("login", "Size.userForm.username");
+        if (user.getUsername().length() < 5 || user.getUsername().length() > 32){
+            errors.rejectValue("username", "Size.userForm.username");
         }
 
         if (userService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("login", "Duplicate.userForm.username");
+            errors.rejectValue("username", "Duplicate.userForm.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32){
-            errors.rejectValue("pass", "Size.userForm.password");
+            errors.rejectValue("password", "Size.userForm.password");
         }
 
         if (!user.getConfirmPassword().equals(user.getPassword())){

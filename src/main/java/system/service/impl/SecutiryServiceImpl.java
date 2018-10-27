@@ -1,4 +1,4 @@
-package system.service;
+package system.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import system.service.api.SecurityService;
 
 /**
  * Implementation of {@link SecurityService} interface.
  */
-
 @Service
 public class SecutiryServiceImpl  implements SecurityService{
 
@@ -46,7 +46,7 @@ public class SecutiryServiceImpl  implements SecurityService{
         if (authenticationToken.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            logger.debug(String .format("Successfully %s auto logged in", username));
+            logger.debug("Successfully {} auto logged in", username);
         }
     }
 }

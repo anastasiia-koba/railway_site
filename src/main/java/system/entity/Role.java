@@ -6,7 +6,6 @@ import java.util.Set;
 /**
  * Simple JavaBean object that represents role of (@link UserProfile)
  */
-
 @Entity
 @Table(name = "roles")
 public class Role {

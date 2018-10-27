@@ -1,4 +1,4 @@
-package system.service;
+package system.service.impl;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import system.dao.RoleDao;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.entity.Role;
 import system.entity.UserProfile;
+import system.service.api.UserService;
 
 import java.util.HashSet;
 import java.util.Set;

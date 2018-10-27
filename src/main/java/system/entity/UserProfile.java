@@ -6,7 +6,6 @@ import java.util.Set;
 /**
  * Simple JavaBean domain object that represents a User.
  */
-
 @Entity
 @Table(name = "users")
 public class UserProfile {
