@@ -5,7 +5,6 @@ import javax.persistence.*;
 /**
  * Simple JavaBean domain object that represents a TrainDao.
  */
-
 @Entity
 @Table(name = "trains")
 public class Train {

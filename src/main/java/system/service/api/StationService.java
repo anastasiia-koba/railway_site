@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Service class for {@link system.entity.Station}
  */
-
 public interface StationService {
 
     void save(Station station);

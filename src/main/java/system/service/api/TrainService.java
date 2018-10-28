@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Service class for {@link system.entity.Train}
  */
-
 public interface TrainService {
     void save(Train train);
 

@@ -2,7 +2,7 @@ package system.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import system.dao.StationDao;
+import system.dao.api.StationDao;
 import system.entity.Station;
 import system.service.api.StationService;
 
@@ -17,10 +17,8 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
-
     @Override
     public void save(Station station) {
-
     }
 
     @Override

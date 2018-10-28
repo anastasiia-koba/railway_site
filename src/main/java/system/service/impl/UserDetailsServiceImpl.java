@@ -3,12 +3,13 @@ package system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import system.dao.UserDao;
+import system.dao.api.UserDao;
 import system.entity.Role;
 import system.entity.UserProfile;
 
@@ -34,6 +35,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             grantedAuthoritySet.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        return  new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthoritySet);
+        return  new User(user.getUsername(), user.getPassword(), grantedAuthoritySet);
     }
 }
