@@ -10,7 +10,7 @@ import java.util.List;
 public interface TrainService {
     void save(Train train);
 
-    Train findByTrainName(String trainName);
+    Train findByName(String trainName);
 
     List<Train> findAll();
 }

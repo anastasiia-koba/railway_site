@@ -24,8 +24,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public Train findByTrainName(String trainName) {
-        return trainDao.findByTrainName(trainName);
+    public Train findByName(String trainName) {
+        return trainDao.findByName(trainName);
     }
 
     @Override

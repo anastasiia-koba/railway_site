@@ -11,7 +11,7 @@ public interface StationService {
 
     void save(Station station);
 
-    Station findByStationName(String stationName);
+    Station findByName(String stationName);
 
     List<Station> findAll();
 }

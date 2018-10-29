@@ -1,9 +1,8 @@
-package system.service;
+package system.service.api;
 
 /**
  * Service for Security
  */
-
 public interface SecurityService {
 
     String findLoggedInUsername();
