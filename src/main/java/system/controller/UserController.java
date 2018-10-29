@@ -10,7 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import system.service.api.SecurityService;
 import system.service.api.UserService;
-import system.validator.UserValidator;
+
+import javax.validation.Valid;
 
 
 /**
@@ -24,9 +25,6 @@ public class UserController {
     @Autowired
     private SecurityService securityService;
 
-    @Autowired
-    private UserValidator userValidator;
-
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String register(Model model){
         model.addAttribute("userForm", new UserProfile());
@@ -35,11 +33,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String register(@ModelAttribute("userForm") UserProfile userForm,
+    public String register(@Valid @ModelAttribute("userForm") UserProfile userForm,
                                BindingResult bindingResult, Model model){
-
-        userValidator.validate(userForm, bindingResult);
-
+        if (userService.findByUsername(userForm.getUsername()) != null) {
+            bindingResult.rejectValue("username", "username.duplicate","Such username already exists.");
+        }
         if (bindingResult.hasErrors()){
             return "registration";
         }

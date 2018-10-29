@@ -1,6 +1,7 @@
 package system.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Set;
 
 /**
@@ -14,16 +15,24 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull(message = "This field is required.")
+    @Size(min=5, max=30, message = "Username must be between 5 and 32 characters.")
     @Column(name = "username")
     private String username;
 
+    @NotNull(message = "This field is required.")
+    @Min(value = 8, message = "Password must be over 8 characters.")
     @Column(name = "password")
     private String password;
 
     //private Date birthDate;
 
+    @NotNull(message = "This field is required.")
     @Transient
     private String confirmPassword;
+
+    @Transient
+    private boolean validPasswords = isValidPasswords();
 
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -82,5 +91,13 @@ public class UserProfile {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    @AssertTrue(message = "Password don't match.")
+    public boolean isValidPasswords() {
+        if (password != null &&  confirmPassword != null  && password.equals(confirmPassword) ) {
+            return true;
+        }
+        return false;
     }
 }
