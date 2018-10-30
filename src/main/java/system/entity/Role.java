@@ -8,10 +8,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "roles")
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Role extends BaseEntity {
 
     @Column(name = "name")
     private String name;
@@ -20,14 +17,6 @@ public class Role {
     private Set<UserProfile> users;
 
     public Role() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -49,8 +38,7 @@ public class Role {
     @Override
     public String toString() {
         return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", users=" + users +
                 '}';
     }

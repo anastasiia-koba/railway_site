@@ -9,33 +9,28 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "stations")
-public class Station {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Station extends BaseEntity {
 
     @Column(name = "stationname")
     private String stationName;
 
-
-    @OneToMany(mappedBy = "departure_id",
+    @OneToMany(mappedBy = "departure",
                cascade = CascadeType.ALL)
-    private Set<RoutSection> routsFrom;
+    private Set<RoutSection> sectionsFrom;
 
-    @OneToMany(mappedBy = "destination_id",
+    @OneToMany(mappedBy = "destination",
             cascade = CascadeType.ALL)
-    private Set<RoutSection> routsTo;
+    private Set<RoutSection> sectionsTo;
+
+    @OneToMany(mappedBy = "startStation",
+            cascade = CascadeType.ALL)
+    private Set<Rout> routsFrom;
+
+    @OneToMany(mappedBy = "endStation",
+            cascade = CascadeType.ALL)
+    private Set<Rout> routsTo;
 
     public Station() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStationName() {
@@ -50,19 +45,35 @@ public class Station {
         this.stationName = stationName;
     }
 
-    public Set<RoutSection> getRoutsFrom() {
+    public Set<RoutSection> getSectionsFrom() {
+        return sectionsFrom;
+    }
+
+    public void setSectionsFrom(Set<RoutSection> routsFrom) {
+        this.sectionsFrom = routsFrom;
+    }
+
+    public Set<RoutSection> getSectionsTo() {
+        return sectionsTo;
+    }
+
+    public void setSectionsTo(Set<RoutSection> routsTo) {
+        this.sectionsTo = routsTo;
+    }
+
+    public Set<Rout> getRoutsFrom() {
         return routsFrom;
     }
 
-    public void setRoutsFrom(Set<RoutSection> routsFrom) {
+    public void setRoutsFrom(Set<Rout> routsFrom) {
         this.routsFrom = routsFrom;
     }
 
-    public Set<RoutSection> getRoutsTo() {
+    public Set<Rout> getRoutsTo() {
         return routsTo;
     }
 
-    public void setRoutsTo(Set<RoutSection> routsTo) {
+    public void setRoutsTo(Set<Rout> routsTo) {
         this.routsTo = routsTo;
     }
 }

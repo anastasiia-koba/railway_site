@@ -9,11 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-public class UserProfile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class UserProfile extends BaseEntity {
 
     @NotNull(message = "This field is required.")
     @Size(min=5, max=30, message = "Username must be between 5 and 32 characters.")
@@ -21,7 +17,7 @@ public class UserProfile {
     private String username;
 
     @NotNull(message = "This field is required.")
-    @Min(value = 8, message = "Password must be over 8 characters.")
+    @Size(min = 8, message = "Password must be over 8 characters.")
     @Column(name = "password")
     private String password;
 
@@ -43,12 +39,7 @@ public class UserProfile {
 
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public UserProfile(String username, String password) {

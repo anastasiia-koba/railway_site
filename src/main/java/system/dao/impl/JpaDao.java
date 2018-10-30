@@ -1,12 +1,14 @@
 package system.dao.impl;
 
-import org.hibernate.HibernateException;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import system.dao.api.Dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.ParameterizedType;
 
+@Repository
 public abstract class JpaDao<K, E> implements Dao<K, E> {
     protected Class<E> entityClass;
 
@@ -18,6 +20,7 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[1];
     }
 
+    @Transactional
     @Override
     public void create(E entity) { entityManager.persist(entity); }
 

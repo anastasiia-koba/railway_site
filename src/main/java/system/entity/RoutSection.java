@@ -1,68 +1,88 @@
 package system.entity;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Set;
 
 /**
- * Simple JavaBean domain object that represents a minimum RoutSection.
+ * Simple JavaBean domain object that represents a minimum RoutSectionDao.
  */
-
 @Entity
 @Table(name = "rout_section")
-public class RoutSection {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class RoutSection extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "departure_id", referencedColumnName = "id", nullable = false)
-    private Station departure_id;
+    private Station departure;
 
     @ManyToOne
     @JoinColumn(name = "destination_id", referencedColumnName = "id", nullable = false)
-    private Station destination_id;
+    private Station destination;
 
 
     @Column(name = "distance")
-    private Long distance;
+    private Integer distance;
 
-    @ManyToMany
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "departure_time")
+    private Time departureTime;
+
+    @Column(name = "arrival_time")
+    private Time arrivalTime;
+
+    @ManyToMany(mappedBy = "routSections")
     private Set<Rout> routs;
 
     public RoutSection() {
     }
 
-    public Long getId() {
-        return id;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
-
-    public Station getDeparture_id() {
-        return departure_id;
+    public Time getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDeparture_id(Station departure_id) {
-        this.departure_id = departure_id;
+    public void setDepartureTime(Time departureTime) {
+        this.departureTime = departureTime;
     }
 
-    public Station getDestination_id() {
-        return destination_id;
+    public Time getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setDestination_id(Station destination_id) {
-        this.destination_id = destination_id;
+    public void setArrivalTime(Time arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-    public Long getDistance() {
+    public Station getDeparture() {
+        return departure;
+    }
+
+    public void setDeparture(Station departure_id) {
+        this.departure = departure_id;
+    }
+
+    public Station getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Station destination_id) {
+        this.destination = destination_id;
+    }
+
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(Long distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 

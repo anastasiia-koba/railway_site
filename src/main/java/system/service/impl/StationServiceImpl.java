@@ -22,8 +22,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public Station findByStationName(String stationName) {
-        return stationDao.findByStationName(stationName);
+    public Station findByName(String stationName) {
+        return stationDao.findByName(stationName);
     }
 
     @Override

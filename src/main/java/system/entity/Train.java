@@ -7,10 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "trains")
-public class Train {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Train extends BaseEntity {
 
     @Column(name = "trainname")
     private String trainName;
@@ -19,14 +16,6 @@ public class Train {
     private Integer placesNumber;
 
     public Train() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTrainName() {
