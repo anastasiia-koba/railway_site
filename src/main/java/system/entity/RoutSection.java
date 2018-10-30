@@ -19,7 +19,6 @@ public class RoutSection extends BaseEntity {
     @JoinColumn(name = "destination_id", referencedColumnName = "id", nullable = false)
     private Station destination;
 
-
     @Column(name = "distance")
     private Integer distance;
 
