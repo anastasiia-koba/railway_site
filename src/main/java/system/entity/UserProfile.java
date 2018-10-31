@@ -1,5 +1,10 @@
 package system.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Set;
@@ -7,6 +12,10 @@ import java.util.Set;
 /**
  * Simple JavaBean domain object that represents a User.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserProfile extends BaseEntity {
@@ -35,54 +44,9 @@ public class UserProfile extends BaseEntity {
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public UserProfile(){
 
     }
 
-
-    }
-
-    public UserProfile(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public UserProfile(String username) {
-        this.username = username;
-        this.password = username;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setUsername(String login) {
-        this.username = login;
-    }
-
-    public void setPassword(String pass) {
-        this.password = pass;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
 
     @AssertTrue(message = "Password don't match.")
     public boolean isValidPasswords() {

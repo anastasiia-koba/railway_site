@@ -1,11 +1,18 @@
 package system.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 /**
  * Simple JavaBean object that represents role of (@link UserProfile)
  */
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {
@@ -15,31 +22,4 @@ public class Role extends BaseEntity {
 
     @ManyToMany(mappedBy = "roles")
     private Set<UserProfile> users;
-
-    public Role() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<UserProfile> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserProfile> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "name='" + name + '\'' +
-                ", users=" + users +
-                '}';
-    }
 }
