@@ -6,49 +6,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
     <link href="${contextPath}/resources/css/login.css" rel="stylesheet">
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <title>Create an account</title>
 </head>
 <body>
-    <div class="container">
-        <form:form method="POST" modelAttribute="userForm" class="form-signin">
-            <h2 class="form-signin-heading">Create your account</h2>
-            <spring:bind path="username">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="username" class="form-control" placeholder="Username"
-                                autofocus="true"></form:input>
+<div class="container">
+    <form:form method="POST" modelAttribute="userForm" class="form-horizontal" role="form">
+        <h2>Create your account</h2>
+        <spring:bind path="username">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="username" class="col-sm-3 control-label">Login</label>
+                <div class="col-sm-9">
+                    <form:input type="text" id="username" placeholder="Username" class="form-control" autofocus="true"
+                                path="username"></form:input>
                     <form:errors path="username"></form:errors>
                 </div>
-            </spring:bind>
-
-            <spring:bind path="password">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
+            </div>
+        </spring:bind>
+        <spring:bind path="firstname">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                <div class="col-sm-9">
+                    <form:input type="text" id="firstname" placeholder="First name" class="form-control"
+                                autofocus="true"
+                                path="firstname"></form:input>
+                    <form:errors path="firstname"></form:errors>
+                </div>
+            </div>
+        </spring:bind>
+        <spring:bind path="surname">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="surname" class="col-sm-3 control-label">Last Name</label>
+                <div class="col-sm-9">
+                    <form:input type="text" id="surname" placeholder="Last name" class="form-control" autofocus="true"
+                                path="surname"></form:input>
+                    <form:errors path="surname"></form:errors>
+                </div>
+            </div>
+        </spring:bind>
+        <spring:bind path="password">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="password" class="col-sm-3 control-label">Password</label>
+                <div class="col-sm-9">
+                    <form:input type="password" path="password" class="form-control"
+                                placeholder="Password"></form:input>
                     <form:errors path="password"></form:errors>
                 </div>
-            </spring:bind>
-
-            <spring:bind path="confirmPassword">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
+            </div>
+        </spring:bind>
+        <spring:bind path="confirmPassword">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="password" class="col-sm-3 control-label">Confirm Password</label>
+                <div class="col-sm-9">
                     <form:input type="password" path="confirmPassword" class="form-control"
                                 placeholder="Confirm your password"></form:input>
                     <form:errors path="validPasswords"></form:errors>
                 </div>
-            </spring:bind>
+            </div>
+        </spring:bind>
+        <spring:bind path="birthDate">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
+                <div class="col-sm-9">
+                    <form:input type="date" path="birthDate" class="form-control"></form:input>
+                    <form:errors path="birthDate"></form:errors>
+                </div>
+            </div>
+        </spring:bind>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-        </form:form>
-    </div>
-    <!-- /container -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form:form> <!-- /form -->
+</div> <!-- ./container -->
 </body>
 </html>
