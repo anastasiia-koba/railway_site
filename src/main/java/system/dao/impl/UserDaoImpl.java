@@ -5,6 +5,7 @@ import system.dao.api.UserDao;
 import system.entity.UserProfile;
 
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  *Implementation of {@link UserDao} interface.
@@ -16,7 +17,11 @@ public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
         Query q = entityManager.createQuery("SELECT u FROM UserProfile u WHERE u.username = :username");
         q.setParameter("username", username);
 
-        UserProfile user = (UserProfile) q.getSingleResult();
-        return user;
+        List results = q.getResultList();
+        if (results.isEmpty()) {
+            return null; // handle no-results case
+        } else {
+            return (UserProfile) results.get(0);
+        }
     }
 }

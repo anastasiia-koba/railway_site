@@ -35,10 +35,11 @@ public class UserController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String register(@Valid @ModelAttribute("userForm") UserProfile userForm,
                                BindingResult bindingResult, Model model){
-        if (userService.findByUsername(userForm.getUsername()) != null) {
-            bindingResult.rejectValue("username", "username.duplicate","Such username already exists.");
-        }
+
         if (bindingResult.hasErrors()){
+            return "registration";
+        } else if (userService.findByUsername(userForm.getUsername()) != null) {
+            bindingResult.rejectValue("username", "username.duplicate","Such username already exists.");
             return "registration";
         }
 
@@ -46,7 +47,7 @@ public class UserController {
 
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
-        return "redirect:/welcome";
+        return "redirect:/home";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
