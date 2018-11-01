@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.sql.Date;
 import java.util.Set;
 
 /**
@@ -30,7 +31,17 @@ public class UserProfile extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    //private Date birthDate;
+    @NotNull(message = "This field is required.")
+    @Column(name = "surname")
+    private String surname;
+
+    @NotNull(message = "This field is required.")
+    @Column(name = "firstname")
+    private String firstname;
+
+    @NotNull(message = "This field is required.")
+    @Column(name = "birthdate")
+    private Date birthDate;
 
     @NotNull(message = "This field is required.")
     @Transient
@@ -43,10 +54,6 @@ public class UserProfile extends BaseEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-
-
-    }
-
 
     @AssertTrue(message = "Password don't match.")
     public boolean isValidPasswords() {
