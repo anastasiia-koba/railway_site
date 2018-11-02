@@ -30,7 +30,15 @@
                     <li><a href="#">News</a></li>
                     <li><a href="#">Contact</a></li>
                     <li>
-                        <a class="btn btn-default btn-outline btn-circle" href="${contextPath}/login">Sign in</a>
+                        <c:if test="${pageContext.request.userPrincipal.name != null}">
+                            <form id="logoutForm" method="POST" action="${contextPath}/logout">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            </form>
+                            <a class="btn btn-default btn-outline btn-circle" onclick="document.forms['logoutForm'].submit()">Logout</a>
+                        </c:if>
+                        <c:if test="${pageContext.request.userPrincipal.name == null}">
+                            <a class="btn btn-default btn-outline btn-circle" href="${contextPath}/login">Sign in</a>
+                        </c:if>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
