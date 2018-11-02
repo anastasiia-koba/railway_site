@@ -24,8 +24,17 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
     @Override
     public void create(E entity) { entityManager.persist(entity); }
 
+    @Transactional
     @Override
-    public void remove(E entity) { entityManager.remove(entity); }
+    public void remove(E entity) {
+        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+    }
+
+    @Transactional
+    @Override
+    public void update(E entity) {
+        entityManager.merge(entity);
+    }
 
     @Override
     public E findById(K id) { return entityManager.find(entityClass, id); }
