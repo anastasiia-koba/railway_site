@@ -18,12 +18,28 @@ public class StationServiceImpl implements StationService {
     private StationDao stationDao;
 
     @Override
+    public void create(Station station) {
+        stationDao.create(station);
+    }
+
+    @Override
     public void save(Station station) {
+        stationDao.update(station);
+    }
+
+    @Override
+    public void delete(Station station) {
+        stationDao.remove(station);
     }
 
     @Override
     public Station findByName(String stationName) {
         return stationDao.findByName(stationName);
+    }
+
+    @Override
+    public Station findById(Long id) {
+        return stationDao.findById(id);
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -18,6 +19,7 @@ import java.util.Set;
 @Table(name = "stations")
 public class Station extends BaseEntity {
 
+    @NotNull
     @Column(name = "stationname")
     private String stationName;
 
