@@ -9,8 +9,7 @@
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <link href="${contextPath}/../../resources/css/barPanel.css" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <title>Admin</title>
 </head>
@@ -20,17 +19,21 @@
 <div class="container">
     <div class="col-sm-2">
         <nav class="nav-sidebar">
-            <ul class="nav tabs">
-                <li class="active"><a href="#station-tab" data-toggle="tab">Station</a></li>
-                <li class=""><a href="#train" data-toggle="tab">Trains</a></li>
-                <li class=""><a href="#rout" data-toggle="tab">Routs</a></li>
+            <ul id="myTab" class="nav tabs">
+                <li class="${selectedTab == 'station-tab' ? 'active' : ''}"><a data-target="#station-tab"
+                                                                               data-toggle="tab">Station</a>
+                </li>
+                <li class="${selectedTab == 'train-tab' ? 'active' : ''}"><a data-target="#train-tab"
+                                                                             data-toggle="tab">Trains</a></li>
+                <li class="${selectedTab == 'rout-tab' ? 'active' : '' }"><a data-target="#rout-tab" data-toggle="tab">Routs</a>
+                </li>
             </ul>
         </nav>
     </div>
     <!-- tab content -->
-    <div class="tab-content">
+    <div class="tab-content" id="containerContainingTabs">
         <%--STATIONS--%>
-        <div class="tab-pane active text-style" id="station-tab">
+        <div class="tab-pane ${selectedTab == 'station-tab' ? 'active' : ''} text-style" id="station-tab">
             <form:form method="POST" modelAttribute="stationForm" action="${contextPath}/admin/stations">
                 <spring:bind path="stationName">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -46,7 +49,7 @@
             <div class="container station-table">
                 <div class="list">
                     <h3>Stations</h3>
-                    <table class="table" id="myTable">
+                    <table class="table" id="myTableStations">
                         <thead>
                         <tr>
                             <th>Station name</th>
@@ -59,8 +62,6 @@
                                 <form method="POST" action="${contextPath}/admin/stations">
 
                                     <td value="${station.stationName.toString()}">${station.stationName.toString()}</td>
-                                        <%--<input type="text" name="stationName" id="stationName" value="${station.stationName.toString()}">--%>
-
                                     <td>
                                         <input type="hidden" name="id" value="${station.id}">
                                         <input type="submit" name="change" value="Change">
@@ -73,15 +74,60 @@
                     </table>
                 </div>
             </div>
-
         </div>
 
         <%--TRAINS--%>
-        <div class="tab-pane text-style" id="train">
-            <h2>Trains tab</h2>
-        </div>
-        <div class="tab-pane text-style" id="rout">
+        <div class="tab-pane ${selectedTab == 'train-tab' ? 'active' : ''} text-style" id="train-tab">
+            <form:form method="POST" modelAttribute="trainForm" action="${contextPath}/admin/trains">
+                <spring:bind path="trainName">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="id" type="hidden"></form:input>
+                        <form:input type="text" id="trainName" placeholder="New Train" class="form-control"
+                                    path="trainName"></form:input>
+                        <form:errors path="trainName"></form:errors>
 
+                        <form:input type="text" id="placesNumber" placeholder="Count" class="form-control"
+                                    path="placesNumber"></form:input>
+                        <form:errors path="placesNumber"></form:errors>
+                    </div>
+                </spring:bind>
+                <button type="submit" name="save">Save</button>
+            </form:form>
+
+            <div class="container train-table">
+                <div class="list">
+                    <h3>Trains</h3>
+                    <table class="table" id="myTableTrains">
+                        <thead>
+                        <tr>
+                            <th>Train name</th>
+                            <th>Places</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${trains}" var="train">
+                            <tr>
+                                <form method="POST" action="${contextPath}/admin/trains">
+
+                                    <td value="${train.trainName.toString()}">${train.trainName.toString()}</td>
+                                    <td value="${train.placesNumber.toString()}">${train.placesNumber.toString()}</td>
+                                    <td>
+                                        <input type="hidden" name="id" value="${train.id}">
+                                        <input type="submit" name="change" value="Change">
+                                        <input type="submit" name="delete" value="Delete">
+                                    </td>
+                                </form>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <%--ROUTS--%>
+        <div class="tab-pane ${selectedTab == 'rout-tab' ? 'active' : '' } text-style" id="rout-tab">
             <form name="change_rout" method="POST" action="${contextPath}/admin" class="container-fluid bg-light ">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-2 pt-3">

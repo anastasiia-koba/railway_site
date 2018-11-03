@@ -18,9 +18,24 @@ public class TrainServiceImpl implements TrainService {
     @Autowired
     private TrainDao trainDao;
 
+    @Override
+    public void create(Train train) {
+        trainDao.create(train);
+    }
 
     @Override
     public void save(Train train) {
+        trainDao.update(train);
+    }
+
+    @Override
+    public void delete(Train train) {
+        trainDao.remove(train);
+    }
+
+    @Override
+    public Train findById(Long id) {
+        return trainDao.findById(id);
     }
 
     @Override
