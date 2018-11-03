@@ -21,29 +21,30 @@ import java.util.Set;
 @Table(name = "users")
 public class UserProfile extends BaseEntity {
 
-    @NotNull(message = "This field is required.")
+    @NotBlank(message = "This field is required.")
     @Size(min=5, max=30, message = "Username must be between 5 and 32 characters.")
     @Column(name = "username")
     private String username;
 
-    @NotNull(message = "This field is required.")
+    @NotBlank(message = "This field is required.")
     @Size(min = 8, message = "Password must be over 8 characters.")
     @Column(name = "password")
     private String password;
 
-    @NotNull(message = "This field is required.")
+    @NotBlank(message = "This field is required.")
     @Column(name = "surname")
     private String surname;
 
-    @NotNull(message = "This field is required.")
+    @NotBlank(message = "This field is required.")
     @Column(name = "firstname")
     private String firstname;
 
     @NotNull(message = "This field is required.")
+    @Past
     @Column(name = "birthdate")
     private Date birthDate;
 
-    @NotNull(message = "This field is required.")
+    @NotBlank(message = "This field is required.")
     @Transient
     private String confirmPassword;
 

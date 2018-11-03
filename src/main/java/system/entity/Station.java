@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 /**
@@ -19,7 +19,7 @@ import java.util.Set;
 @Table(name = "stations")
 public class Station extends BaseEntity {
 
-    @NotNull
+    @NotBlank(message = "This field is required.")
     @Column(name = "stationname")
     private String stationName;
 
