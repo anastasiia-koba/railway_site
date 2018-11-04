@@ -27,14 +27,29 @@
             <div class="collapse navbar-collapse" id="navbar-collapse-2">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">News</a></li>
+                    <li><a href="#">Timetable</a></li>
                     <li><a href="#">Contact</a></li>
+
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                        <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown">Admin <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="${contextPath}/admin">Editing</a></li>
+                                    <li><a href="#">Users in Train</a></li>
+                                    <li><a href="${contextPath}/admin/trains">Show all trains</a></li>
+                                </ul>
+                            </li>
+                        </c:if>
+                    </c:if>
+
                     <li>
                         <c:if test="${pageContext.request.userPrincipal.name != null}">
                             <form id="logoutForm" method="POST" action="${contextPath}/logout">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </form>
-                            <a class="btn btn-default btn-outline btn-circle" onclick="document.forms['logoutForm'].submit()">Logout</a>
+                            <a class="btn btn-default btn-outline btn-circle"
+                               onclick="document.forms['logoutForm'].submit()">Logout</a>
                         </c:if>
                         <c:if test="${pageContext.request.userPrincipal.name == null}">
                             <a class="btn btn-default btn-outline btn-circle" href="${contextPath}/login">Sign in</a>
