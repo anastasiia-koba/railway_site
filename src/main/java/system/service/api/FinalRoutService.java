@@ -1,7 +1,10 @@
 package system.service.api;
 
 import system.entity.FinalRout;
+import system.entity.Rout;
+import system.entity.Train;
 
+import java.sql.Date;
 import java.util.Set;
 
 /**
@@ -13,4 +16,6 @@ public interface FinalRoutService {
     void delete(FinalRout finalRout);
     FinalRout findById(Long id);
     Set<FinalRout> findAll();
+    Set<FinalRout> findByDate(Date date);
+    FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date);
 }

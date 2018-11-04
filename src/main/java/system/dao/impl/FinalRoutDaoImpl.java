@@ -3,6 +3,9 @@ package system.dao.impl;
 import org.springframework.stereotype.Repository;
 import system.dao.api.FinalRoutDao;
 import system.entity.FinalRout;
+import system.entity.Rout;
+import system.entity.Station;
+import system.entity.Train;
 
 import javax.persistence.Query;
 import java.sql.Date;
@@ -16,7 +19,7 @@ import java.util.Set;
 public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRoutDao {
     @Override
     public Set<FinalRout> findByDate(Date date) {
-        Query q = entityManager.createQuery("Select r FROM FinalRout r WHERE r.date=:date");
+        Query q = entityManager.createQuery("SELECT r FROM FinalRout r WHERE r.date = :date");
         q.setParameter("date", date);
 
         Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
@@ -25,9 +28,20 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
 
     @Override
     public Set<FinalRout> findAll() {
-        Query q = entityManager.createQuery("Select r FROM FinalRout r");
+        Query q = entityManager.createQuery("SELECT r FROM FinalRout r");
 
         Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
         return finalRouts;
+    }
+
+    @Override
+    public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) {
+        Query q = entityManager.createQuery("SELECT r FROM FinalRout r WHERE r.rout = :rout " +
+                "AND r.train = :train AND r.date = :date");
+        q.setParameter("rout", rout);
+        q.setParameter("train", train);
+        q.setParameter("date", date);
+
+        return (FinalRout) q.getSingleResult();
     }
 }
