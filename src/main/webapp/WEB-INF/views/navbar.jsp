@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbar-collapse-2">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">Timetable</a></li>
+                    <li><a href="${contextPath}/schedule">Schedule</a></li>
                     <li><a href="#">Contact</a></li>
 
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
@@ -36,8 +36,8 @@
                                 <a href="#" data-toggle="dropdown">Admin <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="${contextPath}/admin">Editing</a></li>
-                                    <li><a href="#">Users in Train</a></li>
-                                    <li><a href="${contextPath}/admin/trains">Show all trains</a></li>
+                                    <li><a href="${contextPath}/admin/passengers">Passengers</a></li>
+                                    <li><a href="${contextPath}/admin/trains">Trains</a></li>
                                 </ul>
                             </li>
                         </c:if>

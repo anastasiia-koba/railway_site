@@ -35,6 +35,25 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
     }
 
     @Override
+    public Set<FinalRout> findByStationAndDate(Station station, Date date) {
+        try {
+            Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
+                    "JOIN fr.rout.routSections rs WHERE " +
+                    "(rs.destination = :station OR rs.departure = :station) AND " +
+                    "fr.date = :date");
+            q.setParameter("station", station);
+            q.setParameter("date", date);
+
+            Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
+            return finalRouts;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
     public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) {
         Query q = entityManager.createQuery("SELECT r FROM FinalRout r WHERE r.rout = :rout " +
                 "AND r.train = :train AND r.date = :date");
