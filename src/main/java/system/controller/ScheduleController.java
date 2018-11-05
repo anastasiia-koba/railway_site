@@ -19,8 +19,6 @@ import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * Controller {@link FinalRout} for {@link system.entity.Station} pages.
@@ -32,9 +30,6 @@ public class ScheduleController {
     private StationService stationService;
 
     @Autowired
-    private TrainService trainService;
-
-    @Autowired
     private RoutService routService;
 
     @Autowired
@@ -44,6 +39,9 @@ public class ScheduleController {
     public String getSchedule(Model model){
         model.addAttribute("stations", stationService.findAll());
         model.addAttribute("station", new Station());
+
+        model.addAttribute("arrivals", null);
+        model.addAttribute("departures", null);
 
         return "schedule";
     }
@@ -58,6 +56,17 @@ public class ScheduleController {
 
         Set<FinalRout> finalRoutSet = finalRoutService.findByStationAndDate(station, date);
         model.addAttribute("trains", finalRoutSet);
+
+        Map<Long, Time> mapDeparture = new HashMap<>(); // Long - finalRout.id
+        Map<Long, Time> mapArrival = new HashMap<>(); // Long - finalRout.id
+
+        for (FinalRout finalRout: finalRoutSet) {
+            mapDeparture.put(finalRout.getId(), routService.getRoutSectionByDepartureStationAndRout(finalRout.getRout(), station).getDepartureTime());
+            mapArrival.put(finalRout.getId(), routService.getRoutSectionByDestinationStationAndRout(finalRout.getRout(), station).getArrivalTime());
+        }
+
+        model.addAttribute("arrivals", mapArrival);
+        model.addAttribute("departures", mapDeparture);
 
         return "schedule";
     }

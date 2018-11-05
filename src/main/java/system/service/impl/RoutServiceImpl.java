@@ -22,7 +22,28 @@ public class RoutServiceImpl implements RoutService {
     private RoutDao routDao;
 
     @Override
+    public void create(Rout rout) {
+        routDao.create(rout);
+    }
+
+    @Override
     public void save(Rout rout) {
+        routDao.update(rout);
+    }
+
+    @Override
+    public void delete(Rout rout) {
+        routDao.remove(rout);
+    }
+
+    @Override
+    public Rout findById(Long id) {
+        return routDao.findById(id);
+    }
+
+    @Override
+    public List<Rout> findAll() {
+        return routDao.findAll();
     }
 
     @Override
@@ -35,5 +56,15 @@ public class RoutServiceImpl implements RoutService {
         Set<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
         //TODO sort of routSection
         return routSections;
+    }
+
+    @Override
+    public RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation) {
+        return routDao.getRoutSectionByRoutAndDepartureStation(rout, departureStation);
+    }
+
+    @Override
+    public RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation) {
+        return routDao.getRoutSectionByRoutAndDestinationStation(rout, destinationStation);
     }
 }

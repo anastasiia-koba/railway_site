@@ -63,8 +63,8 @@
                     <td>${train.train.trainName.toString()}</td>
                     <td>${train.rout.startStation.stationName.toString()}</td>
                     <td>${train.rout.endStation.stationName.toString()}</td>
-                    <td></td>
-                    <td></td>
+                    <td>${arrivals[train.id]}</td>
+                    <td>${departures[train.id]}</td>
                 </tr>
             </c:forEach>
             </tbody>
