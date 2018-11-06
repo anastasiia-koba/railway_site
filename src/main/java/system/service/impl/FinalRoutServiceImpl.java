@@ -57,6 +57,11 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
+    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) {
+        return finalRoutDao.findByStationToStationOnDate(start, end, date);
+    }
+
+    @Override
     public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) {
         return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
     }

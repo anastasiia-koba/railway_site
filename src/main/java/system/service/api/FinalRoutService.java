@@ -19,5 +19,6 @@ public interface FinalRoutService {
     Set<FinalRout> findAll();
     Set<FinalRout> findByDate(Date date);
     Set<FinalRout> findByStationAndDate(Station station, Date date);
+    Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date);
     FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date);
 }

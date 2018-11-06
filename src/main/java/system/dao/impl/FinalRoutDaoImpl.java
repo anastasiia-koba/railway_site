@@ -36,21 +36,29 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
 
     @Override
     public Set<FinalRout> findByStationAndDate(Station station, Date date) {
-        try {
-            Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
-                    "JOIN fr.rout.routSections rs WHERE " +
-                    "(rs.destination = :station OR rs.departure = :station) AND " +
-                    "fr.date = :date");
-            q.setParameter("station", station);
-            q.setParameter("date", date);
+        Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
+                "JOIN fr.rout.routSections rs WHERE " +
+                "(rs.destination = :station OR rs.departure = :station) AND " +
+                "fr.date = :date");
+        q.setParameter("station", station);
+        q.setParameter("date", date);
 
-            Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
-            return finalRouts;
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
+        return finalRouts;
+    }
 
-        return null;
+    @Override
+    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) {
+        Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
+                "JOIN fr.rout.routSections rs WHERE " +
+                "rs.departure = :start AND rs.destination = :end AND " +
+                "fr.date = :date");
+        q.setParameter("start", start);
+        q.setParameter("end", end);
+        q.setParameter("date", date);
+
+        Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
+        return finalRouts;
     }
 
     @Override

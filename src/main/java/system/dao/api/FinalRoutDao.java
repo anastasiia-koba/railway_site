@@ -12,5 +12,6 @@ public interface FinalRoutDao extends Dao<Long, FinalRout> {
     Set<FinalRout> findByDate(Date date);
     Set<FinalRout> findAll();
     Set<FinalRout> findByStationAndDate(Station station, Date date);
+    Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date);
     FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date);
 }

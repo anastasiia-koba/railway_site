@@ -27,66 +27,79 @@
 
 <div class="container-fluid bg-light ">
     <div class="row align-items-center justify-content-center">
-        <div class="col-md-2 pt-3">
-            <div class="form-group ">
-                <label>From where? </label>
-                <select id="comboboxFrom" placeholder="From where?">
-                    <option></option>
-                    <c:forEach items="${stationFrom}" var="station">
-                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                    </c:forEach>
-                </select>
+        <form method="POST" action="${contextPath}">
+            <div class="col-md-2 pt-3">
+                <div class="form-group" ${status.error ? 'has-error' : ''}>
+                    <label>From where? </label>
+                    <select id="comboboxFrom" name="stationsFrom" placeholder="From where?">
+                        <option></option>
+                        <c:forEach items="${stationFrom}" var="station">
+                            <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                        </c:forEach>
+                    </select>
+                    <span>${error}</span>
+                </div>
             </div>
-        </div>
-        <div class="col-md-2 pt-3">
-            <div class="form-group">
-                <label>To where? </label>
-                <select id="comboboxTo" placeholder="To where?">
-                    <option></option>
-                    <c:forEach items="${stationTo}" var="station">
-                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                    </c:forEach>
-                </select>
+            <div class="col-md-2 pt-3">
+                <div class="form-group" ${status.error ? 'has-error' : ''}>
+                    <label>To where? </label>
+                    <select id="comboboxTo" name="stationsTo" placeholder="To where?">
+                        <option></option>
+                        <c:forEach items="${stationTo}" var="station">
+                            <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                        </c:forEach>
+                    </select>
+                    <span>${error}</span>
+                </div>
             </div>
-        </div>
-        <div class="col-md-2 pt-3">
-            <div class="form-group">
-                <label>Date: </label>
-                <input type="date" name="calendar" class="form-control" value="2018-10-25"
-                       max="2020-06-04" min="2018-10-25">
+            <div class="col-md-2 pt-3">
+                <div class="form-group">
+                    <label>Date: </label>
+                    <input type="date" name="date" class="form-control" value="<%=new java.util.Date()%>"
+                           max="2020-06-04" min="2018-10-25">
+                </div>
             </div>
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-primary btn-block">Search</button>
-        </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <div class="container search-table">
     <div class="search-list">
-        <h3>"number" Records Found</h3>
-        <table class="table" id="myTable">
+        <h3>${routs.size()} Routs Found</h3>
+        <table class="table" id="myTableRouts">
             <thead>
             <tr>
                 <th>Train number</th>
+                <th>From</th>
+                <th>To</th>
                 <th>Time of departure</th>
                 <th>Time of arrival</th>
                 <th>Travel time</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>10:30</td>
-                <td>15:30</td>
-                <td>5:30</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>10:30</td>
-                <td>15:30</td>
-                <td>5:30</td>
-            </tr>
+            <c:forEach items="${routs}" var="rout">
+                <tr>
+                    <td>${rout.train.trainName.toString()}</td>
+                    <td>${rout.rout.startStation.stationName.toString()}</td>
+                    <td>${rout.rout.endStation.stationName.toString()}</td>
+                    <td>${departures[rout.id]}</td>
+                    <td>${arrivals[rout.id]}</td>
+                    <td>${times[rout.id]}</td>
+                    <td>
+                        <form method="POST" action="${contextPath}/buy">
+                            <input type="hidden" name="routId" value="${rout.id}">
+                            <input type="hidden" name="stationFrom" value="">
+                            <input type="hidden" name="stationTo" value="">
+                            <input type="submit" name="buy" value="Buy">
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>
