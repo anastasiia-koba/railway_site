@@ -11,6 +11,7 @@ import system.entity.Station;
 import system.service.api.FinalRoutService;
 import system.service.api.RoutService;
 import system.service.api.StationService;
+import system.service.api.TicketService;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -30,6 +31,9 @@ public class MainController {
     @Autowired
     private RoutService routService;
 
+    @Autowired
+    private TicketService ticketService;
+
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public String welcome(Model model){
         model.addAttribute("stationsFrom", stationService.findAll());
@@ -40,15 +44,28 @@ public class MainController {
         model.addAttribute("arrivals", null);
         model.addAttribute("departures", null);
 
+        model.addAttribute("stationFrom", new Station());
+        model.addAttribute("stationTo", new Station());
+
         return "home";
     }
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.POST)
-    public String getSearchResult(@RequestParam("stationFrom") Station stationFrom,
-                                  @RequestParam("stationTo") Station stationTo,
+    public String getSearchResult(@RequestParam("stationsFrom") Station stationFrom,
+                                  @RequestParam("stationsTo") Station stationTo,
                                   @RequestParam("date") Date date, Model model){
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
+
+        model.addAttribute("routs", null);
+
+        model.addAttribute("arrivals", null);
+        model.addAttribute("departures", null);
+
+        model.addAttribute("stationFrom", new Station());
+        model.addAttribute("stationTo", new Station());
+
+        //TODO check input
 
         stationFrom = stationService.findByName(stationFrom.getStationName());
         stationTo = stationService.findByName(stationTo.getStationName());
@@ -70,6 +87,30 @@ public class MainController {
         model.addAttribute("departures", mapDeparture);
         model.addAttribute("times", mapTimeInTravel);
 
+        model.addAttribute("stationFrom", stationFrom);
+        model.addAttribute("stationTo", stationTo);
+
         return "home";
+    }
+
+    @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST)
+    public String getBuyTicketPage(@RequestParam("stationFrom") Long stationFromId,
+                                   @RequestParam("stationTo") Long stationToId,
+                                   @RequestParam("routId") Long routId, Model model) {
+
+        if (false) {//TODO checking free place
+            return "home";
+        }
+
+        Station stationFrom = stationService.findById(stationFromId);
+        Station stationTo = stationService.findById(stationToId);
+
+        FinalRout finalRout = finalRoutService.findById(routId);
+
+        model.addAttribute("rout", finalRout);
+        model.addAttribute("stationFrom", stationFrom);
+        model.addAttribute("stationTo", stationTo);
+
+        return "ticket";
     }
 }
