@@ -1,5 +1,6 @@
 package system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  *Implementation of {@link system.service.api.FinalRoutService} interface.
  */
+@Slf4j
 @Service
 public class FinalRoutServiceImpl implements FinalRoutService {
 
@@ -26,8 +28,12 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     public void create(FinalRout finalRout) {
         try {
             finalRoutDao.create(finalRout);
+            log.debug("Created Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Create Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         }
     }
 
@@ -35,8 +41,12 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     public void save(FinalRout finalRout) {
         try {
             finalRoutDao.update(finalRout);
+            log.debug("Updated Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Update Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         }
     }
 
@@ -44,8 +54,12 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     public void delete(FinalRout finalRout) {
         try {
             finalRoutDao.remove(finalRout);
+            log.debug("Deleted Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Delete Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         }
     }
 
@@ -55,6 +69,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Final Rout by Id {} failed ", id);
         }
         return null;
     }
@@ -65,6 +80,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find All Final Routs failed ");
         }
         return null;
     }
@@ -75,6 +91,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByDate(date);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Final Rout by Date {} failed ", date);
         }
         return null;
     }
@@ -85,6 +102,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByStationAndDate(station, date);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Final Rout by Station {} and Date {} failed ", station.getStationName(), date);
         }
         return null;
     }
@@ -95,6 +113,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByStationToStationOnDate(start, end, date);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Final Rout by Start Station {} and End Station {} and Date {} failed ", start.getStationName(),
+                    end.getStationName(), date);
         }
         return null;
     }
@@ -105,6 +125,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Final Rout by Rout id {} and Train {} and Date {} failed ", rout.getId(),
+                    train.getTrainName(), date);
         }
         return null;
     }

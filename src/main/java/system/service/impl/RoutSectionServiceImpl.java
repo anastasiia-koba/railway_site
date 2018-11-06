@@ -1,6 +1,7 @@
 package system.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Implementation of {@link system.service.api.RoutSectionService} interface.
  */
+@Slf4j
 @Service
 public class RoutSectionServiceImpl implements RoutSectionService {
 
@@ -24,17 +26,25 @@ public class RoutSectionServiceImpl implements RoutSectionService {
     public void create(RoutSection routSection) {
         try {
             routSectionDao.create(routSection);
+            log.debug("Created Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Create Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         }
     }
 
     @Override
     public void save(RoutSection routSection){
         try {
-        routSectionDao.update(routSection);
+            routSectionDao.update(routSection);
+            log.debug("Updated Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Update Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         }
     }
 
@@ -42,8 +52,12 @@ public class RoutSectionServiceImpl implements RoutSectionService {
     public void delete(RoutSection routSection) {
         try {
             routSectionDao.remove(routSection);
+            log.debug("Seleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Delete Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                    routSection.getDestination().getStationName());
         }
     }
 
@@ -53,6 +67,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Id {} failed ", id);
         }
 
         return null;
@@ -64,6 +79,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDeparture(departure);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Departure {} failed ", departure.getStationName());
         }
 
         return null;
@@ -75,6 +91,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDestination(destination);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Destination {} failed ", destination.getStationName());
         }
 
         return null;
@@ -86,6 +103,8 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDepartureAndDestination(departure, destination);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Departure {} and Destination {} failed ", departure.getStationName(),
+                    destination.getStationName());
         }
 
         return null;

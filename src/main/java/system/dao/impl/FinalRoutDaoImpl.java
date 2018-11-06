@@ -1,5 +1,6 @@
 package system.dao.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.FinalRoutDao;
@@ -17,6 +18,7 @@ import java.util.Set;
 /**
  * Implementation of {@link system.entity.FinalRout} interface.
  */
+@Slf4j
 @Repository
 public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRoutDao {
     @Override
@@ -103,6 +105,7 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             List results = q.getResultList();
 
             if (results.isEmpty()) {
+                log.debug("Train {} on date {} is not founded", train.getTrainName(), date);
                 return null; // handle no-results case
             } else {
                 return (FinalRout) results.get(0);

@@ -1,5 +1,6 @@
 package system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,10 +19,9 @@ import java.util.Set;
 /**
  *Implementation of {@link UserService} interface.
  */
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserDao userDao;
@@ -49,11 +49,12 @@ public class UserServiceImpl implements UserService {
         try
         {
             userDao.create(user);
+            log.debug("Created User {} ", user.getUsername());
         }
         catch (DaoException e)
         {
-            logger.debug("Create user {} failed ", user.getUsername());
             e.printStackTrace();
+            log.debug("Create User {} failed ", user.getUsername());
         }
     }
 
@@ -61,8 +62,10 @@ public class UserServiceImpl implements UserService {
     public void delete(UserProfile user) {
         try {
             userDao.remove(user);
+            log.debug("Deleted User {} ", user.getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Delete User {} failed ", user.getUsername());
         }
     }
 
@@ -72,6 +75,7 @@ public class UserServiceImpl implements UserService {
             return userDao.findByUsername(username);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find User by Name {} failed ", username);
         }
         return null;
     }
@@ -82,6 +86,7 @@ public class UserServiceImpl implements UserService {
             return userDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find User by Id {} failed ", id);
         }
         return null;
     }

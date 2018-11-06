@@ -1,5 +1,6 @@
 package system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * Implementation of {@link system.service.api.TicketService} interface.
  */
+@Slf4j
 @Service
 public class TicketServiceImpl implements TicketService {
 
@@ -24,8 +26,10 @@ public class TicketServiceImpl implements TicketService {
     public void create(Ticket ticket) {
         try {
             ticketDao.create(ticket);
+            log.debug("Created Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Create Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -33,8 +37,10 @@ public class TicketServiceImpl implements TicketService {
     public void save(Ticket ticket) {
         try {
             ticketDao.update(ticket);
+            log.debug("Updated Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Update Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -42,8 +48,10 @@ public class TicketServiceImpl implements TicketService {
     public void delete(Ticket ticket) {
         try {
             ticketDao.remove(ticket);
+            log.debug("Delete Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Delete Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -53,6 +61,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Ticket by Id {} failed ", id);
         }
         return null;
     }
@@ -63,6 +72,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findByUser(user);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Ticket by User {} failed ", user.getUsername());
         }
         return null;
     }
@@ -73,6 +83,8 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findByFinalRout(finalRout);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName());
         }
         return null;
     }

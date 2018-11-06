@@ -1,5 +1,6 @@
 package system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +21,7 @@ import java.util.Set;
 /**
  * Implementation of {@link org.springframework.security.core.userdetails.UserDetailsService}
  */
+@Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -35,6 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user = userDao.findByUsername(username);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Load user {} failed ", user.getUsername());
         }
 
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();

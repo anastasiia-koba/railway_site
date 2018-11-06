@@ -1,5 +1,6 @@
 package system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,9 @@ import system.service.api.SecurityService;
 /**
  * Implementation of {@link SecurityService} interface.
  */
+@Slf4j
 @Service
 public class SecutiryServiceImpl  implements SecurityService{
-
-    private static final Logger logger = LoggerFactory.getLogger(SecutiryServiceImpl.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -46,7 +46,7 @@ public class SecutiryServiceImpl  implements SecurityService{
         if (authenticationToken.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            logger.debug("Successfully {} auto logged in", username);
+            log.debug("Successfully {} auto logged in", username);
         }
     }
 }

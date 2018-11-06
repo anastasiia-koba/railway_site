@@ -1,5 +1,6 @@
 package system.dao.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.UserDao;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  *Implementation of {@link UserDao} interface.
  */
+@Slf4j
 @Repository
 public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
     @Override
@@ -21,6 +23,7 @@ public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
 
             List results = q.getResultList();
             if (results.isEmpty()) {
+                log.debug("User {} is not founded", username);
                 return null; // handle no-results case
             } else {
                 return (UserProfile) results.get(0);

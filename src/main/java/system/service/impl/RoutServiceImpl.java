@@ -1,6 +1,7 @@
 package system.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * Implementation of {@link RoutService} interface.
  */
+@Slf4j
 @Service
 public class RoutServiceImpl implements RoutService {
 
@@ -26,8 +28,12 @@ public class RoutServiceImpl implements RoutService {
     public void create(Rout rout) {
         try {
             routDao.create(rout);
+            log.debug("Created Rout from {} to {} ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Create Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         }
     }
 
@@ -35,8 +41,12 @@ public class RoutServiceImpl implements RoutService {
     public void save(Rout rout) {
         try {
             routDao.update(rout);
+            log.debug("Updated Rout from {} to {} ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Update Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         }
     }
 
@@ -44,8 +54,12 @@ public class RoutServiceImpl implements RoutService {
     public void delete(Rout rout) {
         try {
             routDao.remove(rout);
+            log.debug("Deleted Rout from {} to {} ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Delete Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         }
     }
 
@@ -55,6 +69,7 @@ public class RoutServiceImpl implements RoutService {
             return routDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout by Id {} failed ", id);
         }
         return null;
     }
@@ -65,6 +80,7 @@ public class RoutServiceImpl implements RoutService {
             return routDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find All Routs failed ");
         }
         return null;
     }
@@ -75,6 +91,8 @@ public class RoutServiceImpl implements RoutService {
             return routDao.findByStartStationAndEndStation(start, end);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout by Departure {} and Destination {} failed ", start.getStationName(),
+                    end.getStationName());
         }
         return null;
     }
@@ -87,6 +105,8 @@ public class RoutServiceImpl implements RoutService {
             return routSections;
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
         }
         return null;
     }
@@ -97,6 +117,7 @@ public class RoutServiceImpl implements RoutService {
             return routDao.getRoutSectionByRoutAndDepartureStation(rout, departureStation);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Rout id {} And Departure {} failed ", rout.getId(), departureStation.getStationName());
         }
         return null;
     }
@@ -107,6 +128,7 @@ public class RoutServiceImpl implements RoutService {
             return routDao.getRoutSectionByRoutAndDestinationStation(rout, destinationStation);
         } catch (DaoException e) {
             e.printStackTrace();
+            log.debug("Find Rout Section by Rout id {} And Destination {} failed ", rout.getId(), destinationStation.getStationName());
         }
         return null;
     }
