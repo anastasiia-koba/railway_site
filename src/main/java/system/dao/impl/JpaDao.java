@@ -2,10 +2,10 @@ package system.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import system.DaoException;
 import system.dao.api.Dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import java.lang.reflect.ParameterizedType;
 
 @Repository
@@ -22,20 +22,59 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
 
     @Transactional
     @Override
-    public void create(E entity) { entityManager.persist(entity); }
-
-    @Transactional
-    @Override
-    public void remove(E entity) {
-        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+    public void create(E entity) throws DaoException {
+        try {
+            entityManager.persist(entity);
+        } catch(EntityExistsException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+        } catch(TransactionRequiredException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+        }
     }
 
     @Transactional
     @Override
-    public void update(E entity) {
-        entityManager.merge(entity);
+    public void remove(E entity) throws DaoException {
+        try {
+            entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
+        } catch (TransactionRequiredException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void update(E entity) throws DaoException {
+        try {
+            entityManager.merge(entity);
+        } catch (TransactionRequiredException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+        }
     }
 
     @Override
-    public E findById(K id) { return entityManager.find(entityClass, id); }
+    public E findById(K id) throws DaoException {
+        try {
+            E obj = entityManager.find(entityClass, id);
+            return obj;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, e.getMessage());
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package system.dao.impl;
 
 import org.springframework.stereotype.Repository;
+import system.DaoException;
 import system.dao.api.RoutDao;
 import system.entity.Rout;
 import system.entity.RoutSection;
@@ -18,51 +19,87 @@ import java.util.Set;
 @Repository
 public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
     @Override
-    public List<Rout> findAll() {
-        Query q = entityManager.createQuery("SELECT r FROM Rout r");
+    public List<Rout> findAll() throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT r FROM Rout r");
 
-        return q.getResultList();
+            return q.getResultList();
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find All Routs Failed: " + e.getMessage());
+        }
     }
 
     @Override
-    public List<Rout> findByStartStationAndEndStation(Station start, Station end) {
-        Query q = entityManager.createQuery("SELECT r FROM Rout r WHERE r.startStation = :station1 " +
-                "AND r.endStation = :station2");
-        q.setParameter("station1", start);
-        q.setParameter("station2", end);
+    public List<Rout> findByStartStationAndEndStation(Station start, Station end) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT r FROM Rout r WHERE r.startStation = :station1 " +
+                    "AND r.endStation = :station2");
+            q.setParameter("station1", start);
+            q.setParameter("station2", end);
 
-        List<Rout> rout = (List<Rout>) q.getResultList();
-        return rout;
+            List<Rout> rout = (List<Rout>) q.getResultList();
+            return rout;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        }
     }
 
     @Override
-    public Set<RoutSection> getRoutSectionInRout(Rout rout) {
-        Query q = entityManager.createQuery("Select rs FROM RoutSection rs " +
+    public Set<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("Select rs FROM RoutSection rs " +
                     "inner join fetch rs.routs r WHERE r = :rout");
 
-        q.setParameter("rout", rout);
+            q.setParameter("rout", rout);
 
-        Set<RoutSection> routSections = new HashSet<RoutSection>(q.getResultList());
-        return routSections;
+            Set<RoutSection> routSections = new HashSet<RoutSection>(q.getResultList());
+            return routSections;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout Failed: " + e.getMessage());
+        }
     }
 
     @Override
-    public RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation) {
-        Query q = entityManager.createQuery("SELECT rs FROM RoutSection rs " +
-                "inner join fetch rs.routs r WHERE r = :rout AND rs.departure = :departure");
-        q.setParameter("rout", rout);
-        q.setParameter("departure", departureStation);
+    public RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT rs FROM RoutSection rs " +
+                    "inner join fetch rs.routs r WHERE r = :rout AND rs.departure = :departure");
+            q.setParameter("rout", rout);
+            q.setParameter("departure", departureStation);
 
-        return (RoutSection) q.getSingleResult();
+            return (RoutSection) q.getSingleResult();
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Departure Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Departure Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Departure Failed: " + e.getMessage());
+        }
     }
 
     @Override
-    public RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation) {
-        Query q = entityManager.createQuery("SELECT rs FROM RoutSection rs " +
-                "inner join fetch rs.routs r WHERE r = :rout AND rs.destination = :destination");
-        q.setParameter("rout", rout);
-        q.setParameter("destination", destinationStation);
+    public RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT rs FROM RoutSection rs " +
+                    "inner join fetch rs.routs r WHERE r = :rout AND rs.destination = :destination");
+            q.setParameter("rout", rout);
+            q.setParameter("destination", destinationStation);
 
-        return (RoutSection) q.getSingleResult();
+            return (RoutSection) q.getSingleResult();
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Destination Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Destination Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Destination Failed: " + e.getMessage());
+        }
     }
 }

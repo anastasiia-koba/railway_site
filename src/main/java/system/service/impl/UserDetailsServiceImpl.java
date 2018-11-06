@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import system.DaoException;
 import system.dao.api.UserDao;
 import system.entity.Role;
 import system.entity.UserProfile;
@@ -28,7 +29,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        UserProfile user = userDao.findByUsername(username);
+        UserProfile user = new UserProfile();
+
+        try {
+            user = userDao.findByUsername(username);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
 
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
         for (Role role: user.getRoles()){

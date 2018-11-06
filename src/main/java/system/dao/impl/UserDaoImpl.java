@@ -1,6 +1,7 @@
 package system.dao.impl;
 
 import org.springframework.stereotype.Repository;
+import system.DaoException;
 import system.dao.api.UserDao;
 import system.entity.UserProfile;
 
@@ -13,15 +14,23 @@ import java.util.List;
 @Repository
 public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
     @Override
-    public UserProfile findByUsername(String username) {
-        Query q = entityManager.createQuery("SELECT u FROM UserProfile u WHERE u.username = :username");
-        q.setParameter("username", username);
+    public UserProfile findByUsername(String username) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT u FROM UserProfile u WHERE u.username = :username");
+            q.setParameter("username", username);
 
-        List results = q.getResultList();
-        if (results.isEmpty()) {
-            return null; // handle no-results case
-        } else {
-            return (UserProfile) results.get(0);
+            List results = q.getResultList();
+            if (results.isEmpty()) {
+                return null; // handle no-results case
+            } else {
+                return (UserProfile) results.get(0);
+            }
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
         }
     }
 }

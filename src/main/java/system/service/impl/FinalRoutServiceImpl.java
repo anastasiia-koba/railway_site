@@ -2,6 +2,7 @@ package system.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import system.DaoException;
 import system.dao.api.FinalRoutDao;
 import system.entity.FinalRout;
 import system.entity.Rout;
@@ -23,46 +24,88 @@ public class FinalRoutServiceImpl implements FinalRoutService {
 
     @Override
     public void create(FinalRout finalRout) {
-        finalRoutDao.create(finalRout);
+        try {
+            finalRoutDao.create(finalRout);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void save(FinalRout finalRout) {
-        finalRoutDao.update(finalRout);
+        try {
+            finalRoutDao.update(finalRout);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(FinalRout finalRout) {
-        finalRoutDao.remove(finalRout);
+        try {
+            finalRoutDao.remove(finalRout);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public FinalRout findById(Long id) {
-        return finalRoutDao.findById(id);
+        try {
+            return finalRoutDao.findById(id);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Set<FinalRout> findAll() {
-        return finalRoutDao.findAll();
+        try {
+            return finalRoutDao.findAll();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Set<FinalRout> findByDate(Date date) {
-        return finalRoutDao.findByDate(date);
+        try {
+            return finalRoutDao.findByDate(date);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Set<FinalRout> findByStationAndDate(Station station, Date date) {
-        return finalRoutDao.findByStationAndDate(station, date);
+        try {
+            return finalRoutDao.findByStationAndDate(station, date);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) {
-        return finalRoutDao.findByStationToStationOnDate(start, end, date);
+        try {
+            return finalRoutDao.findByStationToStationOnDate(start, end, date);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) {
-        return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
+        try {
+            return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

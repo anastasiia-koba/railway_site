@@ -3,6 +3,7 @@ package system.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import system.DaoException;
 import system.dao.api.TrainDao;
 import system.entity.Train;
 import system.service.api.TrainService;
@@ -20,31 +21,58 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     public void create(Train train) {
-        trainDao.create(train);
+        try {
+            trainDao.create(train);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void save(Train train) {
-        trainDao.update(train);
+        try {
+            trainDao.update(train);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(Train train) {
-        trainDao.remove(train);
+        try {
+            trainDao.remove(train);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Train findById(Long id) {
-        return trainDao.findById(id);
+        try {
+            return trainDao.findById(id);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Train findByName(String trainName) {
-        return trainDao.findByName(trainName);
+        try {
+            return trainDao.findByName(trainName);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public List<Train> findAll() {
-        return trainDao.findAll();
+        try {
+            return trainDao.findAll();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
