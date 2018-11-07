@@ -59,8 +59,8 @@
                            max="2020-06-04" min="2018-10-25">
                 </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary site-btn">Search</button>
             </div>
         </form>
     </div>
@@ -99,8 +99,11 @@
                                 <input type="hidden" name="routId" value="${rout.id}">
                                 <input type="hidden" name="stationFrom" value="${stationFrom.id}">
                                 <input type="hidden" name="stationTo" value="${stationTo.id}">
-                                <input type="submit" name="buy" value="Buy">
+                                <c:if test="${freePlaces[rout.id] != 0}">
+                                    <input type="submit" name="buy" value="Buy">
+                                </c:if>
                             </form>
+                            ${freePlaces[rout.id]} places
                         </td>
                     </tr>
                 </c:forEach>

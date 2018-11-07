@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
+import system.dao.api.RoutDao;
 import system.dao.api.TicketDao;
-import system.entity.FinalRout;
-import system.entity.Ticket;
-import system.entity.UserProfile;
+import system.entity.*;
 import system.service.api.TicketService;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link system.service.api.TicketService} interface.
@@ -21,6 +21,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private TicketDao ticketDao;
+
+    @Autowired
+    private RoutDao routDao;
 
     @Override
     public void create(Ticket ticket) {
@@ -86,6 +89,36 @@ public class TicketServiceImpl implements TicketService {
             log.debug("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
                     finalRout.getRout().getEndStation().getStationName());
         }
+        return null;
+    }
+
+    @Override
+    public Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end) {
+        try {
+            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                                            start, end);
+
+            Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
+
+            Integer countTickets = 0;
+
+            for (Ticket ticket : tickets){
+                Set<RoutSection> ticketSection = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                        ticket.getStartStation(), ticket.getEndStation());
+
+                Set<RoutSection> intersect = ticketSection.stream().filter(routSections::contains).collect(Collectors.toSet());
+
+                if (!intersect.isEmpty())
+                    countTickets++;
+            }
+
+            return countTickets;
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.debug("Find Tickets by Rout id {} Between Departure {} And Destination {} failed ", finalRout.getId(),
+                    start.getStationName(), end.getStationName());
+        }
+
         return null;
     }
 }

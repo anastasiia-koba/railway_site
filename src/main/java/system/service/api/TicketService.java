@@ -1,6 +1,7 @@
 package system.service.api;
 
 import system.entity.FinalRout;
+import system.entity.Station;
 import system.entity.Ticket;
 import system.entity.UserProfile;
 
@@ -16,4 +17,5 @@ public interface TicketService {
     Ticket findById(Long id);
     Set<Ticket> findByUser(UserProfile user);
     Set<Ticket> findByFinalRout(FinalRout finalRout);
+    Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end);
 }

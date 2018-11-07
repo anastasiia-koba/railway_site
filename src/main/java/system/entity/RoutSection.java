@@ -1,5 +1,6 @@
 package system.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "rout_section")
 public class RoutSection extends BaseEntity {
@@ -38,6 +40,7 @@ public class RoutSection extends BaseEntity {
     @Column(name = "arrival_time")
     private Time arrivalTime;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "routSections")
     private Set<Rout> routs;
 }
