@@ -53,13 +53,31 @@
         </div>
     </div>
     <div class="col-md-2">
-        <form method="POST" action="${contextPath}/home/buy" modelAttribute="ticketForm">
-            <input type="hidden" name="routId" value="${rout.id}" path="finalRout.id">
-            <input type="hidden" name="stationFrom" value="${stationFrom.id}" path="startStation.id">
-            <input type="hidden" name="stationTo" value="${stationTo.id}" path="endStation.id">
-            <input type="submit" name="purchase" value="Purchase">
+        <form method="POST" action="${contextPath}/home/buy">
+            <input type="hidden" name="routId" value="${rout.id}">
+            <input type="hidden" name="stationFrom" value="${stationFrom.id}">
+            <input type="hidden" name="stationTo" value="${stationTo.id}">
+            <input type="hidden" name="price" value="${price}">
+            <input type="submit" name="purchase" value="Purchase" data-toggle="modal" data-target="#myModal">
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">You have successfully bought a ticket!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

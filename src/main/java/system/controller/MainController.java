@@ -140,18 +140,22 @@ public class MainController {
     @Secured(value={"ROLE_USER"})
     @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST, params = "purchase")
     public String buyTicket(@AuthenticationPrincipal User activeUser,
-                            @ModelAttribute("ticketForm") Ticket modelTicket, Model model) {
+                            @RequestParam("stationFrom") Long stationFromId,
+                            @RequestParam("stationTo") Long stationToId,
+                            @RequestParam("routId") Long routId,
+                            @RequestParam("price") Integer price, Model model) {
 
         UserProfile user = userService.findByUsername(activeUser.getUsername());
 
         Ticket ticket = new Ticket();
         ticket.setUser(user);
-        ticket.setFinalRout(finalRoutService.findById(modelTicket.getFinalRout().getId()));
-        ticket.setStartStation(stationService.findById(modelTicket.getStartStation().getId()));
-        ticket.setEndStation(stationService.findById(modelTicket.getEndStation().getId()));
+        ticket.setFinalRout(finalRoutService.findById(routId));
+        ticket.setStartStation(stationService.findById(stationFromId));
+        ticket.setEndStation(stationService.findById(stationToId));
+        ticket.setPrice(price);
 
         ticketService.save(ticket);
 
-        return "home";
+        return "redirect:/home";
     }
 }
