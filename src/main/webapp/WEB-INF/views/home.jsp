@@ -14,7 +14,7 @@
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
-          id="bootstrap-css">
+          id="bootstrap-css-datatime">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap-datetimepicker.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -33,7 +33,7 @@
                     <label>From where? </label>
                     <select id="comboboxFrom" name="stationsFrom" placeholder="From where?">
                         <option></option>
-                        <c:forEach items="${stationFrom}" var="station">
+                        <c:forEach items="${stationsFrom}" var="station">
                             <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
                         </c:forEach>
                     </select>
@@ -45,7 +45,7 @@
                     <label>To where? </label>
                     <select id="comboboxTo" name="stationsTo" placeholder="To where?">
                         <option></option>
-                        <c:forEach items="${stationTo}" var="station">
+                        <c:forEach items="${stationsTo}" var="station">
                             <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
                         </c:forEach>
                     </select>
@@ -66,43 +66,48 @@
     </div>
 </div>
 
-<div class="container search-table">
-    <div class="search-list">
-        <h3>${routs.size()} Routs Found</h3>
-        <table class="table" id="myTableRouts">
-            <thead>
-            <tr>
-                <th>Train number</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Time of departure</th>
-                <th>Time of arrival</th>
-                <th>Travel time</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${routs}" var="rout">
+<c:if test="${routs != null}">
+    <div class="container search-table">
+        <div class="search-list">
+            <h3>${stationFrom.stationName} -> ${stationTo.stationName}</h3>
+            <h3>${routs.size()} Routs Found</h3>
+            <table class="table" id="myTableRouts">
+                <thead>
                 <tr>
-                    <td>${rout.train.trainName.toString()}</td>
-                    <td>${rout.rout.startStation.stationName.toString()}</td>
-                    <td>${rout.rout.endStation.stationName.toString()}</td>
-                    <td>${departures[rout.id]}</td>
-                    <td>${arrivals[rout.id]}</td>
-                    <td>${times[rout.id]}</td>
-                    <td>
-                        <form method="POST" action="${contextPath}/buy">
-                            <input type="hidden" name="routId" value="${rout.id}">
-                            <input type="hidden" name="stationFrom" value="">
-                            <input type="hidden" name="stationTo" value="">
-                            <input type="submit" name="buy" value="Buy">
-                        </form>
-                    </td>
+                    <th>Train number</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Time of departure</th>
+                    <th>Time of arrival</th>
+                    <th>Travel time</th>
+                    <th>Price</th>
+                    <th></th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <c:forEach items="${routs}" var="rout">
+                    <tr>
+                        <td>${rout.train.trainName.toString()}</td>
+                        <td>${rout.rout.startStation.stationName.toString()}</td>
+                        <td>${rout.rout.endStation.stationName.toString()}</td>
+                        <td>${departures[rout.id]}</td>
+                        <td>${arrivals[rout.id]}</td>
+                        <td>${times[rout.id]}</td>
+                        <td>${prices[rout.id]}</td>
+                        <td>
+                            <form method="POST" action="${contextPath}/buy">
+                                <input type="hidden" name="routId" value="${rout.id}">
+                                <input type="hidden" name="stationFrom" value="${stationFrom.id}">
+                                <input type="hidden" name="stationTo" value="${stationTo.id}">
+                                <input type="submit" name="buy" value="Buy">
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</c:if>
 </body>
 </html>

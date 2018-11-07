@@ -84,11 +84,13 @@ public class MainController {
         Map<Long, Time> mapDeparture = new HashMap<>(); // Long - finalRout.id
         Map<Long, Time> mapArrival = new HashMap<>(); // Long - finalRout.id
         Map<Long, Time> mapTimeInTravel = new HashMap<>();
+        Map<Long, Integer> mapPrice = new HashMap<>();
 
         for (FinalRout finalRout: finalRoutSet) {
             mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), stationFrom).getDepartureTime());
             mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), stationTo).getArrivalTime());
             mapTimeInTravel.put(finalRout.getId(), new Time(mapArrival.get(finalRout.getId()).getTime() - mapDeparture.get(finalRout.getId()).getTime()));
+            mapPrice.put(finalRout.getId(), routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), stationFrom, stationTo));
         }
 
         model.addAttribute("arrivals", mapArrival);
@@ -98,7 +100,7 @@ public class MainController {
         model.addAttribute("stationFrom", stationFrom);
         model.addAttribute("stationTo", stationTo);
 
-        model.addAttribute("price", null);
+        model.addAttribute("prices", mapPrice);
 
         return "home";
     }
