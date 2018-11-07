@@ -1,12 +1,11 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -105,6 +104,7 @@ public class MainController {
         return "home";
     }
 
+    @Secured(value={"ROLE_USER"})
     @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST)
     public String getBuyTicketPage(@AuthenticationPrincipal User activeUser,
                                    @RequestParam("stationFrom") Long stationFromId,
@@ -133,6 +133,7 @@ public class MainController {
         return "ticket";
     }
 
+    @Secured(value={"ROLE_USER"})
     @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST, params = "purchase")
     public String buyTicket(@AuthenticationPrincipal User activeUser,
                             @ModelAttribute("ticketForm") Ticket modelTicket, Model model) {

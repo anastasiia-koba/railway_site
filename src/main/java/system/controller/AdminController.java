@@ -1,6 +1,7 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,19 +9,18 @@ import org.springframework.web.bind.annotation.*;
 import system.entity.Rout;
 import system.entity.RoutSection;
 import system.entity.Station;
-import system.entity.Train;
 import system.service.api.RoutSectionService;
 import system.service.api.RoutService;
 import system.service.api.StationService;
-import system.service.api.TrainService;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Controller for {@link system.entity.Station, system.entity.Train}'s pages.
+ * Controller for {@link system.entity.Station, system.entity.Rout}'s pages.
  */
+@Secured(value={"ROLE_ADMIN"})
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
