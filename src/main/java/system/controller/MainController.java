@@ -1,17 +1,20 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import system.entity.FinalRout;
 import system.entity.Station;
-import system.service.api.FinalRoutService;
-import system.service.api.RoutService;
-import system.service.api.StationService;
-import system.service.api.TicketService;
+import system.entity.Ticket;
+import system.entity.UserProfile;
+import system.service.api.*;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -32,6 +35,9 @@ public class MainController {
     private RoutService routService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TicketService ticketService;
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
@@ -46,6 +52,8 @@ public class MainController {
 
         model.addAttribute("stationFrom", new Station());
         model.addAttribute("stationTo", new Station());
+
+        model.addAttribute("price", null);
 
         return "home";
     }
@@ -90,11 +98,14 @@ public class MainController {
         model.addAttribute("stationFrom", stationFrom);
         model.addAttribute("stationTo", stationTo);
 
+        model.addAttribute("price", null);
+
         return "home";
     }
 
     @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST)
-    public String getBuyTicketPage(@RequestParam("stationFrom") Long stationFromId,
+    public String getBuyTicketPage(@AuthenticationPrincipal User activeUser,
+                                   @RequestParam("stationFrom") Long stationFromId,
                                    @RequestParam("stationTo") Long stationToId,
                                    @RequestParam("routId") Long routId, Model model) {
 
@@ -102,15 +113,38 @@ public class MainController {
             return "home";
         }
 
+        UserProfile user = userService.findByUsername(activeUser.getUsername());
+
         Station stationFrom = stationService.findById(stationFromId);
         Station stationTo = stationService.findById(stationToId);
 
         FinalRout finalRout = finalRoutService.findById(routId);
+        Integer price = routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), stationFrom, stationTo);
 
         model.addAttribute("rout", finalRout);
         model.addAttribute("stationFrom", stationFrom);
         model.addAttribute("stationTo", stationTo);
+        model.addAttribute("user", user);
+
+        model.addAttribute("price", price);
 
         return "ticket";
+    }
+
+    @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST, params = "purchase")
+    public String buyTicket(@AuthenticationPrincipal User activeUser,
+                            @ModelAttribute("ticketForm") Ticket modelTicket, Model model) {
+
+        UserProfile user = userService.findByUsername(activeUser.getUsername());
+
+        Ticket ticket = new Ticket();
+        ticket.setUser(user);
+        ticket.setFinalRout(finalRoutService.findById(modelTicket.getFinalRout().getId()));
+        ticket.setStartStation(stationService.findById(modelTicket.getStartStation().getId()));
+        ticket.setEndStation(stationService.findById(modelTicket.getEndStation().getId()));
+
+        ticketService.save(ticket);
+
+        return "home";
     }
 }

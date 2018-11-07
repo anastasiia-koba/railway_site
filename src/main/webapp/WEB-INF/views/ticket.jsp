@@ -18,6 +18,12 @@
 <div class="container">
     <div class="col-sm-2">
         <div class="form-group ">
+            <label>Your name: </label>
+            <label>${user.surname} ${user.firstname}</label>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group ">
             <label>Train: </label>
             <label>${rout.train.trainName.toString()}</label>
         </div>
@@ -40,8 +46,19 @@
             <label>${stationFrom.stationName.toString()} - ${stationTo.stationName.toString()}</label>
         </div>
     </div>
+    <div class="col-sm-2">
+        <div class="form-group ">
+            <label>Price: </label>
+            <label>${price}</label>
+        </div>
+    </div>
     <div class="col-md-2">
-        <button type="submit" class="btn btn-primary btn-block">Purchase</button>
+        <form method="POST" action="${contextPath}/home/buy" modelAttribute="ticketForm">
+            <input type="hidden" name="routId" value="${rout.id}" path="finalRout.id">
+            <input type="hidden" name="stationFrom" value="${stationFrom.id}" path="startStation.id">
+            <input type="hidden" name="stationTo" value="${stationTo.id}" path="endStation.id">
+            <input type="submit" name="purchase" value="Purchase">
+        </form>
     </div>
 </div>
 </body>

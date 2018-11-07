@@ -20,4 +20,5 @@ public interface RoutService {
     Set<RoutSection> getRoutSectionInRout(Rout rout);
     RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation);
     RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation);
+    Integer getPriceInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination);
 }

@@ -74,10 +74,11 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
     @Override
     public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
-                    "JOIN fr.rout.routSections rs WHERE " +
-                    "rs.departure = :start AND rs.destination = :end AND " +
-                    "fr.date = :date");
+            Query q = entityManager.createQuery("SELECT fr1 FROM FinalRout fr1 " +
+                    "JOIN fr1.rout.routSections rs1 WHERE " +
+                    "rs1.departure = :start AND fr1.date = :date AND fr1 IN " +
+                    "(SELECT fr2 FROM FinalRout fr2 JOIN fr2.rout.routSections rs2 WHERE " +
+                    "rs2.destination = :end AND fr2.date = :date)");
             q.setParameter("start", start);
             q.setParameter("end", end);
             q.setParameter("date", date);

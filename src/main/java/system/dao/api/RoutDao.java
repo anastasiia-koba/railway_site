@@ -14,4 +14,5 @@ public interface RoutDao extends Dao<Long, Rout> {
     Set<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException;
     RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation) throws DaoException;
     RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation) throws DaoException;
+    Set<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) throws DaoException;
 }

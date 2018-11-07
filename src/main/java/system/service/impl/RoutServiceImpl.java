@@ -132,4 +132,24 @@ public class RoutServiceImpl implements RoutService {
         }
         return null;
     }
+
+    @Override
+    public Integer getPriceInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) {
+        try {
+            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
+
+            Integer price = 0;
+            for (RoutSection rs : routSections) {
+                price += rs.getPrice();
+            }
+
+            return price;
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.debug("Find Price by Rout id {} Between Departure {} And Destination {} failed ", rout.getId(),
+                    departure.getStationName(), destination.getStationName());
+        }
+
+        return null;
+    }
 }
