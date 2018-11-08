@@ -35,9 +35,10 @@
                             <li class="dropdown">
                                 <a href="#" data-toggle="dropdown">Admin <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="${contextPath}/admin">Editing</a></li>
                                     <li><a href="${contextPath}/admin/passengers">Passengers</a></li>
+                                    <li><a href="${contextPath}/admin">Routs</a></li>
                                     <li><a href="${contextPath}/admin/trains">Trains</a></li>
+                                    <li><a href="${contextPath}/admin/finalrouts">Train's rout</a></li>
                                 </ul>
                             </li>
                         </c:if>
