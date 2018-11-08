@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Simple JavaBean domain object that represents a date for Rout and Train.
@@ -30,5 +30,5 @@ public class FinalRout extends BaseEntity {
 
     @NotNull(message = "This field is required.")
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 }

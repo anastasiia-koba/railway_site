@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -42,7 +42,7 @@ public class UserProfile extends BaseEntity {
     @NotNull(message = "This field is required.")
     @Past
     @Column(name = "birthdate")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @NotBlank(message = "This field is required.")
     @Transient

@@ -17,6 +17,8 @@ import system.service.api.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -81,16 +83,18 @@ public class MainController {
         model.addAttribute("routs", finalRoutSet);
 
 
-        Map<Long, Time> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, Time> mapArrival = new HashMap<>(); // Long - finalRout.id
-        Map<Long, Time> mapTimeInTravel = new HashMap<>();
+        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
+        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
+        Map<Long, LocalTime> mapTimeInTravel = new HashMap<>();
         Map<Long, Integer> mapPrice = new HashMap<>();
         Map<Long, Integer> mapPlaces = new HashMap<>();
 
         for (FinalRout finalRout: finalRoutSet) {
             mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), stationFrom).getDepartureTime());
             mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), stationTo).getArrivalTime());
-            mapTimeInTravel.put(finalRout.getId(), new Time(mapArrival.get(finalRout.getId()).getTime() - mapDeparture.get(finalRout.getId()).getTime()));
+
+            Duration duration = Duration.between(mapArrival.get(finalRout.getId()), mapDeparture.get(finalRout.getId())).abs();
+            mapTimeInTravel.put(finalRout.getId(), LocalTime.ofSecondOfDay(duration.getSeconds()));
             mapPrice.put(finalRout.getId(), routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), stationFrom, stationTo));
             mapPlaces.put(finalRout.getId(), finalRout.getTrain().getPlacesNumber() - ticketService.findCountTicketsByFinalRoutAndStartAndEndStations(finalRout, stationFrom, stationTo));
         }
