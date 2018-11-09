@@ -17,6 +17,9 @@ import java.util.Set;
 @Table(name = "routs")
 public class Rout extends BaseEntity {
 
+    @Column(name = "rout_name")
+    private String routName;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "start_station_id", referencedColumnName = "id", nullable = false)
     private Station startStation;

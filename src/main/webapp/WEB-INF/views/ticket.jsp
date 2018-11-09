@@ -25,7 +25,7 @@
     <div class="col-sm-2">
         <div class="form-group ">
             <label>Train: </label>
-            <label>${rout.train.trainName.toString()}</label>
+            <label>${rout.rout.routName.toString()}</label>
         </div>
     </div>
     <div class="col-sm-2">

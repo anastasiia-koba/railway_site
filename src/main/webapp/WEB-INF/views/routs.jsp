@@ -36,10 +36,10 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <label>Select rout </label>
                 <select id="comboboxRout" name="rout" path="rout">
-                    <option value="${finalRoutForm.rout.id}">${finalRoutForm.rout.startStation.stationName.toString()}
+                    <option value="${finalRoutForm.rout.id}">${finalRoutForm.rout.routName} : ${finalRoutForm.rout.startStation.stationName.toString()}
                         - ${finalRoutForm.rout.endStation.stationName.toString()}</option>
                     <c:forEach items="${routs}" var="rout">
-                        <option value="${rout.id}">${rout.startStation.stationName.toString()}
+                        <option value="${rout.id}">${rout.routName} : ${rout.startStation.stationName.toString()}
                             - ${rout.endStation.stationName.toString()}</option>
                     </c:forEach>
                 </select>
@@ -60,6 +60,7 @@
         <table class="table" id="myTableFinalRouts">
             <thead>
             <tr>
+                <th>Rout name</th>
                 <th>Train name</th>
                 <th>From station</th>
                 <th>To station</th>
@@ -72,6 +73,7 @@
             <tbody>
             <c:forEach items="${finalRouts}" var="rout">
                 <tr>
+                    <td>${rout.rout.routName.toString()}</td>
                     <td>${rout.train.trainName.toString()}</td>
                     <td>${rout.rout.startStation.stationName.toString()}</td>
                     <td>${rout.rout.endStation.stationName.toString()}</td>

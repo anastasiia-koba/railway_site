@@ -50,7 +50,7 @@
         <table class="table" id="myTable">
             <thead>
             <tr>
-                <th>Train</th>
+                <th>Rout</th>
                 <th>From</th>
                 <th>To</th>
                 <th>Arrival time</th>
@@ -60,7 +60,7 @@
             <tbody>
             <c:forEach items="${trains}" var="train">
                 <tr>
-                    <td>${train.train.trainName.toString()}</td>
+                    <td>${train.rout.routName.toString()}</td>
                     <td>${train.rout.startStation.stationName.toString()}</td>
                     <td>${train.rout.endStation.stationName.toString()}</td>
                     <td>${arrivals[train.id]}</td>
