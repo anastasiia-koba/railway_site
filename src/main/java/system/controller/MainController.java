@@ -15,9 +15,8 @@ import system.entity.Ticket;
 import system.entity.UserProfile;
 import system.service.api.*;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -62,7 +61,9 @@ public class MainController {
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.POST)
     public String getSearchResult(@RequestParam("stationsFrom") Station stationFrom,
                                   @RequestParam("stationsTo") Station stationTo,
-                                  @RequestParam("date") Date date, Model model){
+                                  @RequestParam("date") String strDate, Model model){
+        LocalDate date = LocalDate.parse(strDate);
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
 
@@ -81,7 +82,6 @@ public class MainController {
 
         Set<FinalRout> finalRoutSet = finalRoutService.findByStationToStationOnDate(stationFrom, stationTo, date);
         model.addAttribute("routs", finalRoutSet);
-
 
         Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
         Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id

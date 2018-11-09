@@ -10,7 +10,7 @@ import system.entity.Station;
 import system.entity.Train;
 
 import javax.persistence.Query;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +22,7 @@ import java.util.Set;
 @Repository
 public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRoutDao {
     @Override
-    public Set<FinalRout> findByDate(Date date) throws DaoException {
+    public Set<FinalRout> findByDate(LocalDate date) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT r FROM FinalRout r WHERE r.date = :date");
             q.setParameter("date", date);
@@ -51,7 +51,7 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
     }
 
     @Override
-    public Set<FinalRout> findByStationAndDate(Station station, Date date) throws DaoException {
+    public Set<FinalRout> findByStationAndDate(Station station, LocalDate date) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT fr FROM FinalRout fr " +
                     "JOIN fr.rout.routSections rs WHERE " +
@@ -72,7 +72,7 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
     }
 
     @Override
-    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) throws DaoException {
+    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, LocalDate date) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT fr1 FROM FinalRout fr1 " +
                     "JOIN fr1.rout.routSections rs1 WHERE " +
@@ -95,7 +95,7 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
     }
 
     @Override
-    public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) throws DaoException {
+    public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, LocalDate date) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT r FROM FinalRout r WHERE r.rout = :rout " +
                     "AND r.train = :train AND r.date = :date");

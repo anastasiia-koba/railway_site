@@ -11,7 +11,7 @@ import system.entity.Station;
 import system.entity.Train;
 import system.service.api.FinalRoutService;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -86,7 +86,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public Set<FinalRout> findByDate(Date date) {
+    public Set<FinalRout> findByDate(LocalDate date) {
         try {
             return finalRoutDao.findByDate(date);
         } catch (DaoException e) {
@@ -97,7 +97,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public Set<FinalRout> findByStationAndDate(Station station, Date date) {
+    public Set<FinalRout> findByStationAndDate(Station station, LocalDate date) {
         try {
             return finalRoutDao.findByStationAndDate(station, date);
         } catch (DaoException e) {
@@ -108,7 +108,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, Date date) {
+    public Set<FinalRout> findByStationToStationOnDate(Station start, Station end, LocalDate date) {
         try {
             return finalRoutDao.findByStationToStationOnDate(start, end, date);
         } catch (DaoException e) {
@@ -120,7 +120,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, Date date) {
+    public FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, LocalDate date) {
         try {
             return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
         } catch (DaoException e) {

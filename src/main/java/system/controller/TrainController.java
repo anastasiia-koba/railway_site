@@ -8,12 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import system.entity.Train;
 import system.service.api.FinalRoutService;
-import system.service.api.RoutService;
-import system.service.api.StationService;
 import system.service.api.TrainService;
 
 import javax.validation.Valid;
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Controller for {@link system.entity.Train}'s pages.
@@ -22,14 +20,9 @@ import java.sql.Date;
 @Controller
 @RequestMapping(value = "/admin/trains")
 public class TrainController {
-    @Autowired
-    private StationService stationService;
 
     @Autowired
     private TrainService trainService;
-
-    @Autowired
-    private RoutService routService;
 
     @Autowired
     private FinalRoutService finalRoutService;
@@ -46,8 +39,10 @@ public class TrainController {
     }
 
     @RequestMapping(value = "/date", method = RequestMethod.POST)
-    public String getTrainsByDatePage(@RequestParam("calendar") Date date,
+    public String getTrainsByDatePage(@RequestParam("calendar") String strDate,
                                       Model model){
+        LocalDate date = LocalDate.parse(strDate);
+
         model.addAttribute("finalRouts", finalRoutService.findByDate(date));
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());
