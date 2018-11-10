@@ -14,6 +14,7 @@ import system.service.api.RoutService;
 import system.service.api.StationService;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,44 +40,16 @@ public class AdminController {
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         model.addAttribute("sections", null);
-        model.addAttribute("stationFrom", stationService.findAll());
-        model.addAttribute("stationTo", stationService.findAll());
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
 
         model.addAttribute("selectedTab", "station-tab");
-
-        return "admin";
-    }
-
-    @RequestMapping(value = "/routs", method = RequestMethod.POST)
-    public String getRout(@ModelAttribute("stationFrom") Station startStation,
-                               @ModelAttribute("stationTo") Station endStation,
-                               Model model){
-        startStation = stationService.findByName(startStation.getStationName());
-        endStation = stationService.findByName(endStation.getStationName());
-
-        List<Rout> routSet = routService.findByStartStationAndEndStation(startStation, endStation);
-        Set<RoutSection> routSections = null;
-
-        if (routSet == null){
-            model.addAttribute("error", "Rout not found");
-        }
-        else {
-            //TODO make unique search of rout
-            routSections = routService.getRoutSectionInRout(routSet.get(0));
-        }
-
-        model.addAttribute("stationFrom", stationService.findAll());
-        model.addAttribute("stationTo", stationService.findAll());
-        model.addAttribute("sections", routSections);
-
-        model.addAttribute("stations", stationService.findAll());
-        model.addAttribute("stationForm", new Station());
-
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("trainForm", new Train());
-
-        model.addAttribute("selectedTab", "rout-tab");
 
         return "admin";
     }
@@ -88,9 +61,14 @@ public class AdminController {
 
         model.addAttribute("stations", stationService.findAll());
 
-        model.addAttribute("stationFrom", stationService.findAll());
-        model.addAttribute("stationTo", stationService.findAll());
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
 
         model.addAttribute("selectedTab", "station-tab");
 
@@ -106,9 +84,14 @@ public class AdminController {
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
 
-        model.addAttribute("stationFrom", stationService.findAll());
-        model.addAttribute("stationTo", stationService.findAll());
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
 
         model.addAttribute("selectedTab", "station-tab");
 
@@ -120,9 +103,14 @@ public class AdminController {
                            BindingResult bindingResult, Model model) {
         model.addAttribute("stations", stationService.findAll());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
 
         model.addAttribute("selectedTab", "station-tab");
 
@@ -144,19 +132,105 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST)
-    public String getRout(@ModelAttribute("stationFrom") Station startStation,
+    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "change")
+    public String changeRout(@ModelAttribute Rout rout, Model model) {
+        Rout routForChange = routService.findById(rout.getId());
+        model.addAttribute("routForm", routForChange);
+
+        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("stationForm", new Station());
+        model.addAttribute("stations", stationService.findAll());
+
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
+        model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
+
+        model.addAttribute("selectedTab", "rout-tab");
+
+        return "admin";
+    }
+
+    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "delete")
+    public String deleteRout(@Valid @ModelAttribute Rout rout, Model model) {
+        Rout routForChange = routService.findById(rout.getId());
+
+        routService.delete(routForChange);
+
+        model.addAttribute("stationForm", new Station());
+        model.addAttribute("stations", stationService.findAll());
+
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
+        model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
+
+        model.addAttribute("selectedTab", "rout-tab");
+
+        return "admin";
+    }
+
+    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "save")
+    public String addRout(@Valid @ModelAttribute("routForm") Rout rout,
+                          BindingResult bindingResult, Model model) {
+        model.addAttribute("stationForm", new Station());
+        model.addAttribute("stations", stationService.findAll());
+
+        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("stationsFrom", stationService.findAll());
+        model.addAttribute("stationsTo", stationService.findAll());
+        model.addAttribute("sections", null);
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("routForSection", null);
+
+        model.addAttribute("selectedTab", "rout-tab");
+
+        if (bindingResult.hasErrors()) {
+            return "admin";
+        }
+
+        rout.setStartStation(stationService.findByName(rout.getStartStation().getStationName()));
+        rout.setEndStation(stationService.findByName(rout.getEndStation().getStationName()));
+
+        if (rout.getId() != null){
+            Rout routForChange = routService.findById(rout.getId());
+            routForChange.setRoutName(rout.getRoutName());
+            routForChange.setStartStation(rout.getStartStation());
+            routForChange.setEndStation(rout.getEndStation());
+            routService.save(routForChange);
+        } else {
+            routService.create(rout);
+        }
+
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
+        return "admin";
+    }
+
+    @RequestMapping(value = "/sections", method = RequestMethod.POST)
+    public String getRoutSections(@ModelAttribute("stationFrom") Station startStation,
                           @ModelAttribute("stationTo") Station endStation,
                           Model model){
         model.addAttribute("stations", stationService.findAll());
         model.addAttribute("stationForm", new Station());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("rout", null);
+        model.addAttribute("routForSection", null);
 
-        model.addAttribute("selectedTab", "rout-tab");
+        model.addAttribute("selectedTab", "section-tab");
 
         startStation = stationService.findByName(startStation.getStationName());
         endStation = stationService.findByName(endStation.getStationName());
@@ -173,12 +247,12 @@ public class AdminController {
         }
 
         model.addAttribute("sections", routSections);
-        model.addAttribute("rout", routSet.get(0));
+        model.addAttribute("routForSection", routSet.get(0));
 
         return "admin";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "change")
+    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "change")
     public String changeRoutSection(@ModelAttribute("section") RoutSection routSection,
                                     @RequestParam("routId") Long routId, Model model) {
         RoutSection sectionForChange = routSectionService.findById(routSection.getId());
@@ -189,17 +263,20 @@ public class AdminController {
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("rout", rout);
+        model.addAttribute("routForSection", rout);
 
-        model.addAttribute("selectedTab", "rout-tab");
+        model.addAttribute("selectedTab", "sections-tab");
 
         return "admin";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "delete")
+    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "delete")
     public String deleteRoutSection(@ModelAttribute RoutSection routSection,
                                     @RequestParam("routId") Long routId, Model model) {
         RoutSection sectionForDelete = routSectionService.findById(routSection.getId());
@@ -209,21 +286,24 @@ public class AdminController {
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("routSectionForm", new RoutSection());
 
         Rout rout = routService.findById(routId);
         model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("rout", rout);
+        model.addAttribute("routForSection", rout);
 
-        model.addAttribute("selectedTab", "train-tab");
+        model.addAttribute("selectedTab", "sections-tab");
 
         return "admin";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "save")
-    public String addRoutSection(@Valid @ModelAttribute("routSectionForm") RoutSection routSection,
+    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "save")
+    public String saveRoutSection(@Valid @ModelAttribute("routSectionForm") RoutSection routSection,
                                  @RequestParam("routId") Long routId,
                                  BindingResult bindingResult, Model model) {
         model.addAttribute("stationForm", new Station());
@@ -232,27 +312,37 @@ public class AdminController {
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
 
+        model.addAttribute("routForm", new Rout());
+        model.addAttribute("routs", routService.findAll());
+
         Rout rout = routService.findById(routId);
-        model.addAttribute("rout", rout);
+        model.addAttribute("routForSection", rout);
         model.addAttribute("sections", routService.getRoutSectionInRout(rout));
 
-        model.addAttribute("selectedTab", "rout-tab");
+        model.addAttribute("selectedTab", "sections-tab");
 
         if (bindingResult.hasErrors()) {
             return "admin";
         }
 
-        if (train.getId() != null){
-            Train trainForChange = trainService.findById(train.getId());
-            trainForChange.setTrainName(train.getTrainName());
-            trainForChange.setPlacesNumber(train.getPlacesNumber());
-            trainService.save(trainForChange);
+        if (routSection.getId() != null){
+            RoutSection sectionForChange = routSectionService.findById(routSection.getId());
+            sectionForChange.setDeparture(routSection.getDeparture());
+            sectionForChange.setDestination(routSection.getDestination());
+            sectionForChange.setDistance(routSection.getDistance());
+            sectionForChange.setPrice(routSection.getPrice());
+            sectionForChange.setDepartureTime(routSection.getDepartureTime());
+            sectionForChange.setArrivalTime(routSection.getArrivalTime());
+            routSectionService.save(sectionForChange);
         } else {
-            trainService.create(train);
+            Set<Rout> routSet = new HashSet<>();
+            routSet.add(rout);
+            routSection.setRouts(routSet);
+            routSectionService.create(routSection);
         }
 
-        model.addAttribute("trainForm", new Train());
-        model.addAttribute("trains", trainService.findAll());
+        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
 
         return "admin";
     }

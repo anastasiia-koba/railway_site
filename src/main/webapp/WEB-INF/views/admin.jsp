@@ -23,9 +23,9 @@
                 <li class="${selectedTab == 'station-tab' ? 'active' : ''}"><a data-target="#station-tab"
                                                                                data-toggle="tab">Station</a>
                 </li>
-                <%--<li class="${selectedTab == 'train-tab' ? 'active' : ''}"><a data-target="#train-tab"--%>
-                                                                             <%--data-toggle="tab">Trains</a></li>--%>
                 <li class="${selectedTab == 'rout-tab' ? 'active' : '' }"><a data-target="#rout-tab" data-toggle="tab">Routs</a>
+                <li class="${selectedTab == 'section-tab' ? 'active' : '' }"><a data-target="#section-tab"
+                                                                                data-toggle="tab">Sections</a>
                 </li>
             </ul>
         </nav>
@@ -34,10 +34,10 @@
     <div class="tab-content" id="containerContainingTabs">
         <%--STATIONS--%>
         <div class="tab-pane ${selectedTab == 'station-tab' ? 'active' : ''} text-style" id="station-tab">
-            <form:form method="POST" modelAttribute="stationForm" action="${contextPath}/admin/stations">
+            <form:form method="POST" modelAttribute="stationForm" action="${contextPath}/admin/stations" class="form-group">
+                <form:input path="id" type="hidden"></form:input>
                 <spring:bind path="stationName">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input path="id" type="hidden"></form:input>
                         <form:input type="text" id="stationName" placeholder="New Station" class="form-control"
                                     path="stationName"></form:input>
                         <form:errors path="stationName"></form:errors>
@@ -77,8 +77,90 @@
         </div>
 
         <%--ROUTS--%>
-        <div class="tab-pane ${selectedTab == 'rout-tab' ? 'active' : '' } text-style" id="rout-tab">
-            <form name="change_rout" method="POST" action="${contextPath}/admin/routs"
+        <div class="tab-pane ${selectedTab == 'rout-tab' ? 'active' : ''} text-style" id="rout-tab">
+            <dix class="container">
+                <form:form method="POST" modelAttribute="routForm" action="${contextPath}/admin/routs">
+                    <form:input path="id" type="hidden"></form:input>
+                    <spring:bind path="routName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <label>Rout name</label>
+                            <form:input type="text" id="routName" placeholder="New Rout" class="form-control"
+                                        path="routName"></form:input>
+                            <form:errors path="routName"></form:errors>
+                        </div>
+                    </spring:bind>
+
+                    <spring:bind path="startStation">
+                        <div class="col-md-2 pt-3">
+                            <div class="form-group ">
+                                <label>Select start </label>
+                                <select id="comboboxStart" placeholder="From where?" name="startStation"
+                                        class="form-control">
+                                    <option value="${routForm.startStation.stationName.toString()}">${routForm.startStation.stationName.toString()}</option>
+                                    <c:forEach items="${stationsFrom}" var="station">
+                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                    </c:forEach>
+                                </select>
+                                <form:errors path="startStation"></form:errors>
+                            </div>
+                        </div>
+                    </spring:bind>
+
+                    <spring:bind path="endStation">
+                        <div class="col-md-2 pt-3">
+                            <div class="form-group">
+                                <label>Select end </label>
+                                <select id="comboboxEnd" placeholder="To where?" name="endStation" class="form-control">
+                                    <option value="${routForm.endStation.stationName.toString()}">${routForm.endStation.stationName.toString()}</option>
+                                    <c:forEach items="${stationsTo}" var="station">
+                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                    </c:forEach>
+                                </select>
+                                <form:errors path="endStation"></form:errors>
+                            </div>
+                        </div>
+                    </spring:bind>
+
+                    <button type="submit" name="save">Save</button>
+                </form:form>
+            </dix>
+
+            <div class="container routs-table">
+                <div class="list">
+                    <h3>Routs</h3>
+                    <table class="table" id="myTableRouts">
+                        <thead>
+                        <tr>
+                            <th>Rout name</th>
+                            <th>Station from</th>
+                            <th>Station to</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${routs}" var="rout">
+                            <tr>
+                                <td value="${rout.routName.toString()}">${rout.routName.toString()}</td>
+                                <td value="${rout.startStation.stationName.toString()}">${rout.startStation.stationName.toString()}</td>
+                                <td value="${rout.endStation.stationName.toString()}">${rout.endStation.stationName.toString()}</td>
+                                <form method="POST" action="${contextPath}/admin/routs">
+                                    <td>
+                                        <input type="hidden" name="id" value="${rout.id}">
+                                        <input type="submit" name="change" value="Change">
+                                        <input type="submit" name="delete" value="Delete">
+                                    </td>
+                                </form>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <%--SECTIONS--%>
+        <div class="tab-pane ${selectedTab == 'section-tab' ? 'active' : '' } text-style" id="section-tab">
+            <form name="change_rout" method="POST" action="${contextPath}/admin/sections"
                   class="container-fluid bg-light ">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-2 pt-3">
@@ -115,12 +197,12 @@
             <h3>Rout section</h3>
             <form:form method="POST" modelAttribute="routSectionForm" action="${contextPath}/admin/routs">
                 <form:input path="id" type="hidden"></form:input>
-                <input type="hidden" name="routId" value="${rout.id}">
+                <input type="hidden" name="routId" value="${routForSection.id}">
                 <%--<form:input path="rout" type="hidden" name="rout"></form:input>--%>
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select from where </label>
-                        <select id="comboboxFrom" name="departure" path="departure">
+                        <select id="comboboxSecFrom" name="departure" path="departure">
                             <option value="${routSectionForm.departure.id}">${routSectionForm.departure.stationName.toString()}</option>
                             <c:forEach items="${stationsFrom}" var="station">
                                 <option value="${station.id}">${station.stationName.toString()}</option>
@@ -133,7 +215,7 @@
                 <spring:bind path="destination">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select to where </label>
-                        <select id="comboboxFrom" placeholder="To where?" name="destination" path="destination">
+                        <select id="comboboxSecTo" placeholder="To where?" name="destination" path="destination">
                             <option value="${routSectionForm.destination.id}">${routSectionForm.destination.stationName.toString()}</option>
                             <c:forEach items="${stationsTo}" var="station">
                                 <option value="${station.id}">${station.stationName.toString()}</option>
@@ -161,7 +243,7 @@
             <div class="container rout-table">
                 <div class="list">
                     <h3>Build rout ${stationFrom.stationName.toString()} - ${stationTo.stationName.toString()}</h3>
-                    <table class="table" id="myTable">
+                    <table class="table" id="myTableSections">
                         <thead>
                         <tr>
                             <th>From</th>
@@ -185,7 +267,7 @@
                                 <td>
                                     <form method="POST" action="${contextPath}/admin/routs">
                                         <input type="hidden" name="id" value="${section.id}">
-                                        <input type="hidden" name="routId" value="${rout.id}">
+                                        <input type="hidden" name="routId" value="${routForSection.id}">
                                         <input type="submit" name="change" value="Change">
                                         <input type="submit" name="delete" value="Delete">
                                     </form>

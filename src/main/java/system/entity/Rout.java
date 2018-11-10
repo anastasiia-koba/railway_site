@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -17,18 +19,21 @@ import java.util.Set;
 @Table(name = "routs")
 public class Rout extends BaseEntity {
 
+    @NotBlank(message = "This field is required.")
     @Column(name = "rout_name")
     private String routName;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull(message = "This field is required.")
+    @ManyToOne
     @JoinColumn(name = "start_station_id", referencedColumnName = "id", nullable = false)
     private Station startStation;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull(message = "This field is required.")
+    @ManyToOne
     @JoinColumn(name = "end_station_id", referencedColumnName = "id", nullable = false)
     private Station endStation;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "routs_by_sections", joinColumns = @JoinColumn(name = "rout_id"),
             inverseJoinColumns = @JoinColumn(name = "rout_section_id"))
     private Set<RoutSection> routSections;

@@ -1,6 +1,6 @@
 package system.entity;
 
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "stations")
 public class Station extends BaseEntity {
@@ -23,20 +24,24 @@ public class Station extends BaseEntity {
     @Column(name = "stationname")
     private String stationName;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "departure",
-               cascade = CascadeType.ALL)
+               orphanRemoval = true)
     private Set<RoutSection> sectionsFrom;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "destination",
-            cascade = CascadeType.ALL)
+               orphanRemoval = true)
     private Set<RoutSection> sectionsTo;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "startStation",
-            cascade = CascadeType.ALL)
+            orphanRemoval = true)
     private Set<Rout> routsFrom;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "endStation",
-            cascade = CascadeType.ALL)
+            orphanRemoval = true)
     private Set<Rout> routsTo;
 
     public Station(String stationName) {
