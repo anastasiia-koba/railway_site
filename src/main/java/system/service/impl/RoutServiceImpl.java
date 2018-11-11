@@ -86,6 +86,17 @@ public class RoutServiceImpl implements RoutService {
     }
 
     @Override
+    public Rout findByName(String routName) {
+        try {
+            return routDao.findByName(routName);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.debug("Find Rout by routName {} failed ", routName);
+        }
+        return null;
+    }
+
+    @Override
     public List<Rout> findByStartStationAndEndStation(Station start, Station end) {
         try {
             return routDao.findByStartStationAndEndStation(start, end);
@@ -93,6 +104,17 @@ public class RoutServiceImpl implements RoutService {
             e.printStackTrace();
             log.debug("Find Rout by Departure {} and Destination {} failed ", start.getStationName(),
                     end.getStationName());
+        }
+        return null;
+    }
+
+    @Override
+    public List<Rout> findByRoutSection(RoutSection routSection) {
+        try {
+            return routDao.findByRoutSection(routSection);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.debug("Find Rout by routSection {} failed ", routSection.getId());
         }
         return null;
     }

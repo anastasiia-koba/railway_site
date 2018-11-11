@@ -33,7 +33,7 @@ public class Rout extends BaseEntity {
     @JoinColumn(name = "end_station_id", referencedColumnName = "id", nullable = false)
     private Station endStation;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "routs_by_sections", joinColumns = @JoinColumn(name = "rout_id"),
             inverseJoinColumns = @JoinColumn(name = "rout_section_id"))
     private Set<RoutSection> routSections;

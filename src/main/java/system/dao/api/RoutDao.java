@@ -11,6 +11,8 @@ import java.util.Set;
 public interface RoutDao extends Dao<Long, Rout> {
     List<Rout> findAll() throws DaoException;
     List<Rout> findByStartStationAndEndStation(Station start, Station end) throws DaoException;
+    List<Rout> findByRoutSection(RoutSection routSection) throws DaoException;
+    Rout findByName(String routName) throws DaoException;
     Set<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException;
     RoutSection getRoutSectionByRoutAndDepartureStation(Rout rout, Station departureStation) throws DaoException;
     RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation) throws DaoException;
