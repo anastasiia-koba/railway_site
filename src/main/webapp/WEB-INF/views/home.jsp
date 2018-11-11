@@ -1,3 +1,4 @@
+<%@ page import="java.time.LocalDate" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -13,11 +14,8 @@
 <html>
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
-          id="bootstrap-css-datatime">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <title>Railway Home</title>
 </head>
@@ -51,12 +49,12 @@
                     </select>
                     <span>${error}</span>
                 </div>
-            </div>
-            <div class="col-md-2 pt-3">
-                <div class="form-group">
-                    <label>Date: </label>
-                    <input type="date" name="date" class="form-control" value="<%=new java.util.Date()%>"
-                           max="2020-06-04" min="2018-10-25">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Date: </label>
+                        <input type="date" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>"
+                               max="2020-06-04" min="2018-10-25">
+                    </div>
                 </div>
             </div>
             <div class="col-sm-1">

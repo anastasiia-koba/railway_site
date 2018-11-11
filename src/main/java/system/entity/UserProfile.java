@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -41,6 +42,7 @@ public class UserProfile extends BaseEntity {
 
     @NotNull(message = "This field is required.")
     @Past
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "birthdate")
     private LocalDate birthDate;
 

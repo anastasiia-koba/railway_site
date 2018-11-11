@@ -3,6 +3,7 @@ package system.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class FinalRout extends BaseEntity {
     private Rout rout;
 
     @NotNull(message = "This field is required.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "date")
     private LocalDate date;
 }

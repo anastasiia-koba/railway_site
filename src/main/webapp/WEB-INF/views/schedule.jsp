@@ -1,3 +1,4 @@
+<%@ page import="java.time.LocalDate" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -30,13 +31,13 @@
                     </select>
                     <span>${error}</span>
                 </div>
-            </div>
-            <div class="col-md-2 pt-3">
-                <div class="form-group" ${status.error ? 'has-error' : ''}>
-                    <label>Date: </label>
-                    <input type="date" name="date" class="form-control" value="<%=new java.util.Date()%>"
-                           max="2020-06-04" min="2018-10-25">
-                    <span>${error}</span>
+                <div class="col-sm-2">
+                    <div class="form-group" ${status.error ? 'has-error' : ''}>
+                        <label>Date: </label>
+                        <input type="date" name="date" class="form-control" value="<%=LocalDate.now()%>"
+                               max="2020-06-04" min="2018-10-25">
+                        <span>${error}</span>
+                    </div>
                 </div>
             </div>
             <input type="submit" value="Show schedule">
