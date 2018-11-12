@@ -5,16 +5,16 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import system.entity.FinalRout;
+import system.entity.Rout;
+import system.entity.Train;
 import system.service.api.FinalRoutService;
 import system.service.api.RoutService;
 import system.service.api.TrainService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,7 +93,7 @@ public class FinalRoutController {
 
         finalRoutService.delete(currentFinalRout);
 
-        model.addAttribute("finalRoutForm", currentFinalRout);
+        model.addAttribute("finalRoutForm", new FinalRout());
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("routs", routService.findAll());
 
@@ -116,9 +116,9 @@ public class FinalRoutController {
     }
 
     @PostMapping(params = "save")
-    public String saveFinalRout(@Valid @ModelAttribute FinalRout finalRout,
-                                BindingResult bindingResult, Model model) {
-        model.addAttribute("finalRoutForm", new FinalRout());
+    public String saveFinalRout(@Valid @ModelAttribute("finalRoutForm") FinalRout finalRout,
+                                BindingResult bindingResult,
+                                Model model) {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("routs", routService.findAll());
 
@@ -137,6 +137,11 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
+        Train train = trainService.findByName(finalRout.getTrain().getTrainName());
+        Rout rout = routService.findByName(finalRout.getRout().getRoutName());
+        finalRout.setTrain(train);
+        finalRout.setRout(rout);
+
         if (bindingResult.hasErrors()) {
             return "routs";
         }
@@ -152,11 +157,17 @@ public class FinalRoutController {
             finalRoutService.create(finalRout);
         }
 
+        model.addAttribute("finalRoutForm", new FinalRout());
         model.addAttribute("finalRouts", finalRoutService.findAll());
-        model.addAttribute("arrivals", mapArrival.put(finalRout.getId(),routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                finalRout.getRout().getEndStation()).getArrivalTime()));
-        model.addAttribute("departures", mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                finalRout.getRout().getEndStation()).getArrivalTime()));
+
+        mapArrival.put(finalRout.getId(),routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
+                finalRout.getRout().getEndStation()).getArrivalTime());
+
+        model.addAttribute("arrivals", mapArrival);
+
+        mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(),
+                finalRout.getRout().getStartStation()).getDepartureTime());
+        model.addAttribute("departures", mapDeparture);
 
         return "routs";
     }

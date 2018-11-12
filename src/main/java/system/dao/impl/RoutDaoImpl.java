@@ -49,6 +49,41 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
     }
 
     @Override
+    public List<Rout> findByRoutSection(RoutSection routSection) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("Select r FROM Rout r " +
+                    "inner join fetch r.routSections rs WHERE rs = :routSection");
+            q.setParameter("routSection", routSection);
+
+            List<Rout> rout = (List<Rout>) q.getResultList();
+            return rout;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find by Start and End stations Failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Rout findByName(String routName) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT r FROM Rout r WHERE r.routName = :routname");
+            q.setParameter("routname", routName);
+
+            Rout rout = (Rout) q.getSingleResult();
+            return rout;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Rout by routName Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Rout by routName Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Rout by routName Failed: " + e.getMessage());
+        }
+    }
+
+    @Override
     public Set<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException {
         try {
             Query q = entityManager.createQuery("Select rs FROM RoutSection rs " +

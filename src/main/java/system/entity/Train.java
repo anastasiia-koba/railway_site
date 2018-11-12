@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * Simple JavaBean domain object that represents a TrainDao.
+ * Simple JavaBean domain object that represents a Train.
  */
 @Getter
 @Setter
@@ -27,4 +27,8 @@ public class Train extends BaseEntity {
     @Digits(integer=4, fraction = 0, message = "This field must be four-digit number or less.")
     @Column(name = "places_number")
     private Integer placesNumber;
+
+    public Train(String trainName) {
+        this.trainName = trainName;
+    }
 }
