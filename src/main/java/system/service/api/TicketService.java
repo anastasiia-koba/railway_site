@@ -18,4 +18,5 @@ public interface TicketService {
     Set<Ticket> findByUser(UserProfile user);
     Set<Ticket> findByFinalRout(FinalRout finalRout);
     Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end);
+    Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user);
 }

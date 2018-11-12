@@ -119,21 +119,64 @@ public class MainController {
                                    @RequestParam("stationTo") Long stationToId,
                                    @RequestParam("routId") Long routId, Model model) {
 
-        if (false) {//TODO checking free place
-            return "home";
-        }
-
         UserProfile user = userService.findByUsername(activeUser.getUsername());
 
         Station stationFrom = stationService.findById(stationFromId);
         Station stationTo = stationService.findById(stationToId);
 
         FinalRout finalRout = finalRoutService.findById(routId);
+
+        model.addAttribute("stationFrom", stationFrom);
+        model.addAttribute("stationTo", stationTo);
+
+        Set<FinalRout> finalRoutSet = finalRoutService.findByStationToStationOnDate(stationFrom, stationTo, finalRout.getDate());
+        model.addAttribute("routs", finalRoutSet);
+
+        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
+        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
+        Map<Long, LocalTime> mapTimeInTravel = new HashMap<>();
+        Map<Long, Integer> mapPrice = new HashMap<>();
+        Map<Long, Integer> mapPlaces = new HashMap<>();
+
+        for (FinalRout finalRt: finalRoutSet) {
+            mapDeparture.put(finalRt.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRt.getRout(), stationFrom).getDepartureTime());
+            mapArrival.put(finalRt.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRt.getRout(), stationTo).getArrivalTime());
+
+            Duration duration = Duration.between(mapArrival.get(finalRout.getId()), mapDeparture.get(finalRt.getId())).abs();
+            mapTimeInTravel.put(finalRt.getId(), LocalTime.ofSecondOfDay(duration.getSeconds()));
+            mapPrice.put(finalRt.getId(), routService.getPriceInRoutBetweenDepartureAndDestination(finalRt.getRout(), stationFrom, stationTo));
+            mapPlaces.put(finalRt.getId(), finalRt.getTrain().getPlacesNumber() - ticketService.findCountTicketsByFinalRoutAndStartAndEndStations(finalRt, stationFrom, stationTo));
+        }
+
+        model.addAttribute("arrivals", mapArrival);
+        model.addAttribute("departures", mapDeparture);
+        model.addAttribute("times", mapTimeInTravel);
+
+        model.addAttribute("prices", mapPrice);
+        model.addAttribute("freePlaces", mapPlaces);
+
+        if (ticketService.isAnyBodyInFinalRoutWithUserData(finalRout, user)) {
+            model.addAttribute("error", "User with such surname, firstname and birth date has already register. ");
+            return "home";
+        }
+
+        LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), stationFrom).getDepartureTime();
+
+        LocalDate departureDate = finalRout.getDate();
+        LocalDate currentDate = LocalDate.now();
+
+        Duration duration = Duration.between(LocalTime.now(), timeDeparture).abs();
+
+        if (currentDate.isAfter(departureDate) ||
+                (LocalTime.ofSecondOfDay(duration.getSeconds()).isBefore(LocalTime.of(0, 10)))) {
+            model.addAttribute("error", "Train departures in less than 10 minutes. ");
+            return "home";
+        }
+
         Integer price = routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), stationFrom, stationTo);
 
         model.addAttribute("rout", finalRout);
-        model.addAttribute("stationFrom", stationFrom);
-        model.addAttribute("stationTo", stationTo);
+
         model.addAttribute("user", user);
 
         model.addAttribute("price", price);

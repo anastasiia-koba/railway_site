@@ -23,31 +23,33 @@
 
 <jsp:include page="navbar.jsp"></jsp:include>
 
-<div class="container-fluid bg-light ">
-    <div class="row align-items-center justify-content-center">
-        <form method="POST" action="${contextPath}">
-            <div class="col-md-2 pt-3">
-                <div class="form-group" ${status.error ? 'has-error' : ''}>
-                    <label>From where? </label>
-                    <select id="comboboxFrom" name="stationsFrom" placeholder="From where?">
-                        <option></option>
-                        <c:forEach items="${stationsFrom}" var="station">
-                            <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                        </c:forEach>
-                    </select>
-                    <span>${error}</span>
+<div id="top-filter" class="top-filter tfilter-box hidden-xs" data-spy="affix" data-offset-top="197">
+    <div class="container">
+        <div class="row">
+            <form method="POST" id="searchForm" action="${contextPath}/">
+                <div class="col-sm-2">
+                    <div class="form-group" ${status.error ? 'has-error' : ''}>
+                        <label>From where? </label>
+                        <select id="comboboxFrom" name="stationsFrom" placeholder="From where?" class="form-control">
+                            <option></option>
+                            <c:forEach items="${stationsFrom}" var="station">
+                                <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                            </c:forEach>
+                        </select>
+                        <span>${error}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2 pt-3">
-                <div class="form-group" ${status.error ? 'has-error' : ''}>
-                    <label>To where? </label>
-                    <select id="comboboxTo" name="stationsTo" placeholder="To where?">
-                        <option></option>
-                        <c:forEach items="${stationsTo}" var="station">
-                            <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                        </c:forEach>
-                    </select>
-                    <span>${error}</span>
+                <div class="col-sm-2">
+                    <div class="form-group" ${status.error ? 'has-error' : ''}>
+                        <label>To where? </label>
+                        <select id="comboboxTo" name="stationsTo" placeholder="To where?" class="form-control">
+                            <option></option>
+                            <c:forEach items="${stationsTo}" var="station">
+                                <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                            </c:forEach>
+                        </select>
+                        <span>${error}</span>
+                    </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
@@ -56,11 +58,11 @@
                                max="2020-06-04" min="2018-10-25">
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-1">
-                <button type="submit" class="btn btn-primary site-btn">Search</button>
-            </div>
-        </form>
+                <div class="col-sm-1">
+                    <input type="submit" id="search" class="btn btn-primary site-btn" value="Search"/>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -93,15 +95,17 @@
                         <td>${times[rout.id]}</td>
                         <td>${prices[rout.id]}</td>
                         <td>
-                            <form method="POST" action="${contextPath}/buy">
+                            <form method="POST" action="${contextPath}/buy" ${error != null ? 'has-error' : ''}>
                                 <input type="hidden" name="routId" value="${rout.id}">
                                 <input type="hidden" name="stationFrom" value="${stationFrom.id}">
                                 <input type="hidden" name="stationTo" value="${stationTo.id}">
                                 <c:if test="${freePlaces[rout.id] != 0}">
-                                    <input type="submit" name="buy" value="Buy">
+                                    <input type="submit" id="btnBuy" name="buy" value="Buy">
                                 </c:if>
+                            <br/>
+                                <span>${error}</span>
                             </form>
-                            ${freePlaces[rout.id]} places
+                                ${freePlaces[rout.id]} places
                         </td>
                     </tr>
                 </c:forEach>
