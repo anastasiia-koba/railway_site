@@ -61,7 +61,9 @@ public class MainController {
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.POST)
     public String getSearchResult(@RequestParam("stationsFrom") Station stationFrom,
                                   @RequestParam("stationsTo") Station stationTo,
-                                  @RequestParam("date") LocalDate date, Model model){
+                                  @RequestParam("date") String strDate, Model model){
+        LocalDate date = LocalDate.parse(strDate);
+
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
 

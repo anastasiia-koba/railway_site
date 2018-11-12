@@ -39,10 +39,8 @@ public class TrainController {
     }
 
     @RequestMapping(value = "/date", method = RequestMethod.POST)
-    public String getTrainsByDatePage(@RequestParam("calendar") String strDate,
+    public String getTrainsByDatePage(@RequestParam("calendar") LocalDate date,
                                       Model model){
-        LocalDate date = LocalDate.parse(strDate);
-
         model.addAttribute("finalRouts", finalRoutService.findByDate(date));
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());

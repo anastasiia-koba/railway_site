@@ -47,7 +47,9 @@ public class ScheduleController {
 
     @RequestMapping(value = "/schedule", method = RequestMethod.POST)
     public String getScheduleByStation(@ModelAttribute Station station,
-                                       @RequestParam("date") LocalDate date, Model model){
+                                       @RequestParam("date") String strDate, Model model){
+        LocalDate date = LocalDate.parse(strDate);
+
         model.addAttribute("stations", stationService.findAll());
 
         station = stationService.findByName(station.getStationName());
