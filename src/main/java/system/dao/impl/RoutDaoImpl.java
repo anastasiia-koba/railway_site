@@ -1,5 +1,6 @@
 package system.dao.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.RoutDao;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * Implementation of {@link Rout} interface.
  */
+@Slf4j
 @Repository
 public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
     @Override
@@ -110,7 +112,14 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             q.setParameter("rout", rout);
             q.setParameter("departure", departureStation);
 
-            return (RoutSection) q.getSingleResult();
+            List results = q.getResultList();
+
+            if (results.isEmpty()) {
+                log.debug("RoutSection in rout {} with departure {} is not founded", rout.getRoutName(), departureStation);
+                return null; // handle no-results case
+            } else {
+                return (RoutSection) results.get(0);
+            }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Departure Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -128,7 +137,14 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             q.setParameter("rout", rout);
             q.setParameter("destination", destinationStation);
 
-            return (RoutSection) q.getSingleResult();
+            List results = q.getResultList();
+
+            if (results.isEmpty()) {
+                log.debug("RoutSection in rout {} with destination {} is not founded", rout.getRoutName(), destinationStation);
+                return null; // handle no-results case
+            } else {
+                return (RoutSection) results.get(0);
+            }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by Rout And Destination Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
