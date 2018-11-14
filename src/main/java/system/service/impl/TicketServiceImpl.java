@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import system.DaoException;
-import system.dao.api.RoutDao;
 import system.dao.api.TicketDao;
 import system.entity.*;
+import system.service.api.RoutService;
 import system.service.api.TicketService;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class TicketServiceImpl implements TicketService {
     private TicketDao ticketDao;
 
     @Autowired
-    private RoutDao routDao;
+    private RoutService routService;
 
     @Override
     public void create(Ticket ticket) {
@@ -97,7 +97,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end) {
         try {
-            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+            Set<RoutSection> routSections = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                                             start, end);
 
             Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
@@ -105,7 +105,7 @@ public class TicketServiceImpl implements TicketService {
             Integer countTickets = 0;
 
             for (Ticket ticket : tickets){
-                Set<RoutSection> ticketSection = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                Set<RoutSection> ticketSection = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                         ticket.getStartStation(), ticket.getEndStation());
 
                 Set<RoutSection> intersect = ticketSection.stream().filter(routSections::contains).collect(Collectors.toSet());
