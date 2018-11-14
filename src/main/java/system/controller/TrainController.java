@@ -90,14 +90,7 @@ public class TrainController {
             return "admin";
         }
 
-        if (train.getId() != null){
-            Train trainForChange = trainService.findById(train.getId());
-            trainForChange.setTrainName(train.getTrainName());
-            trainForChange.setPlacesNumber(train.getPlacesNumber());
-            trainService.save(trainForChange);
-        } else {
-            trainService.create(train);
-        }
+        trainService.save(train);
 
         model.addAttribute("trainForm", new Train());
         model.addAttribute("trains", trainService.findAll());

@@ -4,6 +4,7 @@ package system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.TrainDao;
 import system.entity.Train;
@@ -21,28 +22,33 @@ public class TrainServiceImpl implements TrainService {
     @Autowired
     private TrainDao trainDao;
 
-    @Override
-    public void create(Train train) {
-        try {
-            trainDao.create(train);
-            log.debug("Created Train {} ", train.getTrainName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Create Train {} failed ", train.getTrainName());
-        }
-    }
-
+    @Transactional
     @Override
     public void save(Train train) {
-        try {
-            trainDao.update(train);
-            log.debug("Updated Train {} ", train.getTrainName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Update Train {} failed ", train.getTrainName());
+        if (train.getId() != null) {
+            try {
+                Train trainForChange = trainDao.findById(train.getId());
+                trainForChange.setTrainName(train.getTrainName());
+                trainForChange.setPlacesNumber(train.getPlacesNumber());
+
+                trainDao.update(trainForChange);
+                log.debug("Updated Train {} ", train.getTrainName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Update Train {} failed ", train.getTrainName());
+            }
+        } else {
+            try {
+                trainDao.create(train);
+                log.debug("Created Train {} ", train.getTrainName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Create Train {} failed ", train.getTrainName());
+            }
         }
     }
 
+    @Transactional
     @Override
     public void delete(Train train) {
         try {
