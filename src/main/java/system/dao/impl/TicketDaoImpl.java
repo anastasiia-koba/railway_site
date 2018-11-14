@@ -9,6 +9,7 @@ import system.entity.UserProfile;
 
 import javax.persistence.Query;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,6 +48,34 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             throw new DaoException(DaoException._SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
         } catch (Exception e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
+                    "inner join fetch t.user user WHERE t.finalRout = :finalRout " +
+                    "AND user.surname = :surname AND user.firstname = :firstname " +
+                    "AND user.birthDate = :birthdate");
+            q.setParameter("finalRout", finalRout);
+            q.setParameter("surname", user.getSurname());
+            q.setParameter("firstname", user.getFirstname());
+            q.setParameter("birthdate", user.getBirthDate());
+
+            List results = q.getResultList();
+
+            if (results.isEmpty()) {
+                return false; // handle no-results case
+            } else {
+                return true;
+            }
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
         }
     }
 }

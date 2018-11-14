@@ -10,4 +10,5 @@ import java.util.Set;
 public interface TicketDao extends Dao<Long, Ticket> {
     Set<Ticket> findByUser(UserProfile user) throws DaoException;
     Set<Ticket> findByFinalRout(FinalRout finalRout) throws DaoException;
+    Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) throws DaoException;
 }

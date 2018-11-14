@@ -127,17 +127,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) {
         try {
-            Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
-
-            for (Ticket ticket : tickets){
-                if (ticket.getUser().getSurname().equals(user.getSurname()) &&
-                        ticket.getUser().getFirstname().equals(user.getFirstname()) &&
-                        ticket.getUser().getBirthDate().equals(user.getBirthDate())) {
-                    return true;
-                }
-            }
-
-            return false;
+            return ticketDao.isAnyBodyInFinalRoutWithUserData(finalRout, user);
         } catch (DaoException e) {
             e.printStackTrace();
             log.debug("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
