@@ -3,6 +3,7 @@ package system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.StationDao;
 import system.entity.Station;
@@ -11,7 +12,7 @@ import system.service.api.StationService;
 import java.util.List;
 
 /**
- *Implementation of {@link StationService} interface.
+ * Implementation of {@link StationService} interface.
  */
 @Slf4j
 @Service
@@ -20,28 +21,31 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
-    @Override
-    public void create(Station station) {
-        try {
-            stationDao.create(station);
-            log.debug("Created Station {} ", station.getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Create Station {} failed", station.getStationName());
-        }
-    }
-
+    @Transactional
     @Override
     public void save(Station station) {
-        try {
-            stationDao.update(station);
-            log.debug("Updated Station {} ", station.getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Update Station {} failed", station.getStationName());
+        if (station.getId() != null) {
+            try {
+                Station stationForChange = stationDao.findById(station.getId());
+                stationForChange.setStationName(station.getStationName());
+
+                stationDao.update(stationForChange);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Update Station {} failed", station.getStationName());
+            }
+        } else {
+            try {
+                stationDao.create(station);
+                log.debug("Created Station {} ", station.getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Create Station {} failed", station.getStationName());
+            }
         }
     }
 
+    @Transactional
     @Override
     public void delete(Station station) {
         try {

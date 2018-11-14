@@ -8,7 +8,6 @@ import java.util.List;
  * Service class for {@link system.entity.Station}
  */
 public interface StationService {
-    void create(Station station);
     void save(Station station);
     void delete(Station station);
     Station findByName(String stationName);

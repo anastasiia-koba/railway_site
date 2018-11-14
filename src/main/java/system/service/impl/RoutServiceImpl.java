@@ -4,6 +4,7 @@ package system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.RoutDao;
 import system.entity.Rout;
@@ -24,32 +25,38 @@ public class RoutServiceImpl implements RoutService {
     @Autowired
     private RoutDao routDao;
 
-    @Override
-    public void create(Rout rout) {
-        try {
-            routDao.create(rout);
-            log.debug("Created Rout from {} to {} ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Create Rout from {} to {} failed ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName());
-        }
-    }
-
+    @Transactional
     @Override
     public void save(Rout rout) {
-        try {
-            routDao.update(rout);
-            log.debug("Updated Rout from {} to {} ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Update Rout from {} to {} failed ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName());
+        if (rout.getId() != null) {
+            try {
+                Rout routForChange = routDao.findById(rout.getId());
+                routForChange.setRoutName(rout.getRoutName());
+                routForChange.setStartStation(rout.getStartStation());
+                routForChange.setEndStation(rout.getEndStation());
+
+                routDao.update(routForChange);
+                log.debug("Updated Rout from {} to {} ", rout.getStartStation().getStationName(),
+                        rout.getEndStation().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Update Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                        rout.getEndStation().getStationName());
+            }
+        } else {
+            try {
+                routDao.create(rout);
+                log.debug("Created Rout from {} to {} ", rout.getStartStation().getStationName(),
+                        rout.getEndStation().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Create Rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                        rout.getEndStation().getStationName());
+            }
         }
     }
 
+    @Transactional
     @Override
     public void delete(Rout rout) {
         try {

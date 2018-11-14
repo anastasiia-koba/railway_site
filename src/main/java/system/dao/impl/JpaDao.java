@@ -20,7 +20,6 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[1];
     }
 
-    @Transactional
     @Override
     public void create(E entity) throws DaoException {
         try {
@@ -37,7 +36,6 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         }
     }
 
-    @Transactional
     @Override
     public void remove(E entity) throws DaoException {
         try {
@@ -51,7 +49,6 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         }
     }
 
-    @Transactional
     @Override
     public void update(E entity) throws DaoException {
         try {

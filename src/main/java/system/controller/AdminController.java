@@ -14,7 +14,6 @@ import system.service.api.RoutService;
 import system.service.api.StationService;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -122,13 +121,7 @@ public class AdminController {
             return "admin";
         }
 
-        if (station.getId() != null){
-            Station stationForChange = stationService.findById(station.getId());
-            stationForChange.setStationName(station.getStationName());
-            stationService.save(stationForChange);
-        } else {
-            stationService.create(station);
-        }
+        stationService.save(station);
 
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
@@ -206,15 +199,7 @@ public class AdminController {
         rout.setStartStation(stationService.findByName(rout.getStartStation().getStationName()));
         rout.setEndStation(stationService.findByName(rout.getEndStation().getStationName()));
 
-        if (rout.getId() != null){
-            Rout routForChange = routService.findById(rout.getId());
-            routForChange.setRoutName(rout.getRoutName());
-            routForChange.setStartStation(rout.getStartStation());
-            routForChange.setEndStation(rout.getEndStation());
-            routService.save(routForChange);
-        } else {
-            routService.create(rout);
-        }
+        routService.save(rout);
 
         model.addAttribute("routForm", new Rout());
         model.addAttribute("routs", routService.findAll());
@@ -332,20 +317,7 @@ public class AdminController {
         Station destination = stationService.findByName(routSection.getDestination().getStationName());
         routSection.setDestination(destination);
 
-        if (routSection.getId() != null){
-            RoutSection sectionForChange = routSectionService.findById(routSection.getId());
-            sectionForChange.setDeparture(routSection.getDeparture());
-            sectionForChange.setDestination(routSection.getDestination());
-            sectionForChange.setDistance(routSection.getDistance());
-            sectionForChange.setPrice(routSection.getPrice());
-            sectionForChange.setDepartureTime(routSection.getDepartureTime());
-            sectionForChange.setArrivalTime(routSection.getArrivalTime());
-            routSectionService.save(sectionForChange);
-        } else {
-            routSectionService.create(routSection);
-            rout.getRoutSections().add(routSection);
-            routService.save(rout);
-        }
+        routSectionService.save(routSection);
 
         model.addAttribute("routSectionForm", new RoutSection());
         model.addAttribute("sections", routService.getRoutSectionInRout(rout));

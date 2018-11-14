@@ -11,7 +11,6 @@ import java.util.Set;
  * Service class for {@link system.entity.Rout}
  */
 public interface RoutService {
-    void create(Rout rout);
     void save(Rout rout);
     void delete(Rout rout);
     Rout findById(Long id);

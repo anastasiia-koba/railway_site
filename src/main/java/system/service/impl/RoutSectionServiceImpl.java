@@ -4,6 +4,7 @@ package system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.RoutSectionDao;
 import system.entity.RoutSection;
@@ -22,32 +23,41 @@ public class RoutSectionServiceImpl implements RoutSectionService {
     @Autowired
     private RoutSectionDao routSectionDao;
 
-    @Override
-    public void create(RoutSection routSection) {
-        try {
-            routSectionDao.create(routSection);
-            log.debug("Created Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Create Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName());
-        }
-    }
-
+    @Transactional
     @Override
     public void save(RoutSection routSection){
-        try {
-            routSectionDao.update(routSection);
-            log.debug("Updated Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Update Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName());
+        if (routSection.getId() != null) {
+            try {
+                RoutSection sectionForChange = routSectionDao.findById(routSection.getId());
+                sectionForChange.setDeparture(routSection.getDeparture());
+                sectionForChange.setDestination(routSection.getDestination());
+                sectionForChange.setDistance(routSection.getDistance());
+                sectionForChange.setPrice(routSection.getPrice());
+                sectionForChange.setDepartureTime(routSection.getDepartureTime());
+                sectionForChange.setArrivalTime(routSection.getArrivalTime());
+
+                routSectionDao.update(sectionForChange);
+                log.debug("Updated Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                        routSection.getDestination().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Update Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                        routSection.getDestination().getStationName());
+            }
+        } else {
+            try {
+                routSectionDao.create(routSection);
+                log.debug("Created Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                        routSection.getDestination().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Create Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                        routSection.getDestination().getStationName());
+            }
         }
     }
 
+    @Transactional
     @Override
     public void delete(RoutSection routSection) {
         try {

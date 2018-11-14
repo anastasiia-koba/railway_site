@@ -9,7 +9,6 @@ import java.util.List;
  * Service class for {@link system.entity.RoutSection}
  */
 public interface RoutSectionService {
-    void create(RoutSection routSection);
     void save(RoutSection routSection);
     void delete(RoutSection routSection);
     RoutSection findById(Long id);
