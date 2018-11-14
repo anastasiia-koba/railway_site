@@ -44,15 +44,8 @@ public class FinalRoutController {
         model.addAttribute("routs", routService.findAll());
 
         Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
-
-        for (FinalRout finalRout : finalRouts) {
-            mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(),
-                            finalRout.getRout().getStartStation()).getDepartureTime());
-            mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                            finalRout.getRout().getEndStation()).getArrivalTime());
-        }
+        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
+        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
         model.addAttribute("finalRouts", finalRouts);
         model.addAttribute("arrivals", mapArrival);
@@ -70,15 +63,8 @@ public class FinalRoutController {
         model.addAttribute("routs", routService.findAll());
 
         Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
-
-        for (FinalRout finalRout : finalRouts) {
-            mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(),
-                    finalRout.getRout().getStartStation()).getDepartureTime());
-            mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                    finalRout.getRout().getEndStation()).getArrivalTime());
-        }
+        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
+        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
         model.addAttribute("finalRouts", finalRouts);
         model.addAttribute("arrivals", mapArrival);
@@ -98,15 +84,8 @@ public class FinalRoutController {
         model.addAttribute("routs", routService.findAll());
 
         Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
-
-        for (FinalRout finalRout : finalRouts) {
-            mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(),
-                    finalRout.getRout().getStartStation()).getDepartureTime());
-            mapArrival.put(finalRout.getId(), routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                    finalRout.getRout().getEndStation()).getArrivalTime());
-        }
+        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
+        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
         model.addAttribute("finalRouts", finalRouts);
         model.addAttribute("arrivals", mapArrival);
@@ -123,15 +102,8 @@ public class FinalRoutController {
         model.addAttribute("routs", routService.findAll());
 
         Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
-
-        for (FinalRout routs : finalRouts) {
-            mapDeparture.put(routs.getId(), routService.getRoutSectionByRoutAndDepartureStation(routs.getRout(),
-                    routs.getRout().getStartStation()).getDepartureTime());
-            mapArrival.put(routs.getId(), routService.getRoutSectionByRoutAndDestinationStation(routs.getRout(),
-                    routs.getRout().getEndStation()).getArrivalTime());
-        }
+        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
+        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
         model.addAttribute("finalRouts", finalRouts);
         model.addAttribute("arrivals", mapArrival);
@@ -146,27 +118,15 @@ public class FinalRoutController {
             return "routs";
         }
 
-        if (finalRout.getId() != null){
-            FinalRout finalRoutForChange = finalRoutService.findById(finalRout.getId());
-            finalRoutForChange.setTrain(finalRout.getTrain());
-            finalRoutForChange.setRout(finalRout.getRout());
-            finalRoutForChange.setDate(finalRout.getDate());
-            finalRoutService.save(finalRoutForChange);
-            finalRout = finalRoutForChange;
-        } else {
-            finalRoutService.create(finalRout);
-        }
+        finalRoutService.save(finalRout);
 
         model.addAttribute("finalRoutForm", new FinalRout());
         model.addAttribute("finalRouts", finalRoutService.findAll());
 
-        mapArrival.put(finalRout.getId(),routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(),
-                finalRout.getRout().getEndStation()).getArrivalTime());
+        mapDeparture = finalRoutService.getMapDeparture(finalRouts);
+        mapArrival = finalRoutService.getMapArrival(finalRouts);
 
         model.addAttribute("arrivals", mapArrival);
-
-        mapDeparture.put(finalRout.getId(), routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(),
-                finalRout.getRout().getStartStation()).getDepartureTime());
         model.addAttribute("departures", mapDeparture);
 
         return "routs";

@@ -3,6 +3,7 @@ package system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.FinalRoutDao;
 import system.entity.FinalRout;
@@ -10,9 +11,15 @@ import system.entity.Rout;
 import system.entity.Station;
 import system.entity.Train;
 import system.service.api.FinalRoutService;
+import system.service.api.RoutService;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *Implementation of {@link system.service.api.FinalRoutService} interface.
@@ -24,32 +31,41 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     @Autowired
     private FinalRoutDao finalRoutDao;
 
-    @Override
-    public void create(FinalRout finalRout) {
-        try {
-            finalRoutDao.create(finalRout);
-            log.debug("Created Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Create Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
-        }
-    }
+    @Autowired
+    private RoutService routService;
 
+    @Transactional
     @Override
     public void save(FinalRout finalRout) {
-        try {
-            finalRoutDao.update(finalRout);
-            log.debug("Updated Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.debug("Update Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
+        if (finalRout.getId() != null) {
+            try {
+                FinalRout finalRoutForChange = finalRoutDao.findById(finalRout.getId());
+                finalRoutForChange.setTrain(finalRout.getTrain());
+                finalRoutForChange.setRout(finalRout.getRout());
+                finalRoutForChange.setDate(finalRout.getDate());
+
+                finalRoutDao.update(finalRoutForChange);
+                log.debug("Updated Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Update Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName());
+            }
+        } else {
+            try {
+                finalRoutDao.create(finalRout);
+                log.debug("Created Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName());
+            } catch (DaoException e) {
+                e.printStackTrace();
+                log.debug("Create Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName());
+            }
         }
     }
 
+    @Transactional
     @Override
     public void delete(FinalRout finalRout) {
         try {
@@ -129,5 +145,50 @@ public class FinalRoutServiceImpl implements FinalRoutService {
                     train.getTrainName(), date);
         }
         return null;
+    }
+
+    @Override
+    public Map<Long, LocalTime> getMapDeparture(Set<FinalRout> finalRouts) {
+
+        Map<Long, LocalTime> mapDeparture = finalRouts.stream().collect(Collectors.toMap(e -> e.getId(),
+                                            e -> routService.getRoutSectionByRoutAndDepartureStation(e.getRout(),
+                                            e.getRout().getStartStation()).getDepartureTime()));
+
+        return mapDeparture;
+    }
+
+    @Override
+    public Map<Long, LocalTime> getMapArrival(Set<FinalRout> finalRouts) {
+
+        Map<Long, LocalTime> mapArrival = finalRouts.stream().collect(Collectors.toMap(e -> e.getId(),
+                                            e -> routService.getRoutSectionByRoutAndDestinationStation(e.getRout(),
+                                            e.getRout().getEndStation()).getArrivalTime()));
+
+        return mapArrival;
+    }
+
+    @Override
+    public Map<Long, LocalTime> getMapDepartureByStation(Set<FinalRout> finalRouts, Station station) {
+        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
+
+        for (FinalRout finalRout : finalRouts) {
+            LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
+                    routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station).getDepartureTime() : null;
+            mapDeparture.put(finalRout.getId(), timeDeparture);
+        }
+        return mapDeparture;
+    }
+
+    @Override
+    public Map<Long, LocalTime> getMapArrivalByStation(Set<FinalRout> finalRouts, Station station) {
+        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
+
+        for (FinalRout finalRout : finalRouts) {
+            LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
+                    routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station).getArrivalTime(): null ;
+            mapArrival.put(finalRout.getId(), timeArrival);
+        }
+
+        return mapArrival;
     }
 }

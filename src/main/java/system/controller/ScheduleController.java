@@ -58,17 +58,8 @@ public class ScheduleController {
         Set<FinalRout> finalRoutSet = finalRoutService.findByStationAndDate(station, date);
         model.addAttribute("trains", finalRoutSet);
 
-        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
-        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
-
-        for (FinalRout finalRout : finalRoutSet) {
-            LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
-                    routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station).getDepartureTime() : null;
-            mapDeparture.put(finalRout.getId(), timeDeparture);
-            LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
-                    routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station).getArrivalTime(): null ;
-            mapArrival.put(finalRout.getId(), timeArrival);
-        }
+        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDepartureByStation(finalRoutSet, station);
+        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrivalByStation(finalRoutSet, station);
 
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
