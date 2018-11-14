@@ -191,4 +191,37 @@ public class FinalRoutServiceImpl implements FinalRoutService {
 
         return mapArrival;
     }
+
+    @Override
+    public Map<Long, LocalTime> getMapTimeInTravel(Set<FinalRout> finalRouts, Station from, Station to) {
+        Map<Long, LocalTime> mapTimeInTravel = new HashMap<>();
+
+        Map<Long, LocalTime> mapDeparture = getMapDepartureByStation(finalRouts, from);
+        Map<Long, LocalTime> mapArrival = getMapArrivalByStation(finalRouts, to);
+
+        mapDeparture = mapDeparture.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(),
+                e -> (e.getValue() == null ? LocalTime.of(0, 0) : e.getValue())));
+
+        mapArrival = mapArrival.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(),
+                e -> (e.getValue() == null ? LocalTime.of(0, 0) : e.getValue())));
+
+        for (FinalRout finalRout: finalRouts) {
+            Duration duration = Duration.between(mapArrival.get(finalRout.getId()), mapDeparture.get(finalRout.getId())).abs();
+            mapTimeInTravel.put(finalRout.getId(), LocalTime.ofSecondOfDay(duration.getSeconds()));
+        }
+
+        return mapTimeInTravel;
+    }
+
+    @Override
+    public Map<Long, Integer> getMapPriceInCustomRout(Set<FinalRout> finalRouts, Station from, Station to) {
+        Map<Long, Integer> mapPrice = new HashMap<>();
+
+        for (FinalRout finalRout: finalRouts) {
+            mapPrice.put(finalRout.getId(), routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), from, to));
+        }
+
+        return mapPrice;
+    }
+
 }

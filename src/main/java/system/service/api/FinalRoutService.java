@@ -26,4 +26,6 @@ public interface FinalRoutService {
     Map<Long, LocalTime> getMapArrival(Set<FinalRout> finalRouts);
     Map<Long, LocalTime> getMapDepartureByStation(Set<FinalRout> finalRouts, Station station);
     Map<Long, LocalTime> getMapArrivalByStation(Set<FinalRout> finalRouts, Station station);
+    Map<Long, LocalTime> getMapTimeInTravel(Set<FinalRout> finalRouts, Station from, Station to);
+    Map<Long, Integer> getMapPriceInCustomRout(Set<FinalRout> finalRouts, Station from, Station to);
 }

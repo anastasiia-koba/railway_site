@@ -5,6 +5,7 @@ import system.entity.Station;
 import system.entity.Ticket;
 import system.entity.UserProfile;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,4 +20,5 @@ public interface TicketService {
     Set<Ticket> findByFinalRout(FinalRout finalRout);
     Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end);
     Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user);
+    Map<Long, Integer> getMapFreePlacesInCustomRout(Set<FinalRout> finalRouts, Station from, Station to);
 }

@@ -9,6 +9,8 @@ import system.dao.api.TicketDao;
 import system.entity.*;
 import system.service.api.TicketService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -143,5 +145,16 @@ public class TicketServiceImpl implements TicketService {
         }
 
         return false;
+    }
+
+    @Override
+    public Map<Long, Integer> getMapFreePlacesInCustomRout(Set<FinalRout> finalRouts, Station from, Station to) {
+        Map<Long, Integer> mapPlaces = new HashMap<>();
+
+        for (FinalRout finalRout: finalRouts) {
+            mapPlaces.put(finalRout.getId(), finalRout.getTrain().getPlacesNumber() -
+                    findCountTicketsByFinalRoutAndStartAndEndStations(finalRout, from, to));
+        }
+        return mapPlaces;
     }
 }
