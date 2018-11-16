@@ -34,22 +34,25 @@
     <div class="tab-content" id="containerContainingTabs">
         <%--STATIONS--%>
         <div class="tab-pane ${selectedTab == 'station-tab' ? 'active' : ''} text-style" id="station-tab">
-            <form:form method="POST" modelAttribute="stationForm" action="${contextPath}/admin/stations"
-                       class="form-group">
-                <form:input path="id" type="hidden"></form:input>
-                <spring:bind path="stationName">
-                    <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="stationName" placeholder="New Station" class="form-control"
-                                    path="stationName"></form:input>
-                        <form:errors path="stationName"></form:errors>
-                    </div>
-                </spring:bind>
-                <button type="submit" name="save">Save</button>
-            </form:form>
-
+            <div id="stationContainer">
+                <form:form method="POST" name="stationForm" modelAttribute="stationForm"
+                           action="${contextPath}/admin/stations"
+                           class="form-group">
+                    <form:input path="id" type="hidden"></form:input>
+                    <spring:bind path="stationName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="stationName" placeholder="New Station" class="form-control"
+                                        path="stationName"></form:input>
+                            <form:errors path="stationName"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <button type="submit" name="save" onclick="stationSave">Save</button>
+                </form:form>
+            </div>
             <div class="container station-table">
                 <div class="list">
                     <h3>Stations</h3>
+                    <div id="stationMessage"></div>
                     <table class="table" id="myTableStations">
                         <thead>
                         <tr>
@@ -60,15 +63,18 @@
                         <tbody>
                         <c:forEach items="${stations}" var="station">
                             <tr>
-                                <form method="POST" action="${contextPath}/admin/stations">
-
-                                    <td value="${station.stationName.toString()}">${station.stationName.toString()}</td>
-                                    <td>
-                                        <input type="hidden" name="id" value="${station.id}">
-                                        <input type="submit" name="change" value="Change">
-                                        <input type="submit" name="delete" value="Delete">
-                                    </td>
-                                </form>
+                                <td value="${station.stationName.toString()}">${station.stationName.toString()}</td>
+                                <td>
+                                    <input type="hidden" id="idStation-${loop.index}" value="${station.id}">
+                                    <button type="button" id="btnChangeStation-${loop.index}"
+                                            onclick="stationEdit('${loop.index}')">
+                                        Change
+                                    </button>
+                                    <button type="button" id="btnDeleteStation-${loop.index}"
+                                            onclick="stationDelete('${loop.index}')">
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -346,5 +352,61 @@
         </div>
     </div>
 </div>
+<script>
+    function stationEdit(index) {
+        event.preventDefault();
+
+        var station = $("#idStation-" + index).val();
+
+
+        var object = {stationId: station};
+
+        $.post("${contextPath}/admin/stations?change", object).done(function (result) {
+            alert(result);
+
+            $('#stationMessage').text('');
+
+            for (var list = Object.keys(result), i = list.length, form = document.forms.namedItem('stationForm'); i--;) {
+                if (form[list[i]]) {
+                    form[list[i]].value = result[list[i]];
+                }
+            }
+            // $("#btnChangeStation-"+index).prop("disabled", true);
+        }).fail(function (e) {
+            alert('Error: ' + e);
+        });
+    }
+
+    function stationDelete(index) {
+        event.preventDefault();
+
+        var station = $("#idStation-" + index).val();
+
+        var object = {stationId: station};
+
+        $.post("${contextPath}/admin/stations?delete", object).done(function (result) {
+            $('#stationMessage').empty().text(result);
+            getStationList();
+        }).fail(function () {
+            alert('Delete station failed');
+        });
+    }
+
+    function stationSave() {
+        event.preventDefault();
+
+        var stationForm = new FormData(document.forms.namedItem('stationForm'));
+
+        var object = {stationForm: stationForm};
+
+        $.post("${contextPath}/admin/stations?save", object).done(function (result) {
+
+            //$('#stationMessage').empty().text(result);
+            getStationList();
+        }).fail(function (e) {
+            alert('Error: ' + JSON.stringify(e));
+        });
+    }
+</script>
 </body>
 </html>

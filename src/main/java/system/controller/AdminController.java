@@ -54,79 +54,39 @@ public class AdminController {
         return "admin";
     }
 
+
+
+
     @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "change")
-    public String changeStation(@ModelAttribute Station station, Model model) {
-        Station stationForChange = stationService.findById(station.getId());
-        model.addAttribute("stationForm", stationForChange);
+    @ResponseBody
+    public Station changeStation(@RequestParam("stationId") Long stationId) {
+        Station stationForChange = stationService.findById(stationId);
 
-        model.addAttribute("stations", stationService.findAll());
-
-        model.addAttribute("routForm", new Rout());
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", null);
-        model.addAttribute("searchSections", null);
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
-
-        model.addAttribute("selectedTab", "station-tab");
-
-        return "admin";
+        return stationForChange;
     }
 
     @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "delete")
-    public String deleteStation(@ModelAttribute Station station, Model model) {
-        Station stationForDelete = stationService.findById(station.getId());
+    @ResponseBody
+    public String deleteStation(@RequestParam("stationId") Long stationId) {
+        Station stationForDelete = stationService.findById(stationId);
 
         stationService.delete(stationForDelete);
 
-        model.addAttribute("stationForm", new Station());
-        model.addAttribute("stations", stationService.findAll());
-
-        model.addAttribute("routForm", new Rout());
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", null);
-        model.addAttribute("searchSections", null);
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
-
-        model.addAttribute("selectedTab", "station-tab");
-
-        return "admin";
+        return "Station " + stationForDelete.getStationName() + " was deleted";
     }
 
     @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "save")
+    @ResponseBody
     public String addStation(@Valid @ModelAttribute("stationForm") Station station,
-                           BindingResult bindingResult, Model model) {
-        model.addAttribute("stations", stationService.findAll());
-
-        model.addAttribute("routForm", new Rout());
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", null);
-        model.addAttribute("searchSections", null);
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
-
-        model.addAttribute("selectedTab", "station-tab");
+                           BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "admin";
+            return "Save station " + station.getStationName() + " failed";
         }
 
         stationService.save(station);
 
-        model.addAttribute("stationForm", new Station());
-        model.addAttribute("stations", stationService.findAll());
-
-        return "admin";
+        return "Station " + station.getStationName() + " was saved";
     }
 
     @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "change")
