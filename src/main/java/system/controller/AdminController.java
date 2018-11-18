@@ -277,6 +277,17 @@ public class AdminController {
         Station destination = stationService.findByName(routSection.getDestination().getStationName());
         routSection.setDestination(destination);
 
+        if (routService.getRoutSectionByRoutAndDepartureStation(rout, departure) != null) {
+            //station with such departure already exists in rout
+            bindingResult.rejectValue("departure", "departure.duplicate","Such departure already exists in rout.");
+            return "admin";
+        }
+        if (routService.getRoutSectionByRoutAndDestinationStation(rout, destination) != null) {
+            //station with such destination already exists in rout
+            bindingResult.rejectValue("destination", "destination.duplicate","Such destination already exists in rout.");
+            return "admin";
+        }
+
         routSectionService.save(routSection);
 
         model.addAttribute("routSectionForm", new RoutSection());
@@ -325,11 +336,9 @@ public class AdminController {
         RoutSection sectionForAdd = routSectionService.findById(routSectionId);
 
         Rout rout = routService.findById(routId);
-        rout.getRoutSections().add(sectionForAdd);
-        routService.save(rout);
 
         List<RoutSection> searchSections = routSectionService.findByDepartureAndDestination(sectionForAdd.getDeparture(),
-                                                                                            sectionForAdd.getDestination());
+                sectionForAdd.getDestination());
         model.addAttribute("searchSections", searchSections);
 
         model.addAttribute("stationForm", new Station());
@@ -345,6 +354,20 @@ public class AdminController {
         model.addAttribute("routForSection", rout);
 
         model.addAttribute("selectedTab", "section-tab");
+
+        if (routService.getRoutSectionByRoutAndDepartureStation(rout, sectionForAdd.getDeparture()) != null) {
+            //station with such departure already exists in rout
+            return "admin";
+        }
+        if (routService.getRoutSectionByRoutAndDestinationStation(rout, sectionForAdd.getDestination()) != null) {
+            //station with such destination already exists in rout
+            return "admin";
+        }
+
+        rout.getRoutSections().add(sectionForAdd);
+        routService.save(rout);
+
+        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
 
         return "admin";
     }
