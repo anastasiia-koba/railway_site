@@ -33,7 +33,7 @@ public class TrainController {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());
 
-        model.addAttribute("selectedTab", "oneTrain-tab");
+        model.addAttribute("selectedTab", "train-tab");
 
         return "trains";
     }
@@ -45,7 +45,7 @@ public class TrainController {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());
 
-        model.addAttribute("selectedTab", "allTrains-tab");
+        model.addAttribute("selectedTab", "trains-tab");
 
         return "trains";
     }
@@ -58,7 +58,7 @@ public class TrainController {
         model.addAttribute("finalRouts", finalRoutService.findAll());
         model.addAttribute("trains", trainService.findAll());
 
-        model.addAttribute("selectedTab", "oneTrain-tab");
+        model.addAttribute("selectedTab", "train-tab");
 
         return "trains";
     }
@@ -73,7 +73,7 @@ public class TrainController {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());
 
-        model.addAttribute("selectedTab", "oneTrain-tab");
+        model.addAttribute("selectedTab", "train-tab");
 
         return "trains";
     }
@@ -84,7 +84,7 @@ public class TrainController {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("finalRouts", finalRoutService.findAll());
 
-        model.addAttribute("selectedTab", "oneTrain-tab");
+        model.addAttribute("selectedTab", "train-tab");
 
         if (bindingResult.hasErrors()) {
             return "admin";

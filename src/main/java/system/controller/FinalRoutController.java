@@ -51,7 +51,9 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
-        return "routs";
+        model.addAttribute("selectedTab", "finalrout-tab");
+
+        return "finalrouts";
     }
 
     @PostMapping(params = "change")
@@ -70,7 +72,9 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
-        return "routs";
+        model.addAttribute("selectedTab", "finalrout-tab");
+
+        return "finalrouts";
     }
 
     @PostMapping(params = "delete")
@@ -91,7 +95,9 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
-        return "routs";
+        model.addAttribute("selectedTab", "finalrout-tab");
+
+        return "finalrouts";
     }
 
     @PostMapping(params = "save")
@@ -109,13 +115,15 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
+        model.addAttribute("selectedTab", "finalrout-tab");
+
         Train train = trainService.findByName(finalRout.getTrain().getTrainName());
         Rout rout = routService.findByName(finalRout.getRout().getRoutName());
         finalRout.setTrain(train);
         finalRout.setRout(rout);
 
         if (bindingResult.hasErrors()) {
-            return "routs";
+            return "finalrouts";
         }
 
         finalRoutService.save(finalRout);
@@ -129,6 +137,6 @@ public class FinalRoutController {
         model.addAttribute("arrivals", mapArrival);
         model.addAttribute("departures", mapDeparture);
 
-        return "routs";
+        return "finalrouts";
     }
 }
