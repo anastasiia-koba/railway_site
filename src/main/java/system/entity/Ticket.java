@@ -3,6 +3,8 @@ package system.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -14,6 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "tickets")
+@SQLDelete(sql="UPDATE tickets SET deleted = true WHERE id = ?")
+@Where(clause="deleted = false")
 public class Ticket extends BaseEntity {
 
     @ManyToOne

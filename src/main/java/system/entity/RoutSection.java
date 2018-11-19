@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -20,6 +22,8 @@ import java.util.Set;
 @EqualsAndHashCode
 @Entity
 @Table(name = "rout_section")
+@SQLDelete(sql="UPDATE rout_section SET deleted = true WHERE id = ?")
+@Where(clause="deleted = false")
 public class RoutSection extends BaseEntity {
 
     @NotNull(message = "This field is required.")

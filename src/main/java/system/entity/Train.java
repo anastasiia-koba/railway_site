@@ -3,6 +3,8 @@ package system.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -17,6 +19,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Entity
 @Table(name = "trains")
+@SQLDelete(sql="UPDATE trains SET deleted = true WHERE id = ?")
+@Where(clause="deleted = false")
 public class Train extends BaseEntity {
 
     @NotBlank(message = "This field is required.")
