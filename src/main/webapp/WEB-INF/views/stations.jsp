@@ -9,6 +9,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 
     <title>Stations</title>
 </head>
@@ -18,21 +19,29 @@
 
 <div class="tab-content" id="containerContainingTabs">
     <div class="tab-pane ${selectedTab == 'station-tab' ? 'active' : ''} text-style" id="station-tab">
-        <div id="stationContainer" class="col-sm-3">
-            <form:form name="stationForm" id="stationForm" class="form-group" modelAttribute="stationForm">
-                <form:input path="id" type="hidden"></form:input>
-                <spring:bind path="stationName">
-                    <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="stationName" placeholder="New Station" class="form-control"
-                                    path="stationName"/>
-                        <form:errors path="stationName"></form:errors>
+        <div class="container-fluid bg-light ">
+            <div class="row align-items-center justify-content-center">
+                <form:form name="stationForm" id="stationForm" class="form-group" modelAttribute="stationForm">
+                    <form:input path="id" type="hidden"></form:input>
+                    <div class="col-md-3">
+                        <spring:bind path="stationName">
+                            <div class="form-group ${status.error ? 'has-error' : ''}">
+                                <form:input type="text" id="stationName" placeholder="New Station" class="form-control"
+                                            path="stationName"/>
+                                <form:errors path="stationName"></form:errors>
+                            </div>
+                        </spring:bind>
                     </div>
-                </spring:bind>
-                <button type="submit" id="btnAddStation">Save</button>
-            </form:form>
+                    <div class="col-md-2">
+                        <button type="submit" id="btnAddStation">Save</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" id="btnClearStation">Clear</button>
+                    </div>
+                </form:form>
+            </div>
         </div>
-        <br/>
-        <div class="container station-table">
+        <div class="container">
             <div class="list">
                 <h3>Stations</h3>
                 <div id="stationMessage"></div>
@@ -44,22 +53,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${stations}" var="station" varStatus="loop">
+                    <script id="template" type="text/x-handlebars-template">
+                        {{#each stations}}
                         <tr>
-                            <td value="${station.stationName.toString()}">${station.stationName.toString()}</td>
+                            <td value="{{stationName}}">{{stationName}}</td>
                             <td>
-                                <input type="hidden" id="idStation-${loop.index}" value="${station.id}">
-                                <button type="button" id="btnChangeStation-${loop.index}"
-                                        onclick="stationEdit('${loop.index}')">
+                                <input type="hidden" id="idStation-{{@index}}" value="{{id}}">
+                                <button type="button" id="btnChangeStation-{{@index}}"
+                                        onclick="stationEdit('{{@index}}')">
                                     Change
                                 </button>
-                                <button type="button" id="btnDeleteStation-${loop.index}"
-                                        onclick="stationDelete('${loop.index}')">
+                                <button type="button" id="btnDeleteStation-{{@index}}"
+                                        onclick="stationDelete('{{@index}}')">
                                     Delete
                                 </button>
                             </td>
                         </tr>
-                    </c:forEach>
+                        {{/each}}
+                    </script>
                     </tbody>
                 </table>
             </div>
@@ -98,7 +109,7 @@
 
         $.post("${contextPath}/admin/stations?delete", object).done(function (result) {
             $('#stationMessage').empty().text(result);
-            // getStationList();
+            getStationList();
         }).fail(function () {
             alert('Delete station failed');
         });
@@ -108,46 +119,32 @@
         event.preventDefault();
 
         $.post("${contextPath}/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
-            $('#stations').html(result);
-            // $('#stationMessage').empty().text(result);
-            // getStationList();
+            $('#stationMessage').empty().text(result);
+            getStationList();
         }).fail(function (e) {
             alert('Error: ' + JSON.stringify(e));
         });
     })
 
-    <%--function getStationList() {--%>
-    <%--event.preventDefault();--%>
+    $('#btnClearStation').click(function () {
+        event.preventDefault();
+        $('form input[type="text"], form input[type="hidden"]').val('');
+    })
 
-    <%--$.get("${contextPath}/admin/stations?list", {}).done(function (result) {--%>
-    <%--&lt;%&ndash;var list = ${stationsList}.val();&ndash;%&gt;--%>
-    <%--// alert(list);--%>
-    <%--$('#stations').html(result);--%>
-    <%--// var $select = $("#stations");--%>
-    <%--// $select.find("option").remove();--%>
-    <%--// $.each(result, function (index, station) {--%>
-    <%--//     $("<option>").val(station.id).text(station.name).appendTo($select);--%>
-    <%--// });--%>
+    function getStationList() {
+        event.preventDefault();
 
-    <%--// var $container = $("#stations");--%>
-    <%--// $container.empty();--%>
-    <%--// $.each(JSON.stringify(result), function(index, value) {--%>
-    <%--//     $container.append(value);--%>
-    <%--// })--%>
+        $.get("${contextPath}/admin/stations?list", {}).done(function (result) {
+            var data = {stations: result};
+            var template = Handlebars.compile($('#template').html());
+            $("#myTableStations tr>td").remove();
+            $('.table').append(template(data));
+        }).fail(function (e) {
+            alert('Error: ' + e);
+        });
+    }
 
-    <%--// if (result.length > 0) {--%>
-    <%--//     var stationTableHTML = '<table>';--%>
-    <%--//     $.each(response, function (key,value) {--%>
-    <%--//         stationTableHTML +=--%>
-    <%--//             '<tr><td>' + key + '</td><td>' + value + '</td></tr>';--%>
-    <%--//     });--%>
-    <%--//     stationTableHTML += '</table>';--%>
-    <%--//     $("#products_table").html( stationTableHTML );--%>
-    <%--// }--%>
-    <%--}).fail(function (e) {--%>
-    <%--alert('Error: ' + e);--%>
-    <%--});--%>
-    <%--}--%>
+    window.onload = getStationList;
 </script>
 </body>
 </html>

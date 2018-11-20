@@ -70,8 +70,11 @@ public class AdminController {
         return "sections";
     }
 
-
-
+    @RequestMapping(value = "/stations", method = RequestMethod.GET, params = "list")
+    @ResponseBody
+    public List<Station> getListStations() {
+        return stationService.findAll();
+    }
 
     @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "change")
     @ResponseBody
@@ -93,11 +96,12 @@ public class AdminController {
 
     @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "save")
     @ResponseBody
-    public String addStation(@Valid @ModelAttribute("stationForm") Station station,
-                           BindingResult bindingResult) {
-
+    public String saveStation(@Valid @ModelAttribute("stationForm") Station station,
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "Save station " + station.getStationName() + " failed";
+            return "Save station " + station.getStationName() + " failed: name must be not empty.";
+        } else if (stationService.findByName(station.getStationName()) != null) {
+            return "Save station " + station.getStationName() + " failed: such name already exists.";
         }
 
         stationService.save(station);
