@@ -109,50 +109,36 @@ public class AdminController {
         return "Station " + station.getStationName() + " was saved";
     }
 
+    @RequestMapping(value = "/routs", method = RequestMethod.GET, params = "list")
+    @ResponseBody
+    public List<Rout> getListRouts() {
+        return routService.findAll();
+    }
+
     @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "change")
-    public String changeRout(@ModelAttribute Rout rout, Model model) {
-        Rout routForChange = routService.findById(rout.getId());
-        model.addAttribute("routForm", routForChange);
+    @ResponseBody
+    public Rout changeRout(@RequestParam("routId") Long routId, Model model) {
+        Rout routForChange = routService.findById(routId);
 
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("selectedTab", "rout-tab");
-
-        return "routs";
+        return routForChange;
     }
 
     @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "delete")
-    public String deleteRout(@Valid @ModelAttribute Rout rout, Model model) {
-        Rout routForChange = routService.findById(rout.getId());
+    @ResponseBody
+    public String deleteRout(@RequestParam("routId") Long routId) {
+        Rout routForChange = routService.findById(routId);
 
         routService.delete(routForChange);
 
-        model.addAttribute("routForm", new Rout());
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("selectedTab", "rout-tab");
-
-        return "routs";
+        return "Rout " + routForChange.getRoutName() + " was deleted";
     }
 
     @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "save")
-    public String addRout(@Valid @ModelAttribute("routForm") Rout rout,
-                          BindingResult bindingResult, Model model) {
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("selectedTab", "rout-tab");
-
+    @ResponseBody
+    public String saveRout(@Valid @ModelAttribute("routForm") Rout rout,
+                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "routs";
+            return "Fields are required";
         }
 
         rout.setStartStation(stationService.findByName(rout.getStartStation().getStationName()));
@@ -160,10 +146,7 @@ public class AdminController {
 
         routService.save(rout);
 
-        model.addAttribute("routForm", new Rout());
-        model.addAttribute("routs", routService.findAll());
-
-        return "routs";
+        return "Rout " + rout.getRoutName() + " was saved";
     }
 
     @RequestMapping(value = "/sections", method = RequestMethod.POST)

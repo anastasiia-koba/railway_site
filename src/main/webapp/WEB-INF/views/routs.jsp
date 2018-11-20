@@ -9,6 +9,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 
     <title>Routs</title>
 </head>
@@ -19,50 +20,55 @@
 <div class="tab-content" id="containerContainingTabs">
     <div class="tab-pane ${selectedTab == 'rout-tab' ? 'active' : ''} text-style" id="rout-tab">
         <div class="container">
-            <form:form method="POST" modelAttribute="routForm" action="${contextPath}/admin/routs">
-                <form:input path="id" type="hidden"></form:input>
-                <spring:bind path="routName">
-                    <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <label>Rout name</label>
-                        <form:input type="text" id="routName" placeholder="New Rout" class="form-control"
-                                    path="routName"></form:input>
-                        <form:errors path="routName"></form:errors>
+            <div class="row align-items-center justify-content-center">
+                <form:form id="routForm" name="routForm" modelAttribute="routForm">
+                    <div class="col-md-3">
+                        <form:input path="id" id="idForm" type="hidden"></form:input>
+                        <spring:bind path="routName">
+                            <div class="form-group ${status.error ? 'has-error' : ''}">
+                                <label>Rout name</label>
+                                <form:input type="text" id="routName" placeholder="New Rout" class="form-control"
+                                            path="routName"></form:input>
+                                <form:errors path="routName"></form:errors>
+                            </div>
+                        </spring:bind>
                     </div>
-                </spring:bind>
-
-                <spring:bind path="startStation">
-                    <div class="col-md-2 pt-3">
-                        <div class="form-group ">
-                            <label>Select start </label>
-                            <select id="comboboxStart" placeholder="From where?" name="startStation"
-                                    class="form-control">
-                                <option value="${routForm.startStation.stationName.toString()}">${routForm.startStation.stationName.toString()}</option>
-                                <c:forEach items="${stationsFrom}" var="station">
-                                    <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                                </c:forEach>
-                            </select>
-                            <form:errors path="startStation"></form:errors>
+                    <spring:bind path="startStation">
+                        <div class="col-md-2 pt-3">
+                            <div class="form-group ">
+                                <label>Select start </label>
+                                <form:select path="startStation" id="comboboxStart" name="startStation"
+                                             class="form-control">
+                                    <option></option>
+                                    <c:forEach items="${stationsFrom}" var="station">
+                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                    </c:forEach>
+                                </form:select>
+                            </div>
                         </div>
-                    </div>
-                </spring:bind>
+                    </spring:bind>
 
-                <spring:bind path="endStation">
-                    <div class="col-md-2 pt-3">
-                        <div class="form-group">
-                            <label>Select end </label>
-                            <select id="comboboxEnd" placeholder="To where?" name="endStation" class="form-control">
-                                <option value="${routForm.endStation.stationName.toString()}">${routForm.endStation.stationName.toString()}</option>
-                                <c:forEach items="${stationsTo}" var="station">
-                                    <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                                </c:forEach>
-                            </select>
-                            <form:errors path="endStation"></form:errors>
+                    <spring:bind path="endStation">
+                        <div class="col-md-2 pt-3">
+                            <div class="form-group">
+                                <label>Select end </label>
+                                <form:select path="endStation" id="comboboxEnd" name="endStation" class="form-control">
+                                    <option></option>
+                                    <c:forEach items="${stationsTo}" var="station">
+                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                    </c:forEach>
+                                </form:select>
+                                <form:errors path="endStation"></form:errors>
+                            </div>
                         </div>
-                    </div>
-                </spring:bind>
+                    </spring:bind>
 
-                <button type="submit" name="save">Save</button>
-            </form:form>
+                    <div class="col-md-3">
+                        <button type="submit" id="btnAddRout">Save</button>
+                        <button type="submit" id="btnClearRout">Clear</button>
+                    </div>
+                </form:form>
+            </div>
         </div>
         <div class="container routs-table">
             <div class="list">
@@ -78,22 +84,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${routs}" var="rout" varStatus="loop">>
+                    <script id="template" type="text/x-handlebars-template">
+                        {{#each routs}}
                         <tr>
-                            <td value="${rout.routName.toString()}">${rout.routName.toString()}</td>
-                            <td value="${rout.startStation.stationName.toString()}">${rout.startStation.stationName.toString()}</td>
-                            <td value="${rout.endStation.stationName.toString()}">${rout.endStation.stationName.toString()}</td>
+                            <td value="{{routName}}">{{routName}}</td>
+                            <td value="{{startStation.stationName}}">{{startStation.stationName}}</td>
+                            <td value="{{endStation.stationName}}">{{endStation.stationName}}</td>
                             <form method="POST" action="${contextPath}/admin/routs">
                                 <td>
-                                    <input type="hidden" name="id" value="${rout.id}">
-                                    <button id="btnChangeRout-${loop.index}"
-                                            onclick="routEdit('${loop.index}')">Change</button>
-                                    <button id="btnDeleteRout-${loop.index}"
-                                            onclick="routDelete('${loop.index}')">Delete</button>
+                                    <input type="hidden" id="idRout-{{@index}}" value="{{id}}">
+                                    <button id="btnChangeRout-{{@index}}"
+                                            onclick="routEdit('{{@index}}')">Change
+                                    </button>
+                                    <button id="btnDeleteRout-{{@index}}"
+                                            onclick="routDelete('{{@index}}')">Delete
+                                    </button>
                                 </td>
                             </form>
                         </tr>
-                    </c:forEach>
+                        {{/each}}
+                    </script>
                     </tbody>
                 </table>
             </div>
@@ -112,11 +122,11 @@
         $.post("${contextPath}/admin/routs?change", object).done(function (result) {
             $('#routMessage').text('');
 
-            for (var list = Object.keys(result), i = list.length, form = document.forms.namedItem('routForm'); i--;) {
-                if (form[list[i]]) {
-                    form[list[i]].value = result[list[i]];
-                }
-            }
+            $('form[name=routForm]').val(result);
+            $('#idForm').val(result.id);
+            $('#routName').val(result.routName);
+            $('#comboboxStart').val(result.startStation.stationName);
+            $('#comboboxEnd').val(result.endStation.stationName);
         }).fail(function (e) {
             alert('Error: ' + e);
         });
@@ -131,11 +141,43 @@
 
         $.post("${contextPath}/admin/routs?delete", object).done(function (result) {
             $('#routMessage').empty().text(result);
-            // getRoutList();
+            getRoutList();
         }).fail(function () {
             alert('Delete rout failed');
         });
     }
+
+    $('#btnAddRout').click(function () {
+        event.preventDefault();
+
+        $.post("${contextPath}/admin/routs?save", $('#routForm').serialize()).done(function (result) {
+            $('#routMessage').empty().text(result);
+            getRoutList();
+        }).fail(function (e) {
+            alert('Error: ' + JSON.stringify(e));
+        });
+    })
+
+    $('#btnClearRout').click(function () {
+        event.preventDefault();
+        $('form input[type="text"], form input[type="hidden"]').val('');
+        $('form[name=routForm]').trigger('reset');
+    })
+
+    function getRoutList() {
+        event.preventDefault();
+
+        $.get("${contextPath}/admin/routs?list", {}).done(function (result) {
+            var data = {routs: result};
+            var template = Handlebars.compile($('#template').html());
+            $("#myTableRouts tr>td").remove();
+            $('.table').append(template(data));
+        }).fail(function (e) {
+            alert('Error: ' + e);
+        });
+    }
+
+    window.onload = getRoutList;
 </script>
 </body>
 </html>
