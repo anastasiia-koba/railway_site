@@ -12,6 +12,7 @@ import system.service.api.TrainService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Controller for {@link system.entity.Train}'s pages.
@@ -30,7 +31,6 @@ public class TrainController {
     @GetMapping
     public String getAdminTrainsPage(Model model){
         model.addAttribute("finalRouts", finalRoutService.findAll());
-        model.addAttribute("trains", trainService.findAll());
         model.addAttribute("trainForm", new Train());
 
         model.addAttribute("selectedTab", "train-tab");
@@ -50,51 +50,40 @@ public class TrainController {
         return "trains";
     }
 
+    @GetMapping(params = "list")
+    @ResponseBody
+    public List<Train> getListTrains() {
+        return trainService.findAll();
+    }
+
     @RequestMapping(method = RequestMethod.POST, params = "change")
-    public String changeTrain(@ModelAttribute Train train, Model model) {
-        Train trainForChange = trainService.findById(train.getId());
-        model.addAttribute("trainForm", trainForChange);
+    @ResponseBody
+    public Train changeTrain(@RequestParam("trainId") Long trainId) {
+        Train trainForChange = trainService.findById(trainId);
 
-        model.addAttribute("finalRouts", finalRoutService.findAll());
-        model.addAttribute("trains", trainService.findAll());
-
-        model.addAttribute("selectedTab", "train-tab");
-
-        return "trains";
+        return trainForChange;
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "delete")
-    public String deleteTrain(@ModelAttribute Train train, Model model) {
-        Train trainForDelete = trainService.findById(train.getId());
+    @ResponseBody
+    public String deleteTrain(@RequestParam("trainId") Long trainId) {
+        Train trainForDelete = trainService.findById(trainId);
 
         trainService.delete(trainForDelete);
 
-        model.addAttribute("finalRouts", finalRoutService.findAll());
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("trainForm", new Train());
-
-        model.addAttribute("selectedTab", "train-tab");
-
-        return "trains";
+        return "Train " + trainForDelete.getTrainName() + " was deleted";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "save")
-    public String addTrain(@Valid @ModelAttribute("trainForm") Train train,
-                           BindingResult bindingResult, Model model) {
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("finalRouts", finalRoutService.findAll());
-
-        model.addAttribute("selectedTab", "train-tab");
-
+    @ResponseBody
+    public String saveTrain(@Valid @ModelAttribute("trainForm") Train train,
+                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin";
+            return "Fields are required";
         }
 
         trainService.save(train);
 
-        model.addAttribute("trainForm", new Train());
-        model.addAttribute("trains", trainService.findAll());
-
-        return "trains";
+        return "Train " + train.getTrainName() + " was saved";
     }
 }
