@@ -1,14 +1,20 @@
 package system.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import system.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import system.service.api.SecurityService;
+import system.service.api.TicketService;
 import system.service.api.UserService;
 
 import javax.validation.Valid;
@@ -24,6 +30,9 @@ public class UserController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private TicketService ticketService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String register(Model model){
@@ -61,5 +70,36 @@ public class UserController {
         }
 
         return "login";
+    }
+
+    @GetMapping(value = "/user/profile")
+    public String getUserprofilePage(@AuthenticationPrincipal User activeUser, Model model) {
+        UserProfile user = userService.findByUsername(activeUser.getUsername());
+        model.addAttribute("userForm", user);
+        model.addAttribute("selectedTab", "profile-tab");
+
+        return "userprofile";
+    }
+
+    @PostMapping(value = "/user/profile")
+    @ResponseBody
+    public String changeUserprofile(@Valid @ModelAttribute("userForm") UserProfile user,
+                                  BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "Errors in fileds";
+        }
+
+        userService.save(user);
+
+        return "Success";
+    }
+
+    @GetMapping(value = "/user/tickets")
+    public String getUserTickets(@AuthenticationPrincipal User activeUser, Model model) {
+        UserProfile user = userService.findByUsername(activeUser.getUsername());
+        model.addAttribute("tickets", ticketService.findByUser(user));
+        model.addAttribute("selectedTab", "ticket-tab");
+
+        return "userTickets";
     }
 }
