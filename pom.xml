@@ -33,6 +33,7 @@
         <h2.version>1.4.194</h2.version>
         <handlebars.version>4.1.0</handlebars.version>
         <gson.version>2.3.1</gson.version>
+        <sonar.version>3.5.0.1254</sonar.version>
     </properties>
 
     <dependencies>
@@ -207,6 +208,12 @@
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>${sonar.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -227,5 +234,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- Optional URL to server. Default value is http://localhost:9000 -->
+                <sonar.host.url>
+                    http://localhost:9000
+                </sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
     
 </project>
