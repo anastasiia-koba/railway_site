@@ -1,6 +1,7 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,9 +48,9 @@ public class ScheduleController {
 
     @RequestMapping(value = "/schedule", method = RequestMethod.POST)
     public String getScheduleByStation(@ModelAttribute Station station,
-                                       @RequestParam("date") String strDate, Model model){
-        LocalDate date = LocalDate.parse(strDate);
-
+                                       @RequestParam("date")
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                       Model model){
         model.addAttribute("stations", stationService.findAll());
 
         station = stationService.findByName(station.getStationName());

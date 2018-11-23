@@ -1,6 +1,7 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -61,8 +62,9 @@ public class MainController {
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.POST)
     public String getSearchResult(@RequestParam("stationsFrom") Station stationFrom,
                                   @RequestParam("stationsTo") Station stationTo,
-                                  @RequestParam("date") String strDate, Model model){
-        LocalDate date = LocalDate.parse(strDate);
+                                  @RequestParam("date")
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                  Model model){
 
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
