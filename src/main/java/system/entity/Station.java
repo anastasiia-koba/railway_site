@@ -28,27 +28,32 @@ public class Station extends BaseEntity {
     @Column(name = "stationname")
     private String stationName;
 
+    @Transient
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "departure",
                orphanRemoval = true)
     private Set<RoutSection> sectionsFrom;
 
+    @Transient
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "destination",
                orphanRemoval = true)
     private Set<RoutSection> sectionsTo;
 
+    @Transient
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "startStation",
             orphanRemoval = true)
     private Set<Rout> routsFrom;
 
+    @Transient
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "endStation",
             orphanRemoval = true)
     private Set<Rout> routsTo;
 
-    public Station(String stationName) {
-        this.stationName = stationName;
+    public Station(String strId) {
+        Long id = Long.valueOf(strId);
+        super.setId(id);
     }
 }

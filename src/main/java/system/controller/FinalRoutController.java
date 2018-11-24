@@ -1,5 +1,7 @@
 package system.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -7,23 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import system.entity.FinalRout;
-import system.entity.Rout;
-import system.entity.Train;
 import system.service.api.FinalRoutService;
 import system.service.api.RoutService;
 import system.service.api.TrainService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller for {@link system.entity.FinalRout}'s pages.
  */
-@Secured(value={"ROLE_ADMIN"})
+@Secured(value = {"ROLE_ADMIN"})
 @Controller
 @RequestMapping(value = "/admin/finalrouts")
 public class FinalRoutController {
@@ -43,100 +40,70 @@ public class FinalRoutController {
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("routs", routService.findAll());
 
+        model.addAttribute("selectedTab", "finalrout-tab");
+
+        return "finalrouts";
+    }
+
+    @GetMapping(params = "list")
+    @ResponseBody
+    public String getListFinalRouts() {
+        JsonArray jsonValues = new JsonArray();
+
         Set<FinalRout> finalRouts = finalRoutService.findAll();
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
-        model.addAttribute("finalRouts", finalRouts);
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
+        JsonObject json;
+        for (FinalRout finalRout : finalRouts) {
+            json = new JsonObject();
 
-        model.addAttribute("selectedTab", "finalrout-tab");
-
-        return "finalrouts";
+            json.addProperty("id", finalRout.getId());
+            json.addProperty("routName", finalRout.getRout().getRoutName());
+            json.addProperty("trainName", finalRout.getTrain().getTrainName());
+            json.addProperty("startStationName", finalRout.getRout().getStartStation().getStationName());
+            json.addProperty("endStationName", finalRout.getRout().getEndStation().getStationName());
+            json.addProperty("date", finalRout.getDate().toString());
+            json.addProperty("departure",
+                    (mapDeparture.get(finalRout.getId()) == null ? null : mapDeparture.get(finalRout.getId()).toString()));
+            json.addProperty("arrival",
+                    (mapArrival.get(finalRout.getId()) == null ? null : mapArrival.get(finalRout.getId()).toString()));
+            jsonValues.add(json);
+        }
+        return jsonValues.toString();
     }
 
     @PostMapping(params = "change")
-    public String changeFinalRout(@ModelAttribute FinalRout currentFinalRout, Model model) {
-        currentFinalRout = finalRoutService.findById(currentFinalRout.getId());
-
-        model.addAttribute("finalRoutForm", currentFinalRout);
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("routs", routService.findAll());
-
-        Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
-        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
-
-        model.addAttribute("finalRouts", finalRouts);
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-
-        model.addAttribute("selectedTab", "finalrout-tab");
-
-        return "finalrouts";
+    @ResponseBody
+    public FinalRout changeFinalRout(@RequestParam("finalRoutId") Long finalId) {
+        FinalRout currentFinalRout = finalRoutService.findById(finalId);
+        return currentFinalRout;
     }
 
     @PostMapping(params = "delete")
-    public String deleteFinalRout(@ModelAttribute FinalRout currentFinalRout, Model model) {
-        currentFinalRout = finalRoutService.findById(currentFinalRout.getId());
+    @ResponseBody
+    public String deleteFinalRout(@RequestParam("finalRoutId") Long finalId) {
+        FinalRout currentFinalRout = finalRoutService.findById(finalId);
 
         finalRoutService.delete(currentFinalRout);
 
-        model.addAttribute("finalRoutForm", new FinalRout());
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("routs", routService.findAll());
-
-        Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
-        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
-
-        model.addAttribute("finalRouts", finalRouts);
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-
-        model.addAttribute("selectedTab", "finalrout-tab");
-
-        return "finalrouts";
+        return "Final rout " + currentFinalRout.getRout().getRoutName() + " " + currentFinalRout.getDate() + " was deleted";
     }
 
     @PostMapping(params = "save")
+    @ResponseBody
     public String saveFinalRout(@Valid @ModelAttribute("finalRoutForm") FinalRout finalRout,
-                                BindingResult bindingResult,
-                                Model model) {
-        model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("routs", routService.findAll());
-
-        Set<FinalRout> finalRouts = finalRoutService.findAll();
-        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
-        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
-
-        model.addAttribute("finalRouts", finalRouts);
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-
-        model.addAttribute("selectedTab", "finalrout-tab");
-
-        Train train = trainService.findByName(finalRout.getTrain().getTrainName());
-        Rout rout = routService.findByName(finalRout.getRout().getRoutName());
-        finalRout.setTrain(train);
-        finalRout.setRout(rout);
-
+                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "finalrouts";
+            //TODO validation
+            return "Fields are required";
         }
+
+        finalRout.setTrain(trainService.findById(finalRout.getTrain().getId()));
+        finalRout.setRout(routService.findById(finalRout.getRout().getId()));
 
         finalRoutService.save(finalRout);
 
-        model.addAttribute("finalRoutForm", new FinalRout());
-        model.addAttribute("finalRouts", finalRoutService.findAll());
-
-        mapDeparture = finalRoutService.getMapDeparture(finalRouts);
-        mapArrival = finalRoutService.getMapArrival(finalRouts);
-
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-
-        return "finalrouts";
+        return "Final rout " + finalRout.getRout().getRoutName() + " " + finalRout.getDate() + " was saved";
     }
 }

@@ -1,5 +1,7 @@
 package system.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,12 +39,15 @@ public class Rout extends BaseEntity {
     @JoinColumn(name = "end_station_id", referencedColumnName = "id", nullable = false)
     private Station endStation;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "routs_by_sections", joinColumns = @JoinColumn(name = "rout_id"),
             inverseJoinColumns = @JoinColumn(name = "rout_section_id"))
     private Set<RoutSection> routSections;
 
-    public Rout(String routName) {
-        this.routName = routName;
+
+    public Rout(String strId) {
+        Long id = Long.valueOf(strId);
+        super.setId(id);
     }
 }
