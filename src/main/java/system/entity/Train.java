@@ -32,8 +32,12 @@ public class Train extends BaseEntity {
     @Column(name = "places_number")
     private Integer placesNumber;
 
-    public Train(String strId) {
-        Long id = Long.valueOf(strId);
-        super.setId(id);
+    public Train(String trainName) {
+        this.trainName = trainName;
+    }
+
+    public Train(String trainName, Integer placesNumber) {
+        this.trainName = trainName;
+        this.placesNumber = placesNumber;
     }
 }

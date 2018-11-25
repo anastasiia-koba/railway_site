@@ -52,8 +52,7 @@ public class Station extends BaseEntity {
             orphanRemoval = true)
     private Set<Rout> routsTo;
 
-    public Station(String strId) {
-        Long id = Long.valueOf(strId);
-        super.setId(id);
+    public Station(String stationName) {
+        this.stationName = stationName;
     }
 }
