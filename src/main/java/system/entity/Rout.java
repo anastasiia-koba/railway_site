@@ -46,8 +46,13 @@ public class Rout extends BaseEntity {
     private Set<RoutSection> routSections;
 
 
-    public Rout(String strId) {
-        Long id = Long.valueOf(strId);
-        super.setId(id);
+    public Rout(String routName) {
+        this.routName = routName;
+    }
+
+    public Rout(String routName, Station startStation, Station endStation) {
+        this.routName = routName;
+        this.startStation = startStation;
+        this.endStation = endStation;
     }
 }

@@ -12,6 +12,7 @@ import system.entity.RoutSection;
 import system.entity.Station;
 import system.service.api.RoutService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -127,11 +128,12 @@ public class RoutServiceImpl implements RoutService {
     }
 
     @Override
-    public Set<RoutSection> getRoutSectionInRout(Rout rout) {
+    public List<RoutSection> getRoutSectionInRout(Rout rout) {
         try {
             Set<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
             //TODO sort of routSection
-            return routSections;
+            List<RoutSection> result = new ArrayList<>(routSections);
+            return result;
         } catch (DaoException e) {
             e.printStackTrace();
             log.debug("Find Rout Section by Rout from {} to {} failed ", rout.getStartStation().getStationName(),
@@ -163,9 +165,12 @@ public class RoutServiceImpl implements RoutService {
     }
 
     @Override
-    public Set<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) {
+    public List<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) {
         try {
-            return routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
+            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
+            //TODO sort
+            List<RoutSection> result = new ArrayList<>(routSections);
+            return result;
         } catch (DaoException e) {
             e.printStackTrace();
             log.debug("Find Rout Sections in Rout {}, Departure {} And Destination {} failed ", rout.getRoutName(),

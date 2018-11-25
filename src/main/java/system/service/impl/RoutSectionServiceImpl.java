@@ -62,7 +62,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
     public void delete(RoutSection routSection) {
         try {
             routSectionDao.remove(routSection);
-            log.debug("Seleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+            log.debug("Deleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
                     routSection.getDestination().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
