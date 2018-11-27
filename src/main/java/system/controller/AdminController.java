@@ -71,13 +71,13 @@ public class AdminController {
         return "sections";
     }
 
-    @RequestMapping(value = "/stations", method = RequestMethod.GET, params = "list")
+    @GetMapping(value = "/stations", params = "list")
     @ResponseBody
     public List<Station> getListStations() {
         return stationService.findAll();
     }
 
-    @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "change")
+    @PostMapping(value = "/stations", params = "change")
     @ResponseBody
     public Station changeStation(@RequestParam("stationId") Long stationId) {
         Station stationForChange = stationService.findById(stationId);
@@ -85,7 +85,7 @@ public class AdminController {
         return stationForChange;
     }
 
-    @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "delete")
+    @PostMapping(value = "/stations", params = "delete")
     @ResponseBody
     public String deleteStation(@RequestParam("stationId") Long stationId) {
         Station stationForDelete = stationService.findById(stationId);
@@ -95,11 +95,12 @@ public class AdminController {
         return "Station " + stationForDelete.getStationName() + " was deleted";
     }
 
-    @RequestMapping(value = "/stations", method = RequestMethod.POST, params = "save")
+    @PostMapping(value = "/stations", params = "save")
     @ResponseBody
     public String saveStation(@Valid @ModelAttribute("stationForm") Station station,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            //TODO validation
             return "Save station " + station.getStationName() + " failed: name must be not empty.";
         } else if (stationService.findByName(station.getStationName()) != null) {
             return "Save station " + station.getStationName() + " failed: such name already exists.";
@@ -110,21 +111,21 @@ public class AdminController {
         return "Station " + station.getStationName() + " was saved";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.GET, params = "list")
+    @GetMapping(value = "/routs", params = "list")
     @ResponseBody
     public List<Rout> getListRouts() {
         return routService.findAll();
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "change")
+    @PostMapping(value = "/routs", params = "change")
     @ResponseBody
-    public Rout changeRout(@RequestParam("routId") Long routId, Model model) {
+    public Rout changeRout(@RequestParam("routId") Long routId) {
         Rout routForChange = routService.findById(routId);
 
         return routForChange;
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "delete")
+    @PostMapping(value = "/routs", params = "delete")
     @ResponseBody
     public String deleteRout(@RequestParam("routId") Long routId) {
         Rout routForChange = routService.findById(routId);
@@ -134,11 +135,12 @@ public class AdminController {
         return "Rout " + routForChange.getRoutName() + " was deleted";
     }
 
-    @RequestMapping(value = "/routs", method = RequestMethod.POST, params = "save")
+    @PostMapping(value = "/routs", params = "save")
     @ResponseBody
     public String saveRout(@Valid @ModelAttribute("routForm") Rout rout,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            //TODO validation
             return "Fields are required";
         }
 
