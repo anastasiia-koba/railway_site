@@ -16,6 +16,7 @@ import system.service.api.StationService;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Controller for {@link system.entity.Station, system.entity.Rout}'s pages.
@@ -62,7 +63,7 @@ public class AdminController {
         model.addAttribute("searchSections", null);
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("routSectionForm", new RoutSection());
+        model.addAttribute("sectionForm", new RoutSection());
         model.addAttribute("routForSection", null);
 
         model.addAttribute("selectedTab", "section-tab");
@@ -149,193 +150,108 @@ public class AdminController {
         return "Rout " + rout.getRoutName() + " was saved";
     }
 
-    @RequestMapping(value = "/sections", method = RequestMethod.POST)
-    public String getRoutSectionsForRout(@RequestParam("routForSearch") Long routId,
-                                         Model model) {
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("searchSections", null);
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
-
-        model.addAttribute("selectedTab", "section-tab");
-
+    @GetMapping(value = "/sections/rout", params = "list")
+    @ResponseBody
+    public List<RoutSection> getRoutSectionsForRout(@RequestParam("routForSearch") Long routId) {
         Rout rout = routService.findById(routId);
-        rout = routService.findById(rout.getId());
-        Set<RoutSection> routSections = routService.getRoutSectionInRout(rout);
+        List<RoutSection> routSections = routService.getRoutSectionInRout(rout);
 
-        model.addAttribute("sections", routSections);
-        model.addAttribute("routForSection", rout);
-
-        return "sections";
+        return routSections;
     }
 
-    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "change")
-    public String changeRoutSection(@ModelAttribute("section") RoutSection routSection,
-                                    @RequestParam("routId") Long routId, Model model) {
-        RoutSection sectionForChange = routSectionService.findById(routSection.getId());
-        model.addAttribute("routSectionForm", sectionForChange);
-
-        Rout rout = routService.findById(routId);
-
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("searchSections", null);
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("routForSection", rout);
-
-        model.addAttribute("selectedTab", "section-tab");
-
-        return "sections";
+    @PostMapping(value = "/sections", params = "change")
+    @ResponseBody
+    public RoutSection changeRoutSection(@RequestParam("sectionId") Long sectionId) {
+        RoutSection sectionForChange = routSectionService.findById(sectionId);
+        return sectionForChange;
     }
 
-    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "delete")
-    public String deleteRoutSectionFromRout(@ModelAttribute RoutSection routSection,
-                                    @RequestParam("routId") Long routId, Model model) {
-        RoutSection sectionForDelete = routSectionService.findById(routSection.getId());
+    @PostMapping(value = "/sections", params = "delete")
+    @ResponseBody
+    public String deleteRoutSectionFromRout(@RequestParam("sectionId") Long sectionId,
+                                            @RequestParam("routId") Long routId) {
+        RoutSection sectionForDelete = routSectionService.findById(sectionId);
         Rout rout = routService.findById(routId);
 
         rout.getRoutSections().remove(sectionForDelete);
         routService.save(rout);
 
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("searchSections", null);
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("routSectionForm", new RoutSection());
-
-
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("routForSection", rout);
-
-        model.addAttribute("selectedTab", "section-tab");
-
-        return "sections";
+        return "Section from "+sectionForDelete.getDeparture().getStationName()+" to "+
+                sectionForDelete.getDestination().getStationName()+" was deleted";
     }
 
-    @RequestMapping(value = "/sections", method = RequestMethod.POST, params = "save")
-    public String saveRoutSection(@Valid @ModelAttribute("routSectionForm") RoutSection routSection,
+    @PostMapping(value = "/sections", params = "save")
+    @ResponseBody
+    public String saveRoutSection(@Valid @ModelAttribute("sectionForm") RoutSection routSection,
                                  @RequestParam("routId") Long routId,
-                                 BindingResult bindingResult, Model model) {
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("routs", routService.findAll());
-
-        Rout rout = routService.findById(routId);
-        model.addAttribute("routForSection", rout);
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("searchSections", null);
-
-        model.addAttribute("selectedTab", "section-tab");
-
+                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "sections";
+            return "Fields are required";
         }
+        Rout rout = routService.findById(routId);
 
         Station departure = stationService.findByName(routSection.getDeparture().getStationName());
         routSection.setDeparture(departure);
         Station destination = stationService.findByName(routSection.getDestination().getStationName());
         routSection.setDestination(destination);
 
-        if (routService.getRoutSectionByRoutAndDepartureStation(rout, departure) != null) {
-            //station with such departure already exists in rout
-            bindingResult.rejectValue("departure", "departure.duplicate","Such departure already exists in rout.");
-            return "sections";
-        }
-        if (routService.getRoutSectionByRoutAndDestinationStation(rout, destination) != null) {
-            //station with such destination already exists in rout
-            bindingResult.rejectValue("destination", "destination.duplicate","Such destination already exists in rout.");
-            return "sections";
+        if (routSection.getId() == null) {
+            if (routService.getRoutSectionByRoutAndDepartureStation(rout, departure) != null) {
+                return "Such departure already exists in rout.";
+            }
+            if (routService.getRoutSectionByRoutAndDestinationStation(rout, destination) != null) {
+                return "Such destination already exists in rout.";
+            }
         }
 
         routSectionService.save(routSection);
 
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
+        if (!rout.getRoutSections().stream().map(e->e.getId()).collect(Collectors.toList()).contains(routSection.getId())) {
+            rout.getRoutSections().add(routSection);
+            routService.save(rout);
+        }
 
-        return "sections";
+        return "Section from "+routSection.getDeparture().getStationName()+" to "+routSection.getDestination().getStationName()+" was saved";
     }
 
-    @RequestMapping(value = "/sections/all", method = RequestMethod.POST)
-    public String getRoutSections(@RequestParam("rout.id") Long routId,
-                                  @RequestParam("sectionFrom") Station sectionFrom,
-                                  @RequestParam("sectionTo") Station sectionTo,
-                                  Model model) {
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
-
-        model.addAttribute("selectedTab", "section-tab");
-
-        Rout rout = routService.findById(routId);
-        rout = routService.findById(rout.getId());
-        Set<RoutSection> routSections = routService.getRoutSectionInRout(rout);
-
-        model.addAttribute("sections", routSections);
-        model.addAttribute("routForSection", rout);
-
+    @GetMapping(value = "/sections/list")
+    @ResponseBody
+    public List<RoutSection> getRoutSections(@RequestParam("sectionFrom") Station sectionFrom,
+                                             @RequestParam("sectionTo") Station sectionTo) {
         Station departure = stationService.findByName(sectionFrom.getStationName());
         Station destination = stationService.findByName(sectionTo.getStationName());
 
         List<RoutSection> searchSections = routSectionService.findByDepartureAndDestination(departure, destination);
-        model.addAttribute("searchSections", searchSections);
 
-        return "sections";
+        return searchSections;
     }
 
-    @RequestMapping(value = "/sections/all", method = RequestMethod.POST, params = "add")
+    @PostMapping(value = "/sections/all", params = "add")
+    @ResponseBody
     public String addRoutSection(@RequestParam("sectionId") Long routSectionId,
-                                    @RequestParam("routId") Long routId, Model model) {
+                                 @RequestParam("routId") Long routId) {
         RoutSection sectionForAdd = routSectionService.findById(routSectionId);
 
         Rout rout = routService.findById(routId);
 
-        List<RoutSection> searchSections = routSectionService.findByDepartureAndDestination(sectionForAdd.getDeparture(),
-                sectionForAdd.getDestination());
-        model.addAttribute("searchSections", searchSections);
-
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("routForSection", rout);
-
-        model.addAttribute("selectedTab", "section-tab");
-
         if (routService.getRoutSectionByRoutAndDepartureStation(rout, sectionForAdd.getDeparture()) != null) {
-            //station with such departure already exists in rout
-            return "sections";
+            return "Such departure already exists in rout.";
         }
         if (routService.getRoutSectionByRoutAndDestinationStation(rout, sectionForAdd.getDestination()) != null) {
-            //station with such destination already exists in rout
-            return "sections";
+            return "Such destination already exists in rout.";
         }
 
         rout.getRoutSections().add(sectionForAdd);
         routService.save(rout);
 
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-
-        return "sections";
+        return "Section from "+sectionForAdd.getDeparture().getStationName()+" to "+
+                sectionForAdd.getDestination().getStationName()+" was saved";
     }
 
-    @RequestMapping(value = "/sections/all", method = RequestMethod.POST, params = "delete")
-    public String deleteRoutSection(@RequestParam("sectionId") Long routSectionId,
-                                 @RequestParam("routId") Long routId, Model model) {
+    @PostMapping(value = "/sections/all", params = "delete")
+    @ResponseBody
+    public String deleteRoutSection(@RequestParam("sectionId") Long routSectionId) {
         RoutSection sectionForDelete = routSectionService.findById(routSectionId);
-
-        Rout rout = routService.findById(routId);
 
         List<Rout> listRouts = routService.findByRoutSection(sectionForDelete);
         for (Rout deleteFrom : listRouts) {
@@ -345,20 +261,7 @@ public class AdminController {
 
         routSectionService.delete(sectionForDelete);
 
-        List<RoutSection> searchSections = routSectionService.findByDepartureAndDestination(sectionForDelete.getDeparture(),
-                sectionForDelete.getDestination());
-        model.addAttribute("searchSections", searchSections);
-
-        model.addAttribute("routs", routService.findAll());
-
-        model.addAttribute("routSectionForm", new RoutSection());
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-        model.addAttribute("sections", routService.getRoutSectionInRout(rout));
-        model.addAttribute("routForSection", rout);
-
-        model.addAttribute("selectedTab", "section-tab");
-
-        return "sections";
+        return "Section from "+sectionForDelete.getDeparture()+" to "+sectionForDelete.getDestination()+" was deleted " +
+                "from all routs";
     }
 }

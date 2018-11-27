@@ -1,11 +1,13 @@
 package system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -47,13 +49,16 @@ public class RoutSection extends BaseEntity {
     private Integer price;
 
     @NotNull(message = "This field is required.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @Column(name = "departure_time")
     private LocalTime departureTime;
 
     @NotNull(message = "This field is required.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @Column(name = "arrival_time")
     private LocalTime arrivalTime;
 
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "routSections")
     private Set<Rout> routs;
