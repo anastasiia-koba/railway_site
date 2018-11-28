@@ -17,7 +17,7 @@ import system.service.api.SecurityService;
  */
 @Slf4j
 @Service
-public class SecutiryServiceImpl  implements SecurityService{
+public class SecurityServiceImpl implements SecurityService{
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -41,7 +41,10 @@ public class SecutiryServiceImpl  implements SecurityService{
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
-        authenticationManager.authenticate(authenticationToken);
+        try {
+            authenticationManager.authenticate(authenticationToken);
+        } catch (Exception e){
+        }
 
         if (authenticationToken.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

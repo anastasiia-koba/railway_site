@@ -1,6 +1,7 @@
 package system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,23 +10,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import system.entity.FinalRout;
-import system.entity.Ticket;
 import system.entity.UserProfile;
 import system.entity.Train;
 import system.service.api.*;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 /**
  * Controller {@link UserProfile} in {@link Train} pages.
  */
+@Secured(value={"ROLE_ADMIN"})
 @Controller
 @RequestMapping(value = "/admin/passengers")
 public class PassengerController {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private TrainService trainService;
