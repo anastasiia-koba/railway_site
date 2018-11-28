@@ -37,10 +37,4 @@ public class FinalRout extends BaseEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "date")
     private LocalDate date;
-
-    public FinalRout(Train train, Rout rout, LocalDate date) {
-        this.train = train;
-        this.rout = rout;
-        this.date = date;
-    }
 }

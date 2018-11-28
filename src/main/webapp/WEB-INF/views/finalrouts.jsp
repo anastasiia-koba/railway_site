@@ -30,7 +30,7 @@
                             <form:select path="train" id="comboboxTrain" name="train" class="form-control">
                                 <option></option>
                                 <c:forEach items="${trains}" var="train">
-                                    <option value="${train.id}">${train.trainName}</option>
+                                    <option value="${train.trainName}">${train.trainName}</option>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="train"></form:errors>
@@ -45,7 +45,7 @@
                             <form:select path="rout" id="comboboxRout" name="rout" class="form-control">
                                 <option></option>
                                 <c:forEach items="${routs}" var="rout">
-                                    <option value="${rout.id}">${rout.routName}
+                                    <option value="${rout.routName}">${rout.routName}
                                         : ${rout.startStation.stationName}
                                         - ${rout.endStation.stationName}</option>
                                 </c:forEach>

@@ -99,8 +99,8 @@ public class FinalRoutController {
             return "Fields are required";
         }
 
-        finalRout.setTrain(trainService.findById(finalRout.getTrain().getId()));
-        finalRout.setRout(routService.findById(finalRout.getRout().getId()));
+        finalRout.setTrain(trainService.findByName(finalRout.getTrain().getTrainName()));
+        finalRout.setRout(routService.findByName(finalRout.getRout().getRoutName()));
 
         finalRoutService.save(finalRout);
 
