@@ -172,6 +172,7 @@
         <div class="container rout-table" hidden>
             <div class="list">
                 <h3>Build rout</h3>
+                <h3 id="buildMessage"></h3>
                 <div id="sectionMessage"></div>
                 <table class="table" id="myTableSections">
                     <thead>
@@ -189,8 +190,8 @@
                     <script id="templateSections" type="text/x-handlebars-template">
                         {{#each sections}}
                         <tr>
-                            <td>{{departure.stationName}}</td>
-                            <td>{{destination.stationName}}</td>
+                            <td>{{departure}}</td>
+                            <td>{{destination}}</td>
                             <td>{{departureTime}}</td>
                             <td>{{arrivalTime}}</td>
                             <td>{{distance}}</td>
@@ -290,12 +291,15 @@
 
         $('#routId').val(rout);
         $.get("${contextPath}/admin/sections/rout?list", {routForSearch: rout}).done(function (result) {
-            var data = {sections: result};
+            var data = JSON.parse(result);
+            $("#buildMessage").empty().text(data.buildMessage);
+
+            var rs = {sections : JSON.parse(data.sections)};
             var template = Handlebars.compile($('#templateSections').html());
             $("#myTableSections tr>td").remove();
-            $('#myTableSections').append(template(data));
+            $('#myTableSections').append(template(rs));
         }).fail(function (e) {
-            alert('Error: ' + e);
+            alert('Error: ' + JSON.stringify(e));
         });
     }
 

@@ -23,4 +23,6 @@ public interface RoutService {
     RoutSection getRoutSectionByRoutAndDestinationStation(Rout rout, Station destinationStation);
     List<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination);
     Integer getPriceInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination);
+    void sortRoutSections(List<RoutSection> routSections, List<RoutSection> result, Station start);
+    Boolean isRoutWellBuilt(Rout rout);
 }

@@ -132,9 +132,13 @@ public class RoutServiceImpl implements RoutService {
     @Override
     public List<RoutSection> getRoutSectionInRout(Rout rout) {
         try {
-            Set<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
-            //TODO sort of routSection
-            List<RoutSection> result = new ArrayList<>(routSections);
+            List<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
+
+            List<RoutSection> result = new ArrayList<>();
+            Station startStation = rout.getStartStation();
+
+            sortRoutSections(routSections, result, startStation);
+
             return result;
         } catch (DaoException e) {
             e.printStackTrace();
@@ -169,9 +173,12 @@ public class RoutServiceImpl implements RoutService {
     @Override
     public List<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) {
         try {
-            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
-            //TODO sort
-            List<RoutSection> result = new ArrayList<>(routSections);
+            List<RoutSection> prep = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
+
+            List<RoutSection> result = new ArrayList<>();
+
+            sortRoutSections(prep, result, rout.getStartStation());
+
             return result;
         } catch (DaoException e) {
             e.printStackTrace();
@@ -199,5 +206,40 @@ public class RoutServiceImpl implements RoutService {
         }
 
         return null;
+    }
+
+    @Override
+    public void sortRoutSections(List<RoutSection> routSections, List<RoutSection> result, Station start) {
+        List<RoutSection> prep = routSections;
+        Station startStation = start;
+        int idx;
+        while ((idx = prep.stream().map(e -> e.getDeparture()).collect(Collectors.toList()).indexOf(startStation)) != -1) {
+            result.add(prep.get(idx));
+            startStation = prep.get(idx).getDestination();
+            prep.remove(idx);
+        }
+
+        result.addAll(prep);
+    }
+
+    @Override
+    public Boolean isRoutWellBuilt(Rout rout) {
+        try {
+            List<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
+
+            int countNotSorted = 0;
+            sortRoutSections(routSections, new ArrayList<>(), rout.getStartStation());
+            countNotSorted = routSections.size();
+
+            if (countNotSorted == 0)
+                return true;
+            else
+                return false;
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.debug("Validate built rout from {} to {} failed ", rout.getStartStation().getStationName(),
+                    rout.getEndStation().getStationName());
+        }
+        return false;
     }
 }

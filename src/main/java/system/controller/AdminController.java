@@ -1,5 +1,7 @@
 package system.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -154,11 +156,34 @@ public class AdminController {
 
     @GetMapping(value = "/sections/rout", params = "list")
     @ResponseBody
-    public List<RoutSection> getRoutSectionsForRout(@RequestParam("routForSearch") Long routId) {
+    public String getRoutSectionsForRout(@RequestParam("routForSearch") Long routId) {
         Rout rout = routService.findById(routId);
         List<RoutSection> routSections = routService.getRoutSectionInRout(rout);
 
-        return routSections;
+        String message = routService.isRoutWellBuilt(rout) ? "Rout was built well" : "Rout has errors";
+        JsonObject jsonObject = new JsonObject();
+        JsonArray jsonValues = new JsonArray();
+
+        jsonObject.addProperty("buildMessage", message);
+
+        JsonObject json;
+        for (RoutSection routSection: routSections) {
+            json = new JsonObject();
+
+            json.addProperty("id", routSection.getId());
+            json.addProperty("departure", routSection.getDeparture().getStationName());
+            json.addProperty("destination", routSection.getDestination().getStationName());
+            json.addProperty("departureTime", routSection.getDepartureTime().toString());
+            json.addProperty("arrivalTime", routSection.getArrivalTime().toString());
+            json.addProperty("distance", routSection.getDistance());
+            json.addProperty("price", routSection.getPrice());
+
+            jsonValues.add(json);
+        }
+
+        jsonObject.addProperty("sections", jsonValues.toString());
+
+        return jsonObject.toString();
     }
 
     @PostMapping(value = "/sections", params = "change")
@@ -263,7 +288,8 @@ public class AdminController {
 
         routSectionService.delete(sectionForDelete);
 
-        return "Section from "+sectionForDelete.getDeparture()+" to "+sectionForDelete.getDestination()+" was deleted " +
+        return "Section from "+sectionForDelete.getDeparture().getStationName()+" to "+
+                sectionForDelete.getDestination().getStationName()+" was deleted " +
                 "from all routs";
     }
 }

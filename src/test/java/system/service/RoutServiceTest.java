@@ -14,9 +14,7 @@ import system.service.impl.RoutServiceImpl;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,6 +37,7 @@ public class RoutServiceTest {
     private List<Rout> routs;
     private List<RoutSection> routSections;
     private RoutSection routSection;
+    private Station start;
 
     @Before
     public void setup(){
@@ -51,8 +50,10 @@ public class RoutServiceTest {
 
         routs = Stream.of(rout).collect(Collectors.toList());
 
+        start = new Station("station1");
+        start.setId(1L);
         routSection = new RoutSection();
-        routSection.setDeparture(new Station("station1"));
+        routSection.setDeparture(start);
         routSection.setDestination(new Station("station2"));
         routSection.setPrice(200);
         routSection.setDistance(100);
@@ -212,13 +213,11 @@ public class RoutServiceTest {
 
     @Test
     public void testSortRoutSections() {
-        Station start = new Station("start1");
-
         List<RoutSection> result = new ArrayList<>();
 
         routService.sortRoutSections(routSections, result, start);
         assertEquals(3, result.size());
-        assertEquals(0, routSections);
+        assertEquals(0, routSections.size());
     }
 
     @Test
