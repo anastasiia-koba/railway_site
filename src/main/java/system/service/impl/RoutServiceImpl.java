@@ -15,6 +15,7 @@ import system.service.api.RoutService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link RoutService} interface.
@@ -35,6 +36,7 @@ public class RoutServiceImpl implements RoutService {
                 routForChange.setRoutName(rout.getRoutName());
                 routForChange.setStartStation(rout.getStartStation());
                 routForChange.setEndStation(rout.getEndStation());
+                routForChange.setRoutSections(rout.getRoutSections());
 
                 routDao.update(routForChange);
                 log.debug("Updated Rout from {} to {} ", rout.getStartStation().getStationName(),
@@ -182,7 +184,7 @@ public class RoutServiceImpl implements RoutService {
     @Override
     public Integer getPriceInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) {
         try {
-            Set<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
+            List<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, departure, destination);
 
             Integer price = 0;
             for (RoutSection rs : routSections) {

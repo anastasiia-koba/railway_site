@@ -62,14 +62,4 @@ public class RoutSection extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "routSections")
     private Set<Rout> routs;
-
-    public RoutSection(Station departure, Station destination, Integer distance,
-                       Integer price, LocalTime departureTime, LocalTime arrivalTime) {
-        this.departure = departure;
-        this.destination = destination;
-        this.distance = distance;
-        this.price = price;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-    }
 }

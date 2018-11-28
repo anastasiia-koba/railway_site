@@ -1,4 +1,4 @@
-package system.service.impl;
+package system.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +28,16 @@ public class TrainServiceTest {
     @InjectMocks
     private TrainServiceImpl trainService;
 
+    private Train train;
+
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
+        train = new Train("testTrain", 50);
     }
 
     @Test
-    public void testSave() throws DaoException {
-        Train train = new Train("testTrain", 50);
+    public void testSaveNew() throws DaoException {
         trainService.save(train);
 
         verify(trainDao, times(1)).create(train);
@@ -45,9 +47,6 @@ public class TrainServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        when(trainDao.findByName("testTrain")).thenReturn(new Train("testTrain", 50));
-
-        Train train = trainService.findByName("testTrain");
         trainService.delete(train);
 
         verify(trainDao, times(1)).remove(train);
@@ -55,23 +54,22 @@ public class TrainServiceTest {
 
     @Test
     public void testFindById() throws DaoException {
-        Train train = new Train("train 1", 30);
+        train.setId(1L);
         when(trainDao.findById(1L)).thenReturn(train);
 
         Train result = trainService.findById(1L);
-        assertEquals("train 1", result.getTrainName());
-        assertEquals(Long.valueOf(30), Long.valueOf(result.getPlacesNumber()));
+        assertEquals("testTrain", result.getTrainName());
+        assertEquals(Long.valueOf(50), Long.valueOf(result.getPlacesNumber()));
         assertEquals(false, result.getDeleted());
     }
 
     @Test
     public void testFindByName() throws DaoException {
-        Train train = new Train("train 2", 50);
-        when(trainDao.findByName("train 2")).thenReturn(train);
+        when(trainDao.findByName("testTrain")).thenReturn(train);
 
-        Train result = trainService.findByName("train 2");
+        Train result = trainService.findByName("testTrain");
         assertNotNull(result);
-        assertEquals("train 2", result.getTrainName());
+        assertEquals("testTrain", result.getTrainName());
         assertEquals(Long.valueOf(50), Long.valueOf(result.getPlacesNumber()));
         assertEquals(false, result.getDeleted());
     }
@@ -79,7 +77,7 @@ public class TrainServiceTest {
     @Test
     public void testFindAll() throws DaoException {
         List<Train> trainList = new ArrayList<>();
-        trainList.add(new Train("train 1"));
+        trainList.add(train);
         trainList.add(new Train("train 2"));
         trainList.add(new Train("train 3"));
 

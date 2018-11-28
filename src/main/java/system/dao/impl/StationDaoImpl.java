@@ -1,5 +1,6 @@
 package system.dao.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.StationDao;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Implementation of {@link StationDao} interface.
  */
+@Slf4j
 @Repository
 public class StationDaoImpl extends JpaDao<Long, Station> implements StationDao {
     @Override
@@ -19,8 +21,14 @@ public class StationDaoImpl extends JpaDao<Long, Station> implements StationDao 
             Query q = entityManager.createQuery("SELECT s FROM Station s WHERE s.stationName = :stationname");
             q.setParameter("stationname", stationName);
 
-            Station station = (Station) q.getSingleResult();
-            return station;
+            List results = q.getResultList();
+
+            if (results.isEmpty()) {
+                log.debug("Station {} is not founded", stationName);
+                return null; // handle no-results case
+            } else {
+                return (Station) results.get(0);
+            }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {

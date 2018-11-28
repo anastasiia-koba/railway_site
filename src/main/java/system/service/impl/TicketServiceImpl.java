@@ -10,6 +10,7 @@ import system.service.api.RoutService;
 import system.service.api.TicketService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -97,7 +98,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end) {
         try {
-            Set<RoutSection> routSections = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+            List<RoutSection> routSections = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                                             start, end);
 
             Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
@@ -105,7 +106,7 @@ public class TicketServiceImpl implements TicketService {
             Integer countTickets = 0;
 
             for (Ticket ticket : tickets){
-                Set<RoutSection> ticketSection = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                List<RoutSection> ticketSection = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                         ticket.getStartStation(), ticket.getEndStation());
 
                 Set<RoutSection> intersect = ticketSection.stream().filter(routSections::contains).collect(Collectors.toSet());

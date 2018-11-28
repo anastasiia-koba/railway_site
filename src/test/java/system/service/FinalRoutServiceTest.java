@@ -32,19 +32,58 @@ public class FinalRoutServiceTest {
     @InjectMocks
     private FinalRoutServiceImpl finalRoutService;
 
+    private Train train;
+    private Rout rout;
+    private FinalRout finalRout;
+    private FinalRout finalRout2;
+    private Set<FinalRout> finalRouts1;
+    private Set<FinalRout> finalRouts2;
+    private RoutSection routSection;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+
+        train = new Train("testTrain", 50);
+        train.setId(1L);
+
+        rout = new Rout();
+        rout.setId(1L);
+        rout.setRoutName("testRout");
+        rout.setStartStation(new Station("station1"));
+        rout.setEndStation(new Station("station4"));
+
+        finalRout = new FinalRout();
+        finalRout.setRout(rout);
+        finalRout.setTrain(train);
+        finalRout.setDate(LocalDate.of(2018, 11, 25));
+
+        Train train2 = new Train("testTrain2", 50);
+        train2.setId(2L);
+
+        Rout rout2 = new Rout();
+        rout2.setId(2L);
+        rout2.setRoutName("testRout3");
+        rout2.setStartStation(new Station("station2"));
+        rout2.setEndStation(new Station("station3"));
+
+        finalRout2 = new FinalRout(train2, rout2, LocalDate.of(2018, 11, 20));
+        finalRout2.setId(2L);
+
+        finalRouts1 = Stream.of(finalRout).collect(Collectors.toSet());
+        finalRouts2 = Stream.of(finalRout, finalRout2).collect(Collectors.toSet());
+
+        routSection = new RoutSection();
+        routSection.setDestination(new Station("station3"));
+        routSection.setDeparture(new Station("station2"));
+        routSection.setPrice(150);
+        routSection.setDistance(100);
+        routSection.setDepartureTime(LocalTime.of(14, 10));
+        routSection.setArrivalTime(LocalTime.of(17, 30));
     }
 
     @Test
     public void save() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
-
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-
         finalRoutService.save(finalRout);
         verify(finalRoutDao, times(1)).create(finalRout);
         verify(finalRoutDao, never()).update(finalRout);
@@ -53,28 +92,13 @@ public class FinalRoutServiceTest {
 
     @Test
     public void delete() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
+        finalRoutService.delete(finalRout);
 
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-
-        when(finalRoutDao.findById(1L)).thenReturn(finalRout);
-
-        FinalRout result = finalRoutService.findById(1L);
-        finalRoutService.delete(result);
-
-        verify(finalRoutDao, times(1)).remove(result);
+        verify(finalRoutDao, times(1)).remove(finalRout);
     }
 
     @Test
     public void findById() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
-
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-
         when(finalRoutDao.findById(1L)).thenReturn(finalRout);
 
         FinalRout result = finalRoutService.findById(1L);
@@ -86,21 +110,7 @@ public class FinalRoutServiceTest {
 
     @Test
     public void findAll() throws DaoException {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station2"));
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-        finalRout1.setId(1L);
-
-        Train train2 = new Train("testTrain2", 50);
-        Rout rout2 = new Rout("testRout2", new Station("station2"),
-                new Station("station3"));
-        FinalRout finalRout2 = new FinalRout(train2, rout2, LocalDate.of(2018, 11, 20));
-        finalRout2.setId(2L);
-
-        Set<FinalRout> finalRouts = Stream.of(finalRout1, finalRout2).collect(Collectors.toSet());
-
-        when(finalRoutDao.findAll()).thenReturn(finalRouts);
+        when(finalRoutDao.findAll()).thenReturn(finalRouts2);
 
         Set<FinalRout> result = finalRoutService.findAll();
         assertEquals(2, result.size());
@@ -108,15 +118,7 @@ public class FinalRoutServiceTest {
 
     @Test
     public void findByDate() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
-
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout);
-
-        when(finalRoutDao.findByDate(LocalDate.of(2018, 11, 25))).thenReturn(finalRouts);
+        when(finalRoutDao.findByDate(LocalDate.of(2018, 11, 25))).thenReturn(finalRouts1);
 
         Set<FinalRout> result = finalRoutService.findByDate(LocalDate.of(2018, 11, 25));
 
@@ -126,16 +128,8 @@ public class FinalRoutServiceTest {
 
     @Test
     public void findByStationAndDate() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
-
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout);
-
         when(finalRoutDao.findByStationAndDate(new Station("station1"),
-                LocalDate.of(2018, 11, 25))).thenReturn(finalRouts);
+                LocalDate.of(2018, 11, 25))).thenReturn(finalRouts1);
 
         Set<FinalRout> result = finalRoutService.findByStationAndDate(new Station("station1"),
                 LocalDate.of(2018, 11, 25));
@@ -146,40 +140,19 @@ public class FinalRoutServiceTest {
 
     @Test
     public void findByStationToStationOnDate() throws DaoException {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
-
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-        finalRout1.setId(1L);
-
-        Train train2 = new Train("testTrain2", 50);
-        Rout rout2 = new Rout("testRout2", new Station("station2"),
-                new Station("station3"));
-        FinalRout finalRout2 = new FinalRout(train2, rout2, LocalDate.of(2018, 11, 20));
-        finalRout2.setId(2L);
-
-        Set<FinalRout> finalRouts = Stream.of(finalRout1, finalRout2).collect(Collectors.toSet());
-
         when(finalRoutDao.findByStationToStationOnDate(new Station("station2"), new Station("station3"),
-                    LocalDate.of(2018, 11, 25))).thenReturn(finalRouts);
+                LocalDate.of(2018, 11, 25))).thenReturn(finalRouts2);
 
         Set<FinalRout> result = finalRoutService.findByStationToStationOnDate(new Station("station2"),
                 new Station("station3"),
                 LocalDate.of(2018, 11, 25));
 
-        assertEquals(true, result.contains(finalRout1));
+        assertEquals(true, result.contains(finalRout));
         assertEquals(true, result.contains(finalRout2));
     }
 
     @Test
     public void findByRoutAndTrainAndDate() throws DaoException {
-        Train train = new Train("testTrain", 50);
-        Rout rout = new Rout("testRout", new Station("station1"),
-                new Station("station2"));
-
-        FinalRout finalRout = new FinalRout(train, rout, LocalDate.of(2018, 11, 25));
-
         when(finalRoutDao.findByRoutAndTrainAndDate(rout, train,
                 LocalDate.of(2018, 11, 25))).thenReturn(finalRout);
 
@@ -193,143 +166,80 @@ public class FinalRoutServiceTest {
 
     @Test
     public void getMapDeparture() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
+        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), finalRout.getRout().getStartStation())).
+                thenReturn(routSection);
 
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
-        RoutSection routSection1 = new RoutSection(new Station("station2"), new Station("station3"),
-                200, 150, LocalTime.of(14, 10), LocalTime.of(17,30));
-
-        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout1.getRout(), finalRout1.getRout().getStartStation())).
-                thenReturn(routSection1);
-
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapDeparture(finalRouts);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapDeparture(finalRouts1);
         assertEquals(true, timeMap.containsValue(LocalTime.of(14, 10)));
         assertEquals(1, timeMap.size());
     }
 
     @Test
     public void getMapArrival() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
+        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), finalRout.getRout().getEndStation())).
+                thenReturn(routSection);
 
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
-        RoutSection routSection1 = new RoutSection(new Station("station2"), new Station("station3"),
-                200, 150, LocalTime.of(14, 10), LocalTime.of(17,30));
-
-        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout1.getRout(), finalRout1.getRout().getEndStation())).
-                thenReturn(routSection1);
-
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrival(finalRouts);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrival(finalRouts1);
         assertEquals(true, timeMap.containsValue(LocalTime.of(17, 30)));
         assertEquals(1, timeMap.size());
     }
 
     @Test
     public void getMapDepartureByStation() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
-
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
-        RoutSection routSection1 = new RoutSection(new Station("station2"), new Station("station3"),
-                200, 150, LocalTime.of(14, 10), LocalTime.of(17,30));
-
         Station station = new Station("station2");
 
-        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout1.getRout(), station)).
-                thenReturn(routSection1);
+        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station)).
+                thenReturn(routSection);
 
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapDepartureByStation(finalRouts, station);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapDepartureByStation(finalRouts1, station);
         assertEquals(true, timeMap.containsValue(LocalTime.of(14, 10)));
         assertEquals(1, timeMap.size());
     }
 
     @Test
     public void getMapArrivalByStation() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
-
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
-        RoutSection routSection1 = new RoutSection(new Station("station2"), new Station("station3"),
-                200, 150, LocalTime.of(14, 10), LocalTime.of(17,30));
-
         Station station = new Station("station3");
 
-        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout1.getRout(), station)).
-                thenReturn(routSection1);
+        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station)).
+                thenReturn(routSection);
 
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrivalByStation(finalRouts, station);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrivalByStation(finalRouts1, station);
         assertEquals(true, timeMap.containsValue(LocalTime.of(17, 30)));
         assertEquals(1, timeMap.size());
     }
 
     @Test
     public void getMapTimeInTravel() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station3"));
-
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
-        RoutSection routSection1 = new RoutSection(new Station("station2"), new Station("station3"),
-                200, 150, LocalTime.of(14, 10), LocalTime.of(17,30));
-        RoutSection routSection2 = new RoutSection(new Station("station3"), new Station("station4"),
-                100, 50, LocalTime.of(17, 40), LocalTime.of(19, 50));
-
         Station from = new Station("station2");
         Station to = new Station("station4");
 
-        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout1.getRout(), from)).
-                thenReturn(routSection1);
+        RoutSection routSection2 = new RoutSection();
+        routSection2.setDeparture(new Station("station3"));
+        routSection2.setDestination(new Station("station4"));
+        routSection2.setDistance(100);
+        routSection2.setPrice(50);
+        routSection2.setDepartureTime(LocalTime.of(17, 40));
+        routSection2.setArrivalTime(LocalTime.of(19, 50));
 
-        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout1.getRout(), to)).
+        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), from)).
+                thenReturn(routSection);
+
+        when(routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), to)).
                 thenReturn(routSection2);
 
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapTimeInTravel(finalRouts, from, to);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapTimeInTravel(finalRouts1, from, to);
         assertEquals(true, timeMap.containsValue(LocalTime.of(5, 40)));
         assertEquals(1, timeMap.size());
     }
 
     @Test
     public void getMapPriceInCustomRout() {
-        Train train1 = new Train("testTrain1", 50);
-        Rout rout1 = new Rout("testRout1", new Station("station1"),
-                new Station("station4"));
-
-        FinalRout finalRout1 = new FinalRout(train1, rout1, LocalDate.of(2018, 11, 25));
-
-        Set<FinalRout> finalRouts = new HashSet<>();
-        finalRouts.add(finalRout1);
-
         Station from = new Station("station2");
         Station to = new Station("station4");
 
-        when(routService.getPriceInRoutBetweenDepartureAndDestination(finalRout1.getRout(), from, to)).thenReturn(100);
+        when(routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), from, to)).thenReturn(100);
 
-        Map<Long, Integer> timeMap = finalRoutService.getMapPriceInCustomRout(finalRouts, from, to);
+        Map<Long, Integer> timeMap = finalRoutService.getMapPriceInCustomRout(finalRouts1, from, to);
         assertEquals(true, timeMap.containsValue(100));
         assertEquals(1, timeMap.size());
     }

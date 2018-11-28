@@ -1,4 +1,4 @@
-package system.service.impl;
+package system.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +28,16 @@ public class StationServiceTest {
     @InjectMocks
     private StationServiceImpl stationService;
 
+    private Station station;
+
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
+        station = new Station("testStation");
     }
 
     @Test
     public void testSave() throws DaoException {
-        Station station = new Station("testStation");
         stationService.save(station);
 
         verify(stationDao, times(1)).create(station);
@@ -45,9 +47,6 @@ public class StationServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        when(stationDao.findByName("testStation")).thenReturn(new Station("testStation"));
-
-        Station station = stationService.findByName("testStation");
         stationService.delete(station);
 
         verify(stationDao, times(1)).remove(station);
@@ -55,29 +54,28 @@ public class StationServiceTest {
 
     @Test
     public void testFindById() throws DaoException {
-        Station station = new Station("station 1");
         when(stationDao.findById(1L)).thenReturn(station);
 
         Station result = stationService.findById(1L);
-        assertEquals("station 1", result.getStationName());
+        assertNotNull(result);
+        assertEquals("testStation", result.getStationName());
         assertEquals(false, result.getDeleted());
     }
 
     @Test
     public void testFindByName() throws DaoException {
-        Station station = new Station("station 2");
-        when(stationDao.findByName("station 2")).thenReturn(station);
+        when(stationDao.findByName("testStation")).thenReturn(station);
 
-        Station result = stationService.findByName("station 2");
+        Station result = stationService.findByName("testStation");
         assertNotNull(result);
-        assertEquals("station 2", result.getStationName());
+        assertEquals("testStation", result.getStationName());
         assertEquals(false, result.getDeleted());
     }
 
     @Test
     public void testFindAll() throws DaoException {
         List<Station> stationList = new ArrayList<>();
-        stationList.add(new Station("station 1"));
+        stationList.add(station);
         stationList.add(new Station("station 2"));
         stationList.add(new Station("station 3"));
 

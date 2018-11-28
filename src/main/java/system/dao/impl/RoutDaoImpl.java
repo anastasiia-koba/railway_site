@@ -9,10 +9,8 @@ import system.entity.RoutSection;
 import system.entity.Station;
 
 import javax.persistence.Query;
-import java.sql.Time;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Implementation of {@link Rout} interface.
@@ -86,14 +84,15 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
     }
 
     @Override
-    public Set<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException {
+    public List<RoutSection> getRoutSectionInRout(Rout rout) throws DaoException {
         try {
             Query q = entityManager.createQuery("Select rs FROM RoutSection rs " +
                     "inner join fetch rs.routs r WHERE r = :rout");
 
             q.setParameter("rout", rout);
 
-            Set<RoutSection> routSections = new HashSet<RoutSection>(q.getResultList());
+            List<RoutSection> routSections = q.getResultList();
+
             return routSections;
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by Rout Failed: " + e.getMessage());
@@ -155,10 +154,10 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
     }
 
     @Override
-    public Set<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) throws DaoException {
+    public List<RoutSection> getRoutSectionsInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination) throws DaoException {
         try {
             Station endStation = new Station();
-            Set<RoutSection> routSections = new HashSet<>();
+            List<RoutSection> routSections = new ArrayList<>();
             while (endStation.getId() != destination.getId()) {
                 Query q = entityManager.createQuery("SELECT rs FROM RoutSection rs " +
                         "inner join fetch rs.routs r WHERE r = :rout AND rs.departure = :departure");

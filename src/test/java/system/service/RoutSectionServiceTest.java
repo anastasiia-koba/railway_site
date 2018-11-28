@@ -12,8 +12,9 @@ import system.entity.Station;
 import system.service.impl.RoutSectionServiceImpl;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -30,15 +31,26 @@ public class RoutSectionServiceTest {
     @InjectMocks
     private RoutSectionServiceImpl routSectionService;
 
+    private RoutSection routSection;
+    private List<RoutSection> routSectionList;
+
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
+
+        routSection = new RoutSection();
+        routSection.setDeparture(new Station("station1"));
+        routSection.setDestination(new Station("station2"));
+        routSection.setPrice(150);
+        routSection.setDistance(100);
+        routSection.setDepartureTime(LocalTime.of(14, 10));
+        routSection.setArrivalTime(LocalTime.of(17, 30));
+
+        routSectionList = Stream.of(routSection).collect(Collectors.toList());
     }
 
     @Test
     public void testSave() throws DaoException {
-        RoutSection routSection = new RoutSection(new Station("station1"), new Station("station2"),
-                100, 200, LocalTime.of(10, 10), LocalTime.of(13, 50));
         routSectionService.save(routSection);
 
         verify(routSectionDao, times(1)).create(routSection);
@@ -48,10 +60,6 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        when(routSectionDao.findById(1L)).thenReturn(new RoutSection(new Station("station1"), new Station("station2"),
-                100, 200, LocalTime.of(10, 10), LocalTime.of(13, 50)));
-
-        RoutSection routSection = routSectionService.findById(1L);
         routSectionService.delete(routSection);
 
         verify(routSectionDao, times(1)).remove(routSection);
@@ -59,8 +67,6 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testFindById() throws DaoException {
-        RoutSection routSection = new RoutSection(new Station("station1"), new Station("station2"),
-                100, 200, LocalTime.of(10, 10), LocalTime.of(13, 50));
         when(routSectionDao.findById(1L)).thenReturn(routSection);
 
         RoutSection result = routSectionService.findById(1L);
@@ -70,10 +76,6 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testFindByDeparture() throws DaoException {
-        RoutSection routSection = new RoutSection(new Station("station1"), new Station("station2"),
-                100, 200, LocalTime.of(10, 10), LocalTime.of(13, 50));
-        List<RoutSection> routSectionList = new ArrayList<>();
-        routSectionList.add(routSection);
         when(routSectionDao.findByDeparture(new Station("station1"))).thenReturn(routSectionList);
 
         List<RoutSection> result = routSectionService.findByDeparture(new Station("station1"));
@@ -84,10 +86,6 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testFindByDestination() throws DaoException {
-        RoutSection routSection = new RoutSection(new Station("station1"), new Station("station2"),
-                200, 100, LocalTime.of(8, 15), LocalTime.of(12, 50));
-        List<RoutSection> routSectionList = new ArrayList<>();
-        routSectionList.add(routSection);
         when(routSectionDao.findByDestination(new Station("station2"))).thenReturn(routSectionList);
 
         List<RoutSection> result = routSectionService.findByDestination(new Station("station2"));
@@ -98,10 +96,6 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testFindByDepartureAndDestination() throws DaoException {
-        RoutSection routSection = new RoutSection(new Station("station1"), new Station("station2"),
-                200, 100, LocalTime.of(10, 10), LocalTime.of(13, 50));
-        List<RoutSection> routSectionList = new ArrayList<>();
-        routSectionList.add(routSection);
         when(routSectionDao.findByDepartureAndDestination(new Station("station1"), new Station("station2"))).
                 thenReturn(routSectionList);
 

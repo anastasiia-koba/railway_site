@@ -49,10 +49,4 @@ public class Rout extends BaseEntity {
     public Rout(String routName) {
         this.routName = routName;
     }
-
-    public Rout(String routName, Station startStation, Station endStation) {
-        this.routName = routName;
-        this.startStation = startStation;
-        this.endStation = endStation;
-    }
 }
