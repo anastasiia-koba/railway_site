@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.RoleDao;
 import system.dao.api.UserDao;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional
     @Override
     public void save(UserProfile user){
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -58,6 +60,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public void delete(UserProfile user) {
         try {
