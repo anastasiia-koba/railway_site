@@ -37,21 +37,21 @@ public class RoutSectionServiceImpl implements RoutSectionService {
                 sectionForChange.setArrivalTime(routSection.getArrivalTime());
 
                 routSectionDao.update(sectionForChange);
-                log.debug("Updated Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                log.info("Updated Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
                         routSection.getDestination().getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Update Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                log.error("Update Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
                         routSection.getDestination().getStationName());
             }
         } else {
             try {
                 routSectionDao.create(routSection);
-                log.debug("Created Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+                log.info("Created Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
                         routSection.getDestination().getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Create Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+                log.error("Create Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
                         routSection.getDestination().getStationName());
             }
         }
@@ -62,11 +62,11 @@ public class RoutSectionServiceImpl implements RoutSectionService {
     public void delete(RoutSection routSection) {
         try {
             routSectionDao.remove(routSection);
-            log.debug("Deleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
+            log.info("Deleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
                     routSection.getDestination().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Delete Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
+            log.error("Delete Rout Section from {} to {} failed ", routSection.getDeparture().getStationName(),
                     routSection.getDestination().getStationName());
         }
     }
@@ -77,7 +77,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Rout Section by Id {} failed ", id);
+            log.error("Find Rout Section by Id {} failed ", id);
         }
 
         return null;
@@ -89,7 +89,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDeparture(departure);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Rout Section by Departure {} failed ", departure.getStationName());
+            log.error("Find Rout Section by Departure {} failed ", departure.getStationName());
         }
 
         return null;
@@ -101,7 +101,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDestination(destination);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Rout Section by Destination {} failed ", destination.getStationName());
+            log.error("Find Rout Section by Destination {} failed ", destination.getStationName());
         }
 
         return null;
@@ -113,7 +113,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             return routSectionDao.findByDepartureAndDestination(departure, destination);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Rout Section by Departure {} and Destination {} failed ", departure.getStationName(),
+            log.error("Find Rout Section by Departure {} and Destination {} failed ", departure.getStationName(),
                     destination.getStationName());
         }
 

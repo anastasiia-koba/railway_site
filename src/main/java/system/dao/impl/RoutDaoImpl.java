@@ -72,8 +72,13 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             Query q = entityManager.createQuery("SELECT r FROM Rout r WHERE r.routName = :routname");
             q.setParameter("routname", routName);
 
-            Rout rout = (Rout) q.getSingleResult();
-            return rout;
+            List results = q.getResultList();
+            if (results.isEmpty()) {
+                log.info("Rout {} is not founded", routName);
+                return null; // handle no-results case
+            } else {
+                return (Rout) results.get(0);
+            }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find Rout by routName Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -114,7 +119,7 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             List results = q.getResultList();
 
             if (results.isEmpty()) {
-                log.debug("RoutSection in rout {} with departure {} is not founded", rout.getRoutName(), departureStation);
+                log.info("RoutSection in rout {} with departure {} is not founded", rout.getRoutName(), departureStation);
                 return null; // handle no-results case
             } else {
                 return (RoutSection) results.get(0);
@@ -139,7 +144,7 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             List results = q.getResultList();
 
             if (results.isEmpty()) {
-                log.debug("RoutSection in rout {} with destination {} is not founded", rout.getRoutName(), destinationStation);
+                log.info("RoutSection in rout {} with destination {} is not founded", rout.getRoutName(), destinationStation);
                 return null; // handle no-results case
             } else {
                 return (RoutSection) results.get(0);

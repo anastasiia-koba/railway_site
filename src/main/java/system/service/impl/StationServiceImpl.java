@@ -30,17 +30,18 @@ public class StationServiceImpl implements StationService {
                 stationForChange.setStationName(station.getStationName());
 
                 stationDao.update(stationForChange);
+                log.info("Updated Station {} ", station.getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Update Station {} failed", station.getStationName());
+                log.error("Update Station {} failed", station.getStationName());
             }
         } else {
             try {
                 stationDao.create(station);
-                log.debug("Created Station {} ", station.getStationName());
+                log.info("Created Station {} ", station.getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Create Station {} failed", station.getStationName());
+                log.error("Create Station {} failed", station.getStationName());
             }
         }
     }
@@ -50,10 +51,10 @@ public class StationServiceImpl implements StationService {
     public void delete(Station station) {
         try {
             stationDao.remove(station);
-            log.debug("Deleted Station {} ", station.getStationName());
+            log.info("Deleted Station {} ", station.getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Delete Station {} failed", station.getStationName());
+            log.error("Delete Station {} failed", station.getStationName());
         }
     }
 
@@ -63,7 +64,7 @@ public class StationServiceImpl implements StationService {
             return stationDao.findByName(stationName);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Station by Name {} failed ", stationName);
+            log.error("Find Station by Name {} failed ", stationName);
         }
         return null;
     }
@@ -74,7 +75,7 @@ public class StationServiceImpl implements StationService {
             return stationDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Station by Id {} failed ", id);
+            log.error("Find Station by Id {} failed ", id);
         }
         return null;
     }
@@ -85,7 +86,7 @@ public class StationServiceImpl implements StationService {
             return stationDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find All Stations failed ");
+            log.error("Find All Stations failed ");
         }
         return null;
     }

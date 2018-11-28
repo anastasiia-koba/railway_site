@@ -34,10 +34,10 @@ public class TicketServiceImpl implements TicketService {
     public void create(Ticket ticket) {
         try {
             ticketDao.create(ticket);
-            log.debug("Created Ticket for User {} ", ticket.getUser().getUsername());
+            log.info("Created Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Create Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Create Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -46,10 +46,10 @@ public class TicketServiceImpl implements TicketService {
     public void save(Ticket ticket) {
         try {
             ticketDao.update(ticket);
-            log.debug("Updated Ticket for User {} ", ticket.getUser().getUsername());
+            log.info("Updated Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Update Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Update Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -58,10 +58,10 @@ public class TicketServiceImpl implements TicketService {
     public void delete(Ticket ticket) {
         try {
             ticketDao.remove(ticket);
-            log.debug("Delete Ticket for User {} ", ticket.getUser().getUsername());
+            log.info("Delete Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Delete Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Delete Ticket for User {} failed ", ticket.getUser().getUsername());
         }
     }
 
@@ -71,7 +71,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Ticket by Id {} failed ", id);
+            log.error("Find Ticket by Id {} failed ", id);
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findByUser(user);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Ticket by User {} failed ", user.getUsername());
+            log.error("Find Ticket by User {} failed ", user.getUsername());
         }
         return null;
     }
@@ -93,7 +93,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.findByFinalRout(finalRout);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+            log.error("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
                     finalRout.getRout().getEndStation().getStationName());
         }
         return null;
@@ -122,7 +122,7 @@ public class TicketServiceImpl implements TicketService {
             return countTickets;
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Tickets by Rout id {} Between Departure {} And Destination {} failed ", finalRout.getId(),
+            log.error("Find Tickets by Rout id {} Between Departure {} And Destination {} failed ", finalRout.getId(),
                     start.getStationName(), end.getStationName());
         }
 
@@ -135,7 +135,7 @@ public class TicketServiceImpl implements TicketService {
             return ticketDao.isAnyBodyInFinalRoutWithUserData(finalRout, user);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
+            log.error("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
                     finalRout.getRout().getEndStation().getStationName());
         }
 

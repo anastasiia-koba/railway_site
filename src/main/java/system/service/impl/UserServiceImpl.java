@@ -51,12 +51,12 @@ public class UserServiceImpl implements UserService {
         try
         {
             userDao.create(user);
-            log.debug("Created User {} ", user.getUsername());
+            log.info("Created User {} ", user.getUsername());
         }
         catch (DaoException e)
         {
             e.printStackTrace();
-            log.debug("Create User {} failed ", user.getUsername());
+            log.error("Create User {} failed ", user.getUsername());
         }
     }
 
@@ -65,10 +65,10 @@ public class UserServiceImpl implements UserService {
     public void delete(UserProfile user) {
         try {
             userDao.remove(user);
-            log.debug("Deleted User {} ", user.getUsername());
+            log.info("Deleted User {} ", user.getUsername());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Delete User {} failed ", user.getUsername());
+            log.error("Delete User {} failed ", user.getUsername());
         }
     }
 
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
             return userDao.findByUsername(username);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find User by Name {} failed ", username);
+            log.error("Find User by Name {} failed ", username);
         }
         return null;
     }
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             return userDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find User by Id {} failed ", id);
+            log.error("Find User by Id {} failed ", id);
         }
         return null;
     }

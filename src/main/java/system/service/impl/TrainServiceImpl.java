@@ -32,18 +32,18 @@ public class TrainServiceImpl implements TrainService {
                 trainForChange.setPlacesNumber(train.getPlacesNumber());
 
                 trainDao.update(trainForChange);
-                log.debug("Updated Train {} ", train.getTrainName());
+                log.info("Updated Train {} ", train.getTrainName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Update Train {} failed ", train.getTrainName());
+                log.error("Update Train {} failed ", train.getTrainName());
             }
         } else {
             try {
                 trainDao.create(train);
-                log.debug("Created Train {} ", train.getTrainName());
+                log.info("Created Train {} ", train.getTrainName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.debug("Create Train {} failed ", train.getTrainName());
+                log.error("Create Train {} failed ", train.getTrainName());
             }
         }
     }
@@ -53,10 +53,10 @@ public class TrainServiceImpl implements TrainService {
     public void delete(Train train) {
         try {
             trainDao.remove(train);
-            log.debug("Deleted Train {} ", train.getTrainName());
+            log.info("Deleted Train {} ", train.getTrainName());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Delete Train {} failed ", train.getTrainName());
+            log.error("Delete Train {} failed ", train.getTrainName());
         }
     }
 
@@ -66,7 +66,7 @@ public class TrainServiceImpl implements TrainService {
             return trainDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Train by Id {} failed ", id);
+            log.error("Find Train by Id {} failed ", id);
         }
         return null;
     }
@@ -77,7 +77,7 @@ public class TrainServiceImpl implements TrainService {
             return trainDao.findByName(trainName);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find Train by Name {} failed ", trainName);
+            log.error("Find Train by Name {} failed ", trainName);
         }
         return null;
     }
@@ -88,7 +88,7 @@ public class TrainServiceImpl implements TrainService {
             return trainDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Find All Trains failed ");
+            log.error("Find All Trains failed ");
         }
         return null;
     }

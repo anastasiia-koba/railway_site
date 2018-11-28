@@ -1,5 +1,6 @@
 package system.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 /**
  * Controller for {@link system.entity.UserProfile}'s pages.
  */
+@Slf4j
 @Controller
 public class UserController {
     @Autowired
@@ -53,6 +55,7 @@ public class UserController {
         }
 
         userService.save(userForm);
+        log.info("User {} has logged in", userForm.getUsername());
 
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
@@ -63,6 +66,7 @@ public class UserController {
     public String login(Model model, String error, String logout){
         if (error != null){
             model.addAttribute("error", "Login or password is incorrect.");
+            log.info("Wrong attempt to log in");
         }
 
         if (logout != null){
