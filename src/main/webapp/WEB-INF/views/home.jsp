@@ -36,7 +36,6 @@
                                 <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
                             </c:forEach>
                         </select>
-                        <span>${error}</span>
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -48,7 +47,6 @@
                                 <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
                             </c:forEach>
                         </select>
-                        <span>${error}</span>
                     </div>
                 </div>
                 <div class="col-sm-2">

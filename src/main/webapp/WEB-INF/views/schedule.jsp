@@ -17,19 +17,21 @@
 <body>
 <jsp:include page="navbar.jsp"></jsp:include>
 
-<div class="container-fluid bg-light ">
-    <div class="row align-items-center justify-content-center">
-        <form method="POST" action="${contextPath}/schedule">
-            <div class="col-md-2 pt-3">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <label>Station </label>
-                    <select id="comboboxStation" name="station" path="station">
-                        <option></option>
-                        <c:forEach items="${stations}" var="station">
-                            <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                        </c:forEach>
-                    </select>
-                    <span>${error}</span>
+<div id="top-filter" class="top-filter tfilter-box hidden-xs" data-spy="affix" data-offset-top="197">
+    <div class="container">
+        <div class="row">
+            <form method="POST" action="${contextPath}/schedule">
+                <div class="col-sm-2">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <label>Station </label>
+                        <select id="comboboxStation" name="station" path="station" class="form-control">
+                            <option></option>
+                            <c:forEach items="${stations}" var="station">
+                                <option value="${station.stationName}">${station.stationName.toString()}</option>
+                            </c:forEach>
+                        </select>
+                        <span>${error}</span>
+                    </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group" ${status.error ? 'has-error' : ''}>
@@ -39,9 +41,11 @@
                         <span>${error}</span>
                     </div>
                 </div>
-            </div>
-            <input type="submit" value="Show schedule">
-        </form>
+                <div class="col-sm-1">
+                    <input type="submit" class="btn btn-primary site-btn" value="Show schedule">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -19,7 +19,7 @@
 
 <div class="tab-content" id="containerContainingTabs">
     <div class="tab-pane ${selectedTab == 'station-tab' ? 'active' : ''} text-style" id="station-tab">
-        <div class="container-fluid bg-light ">
+        <div class="container">
             <div class="row align-items-center justify-content-center">
                 <form:form name="stationForm" id="stationForm" class="form-group" modelAttribute="stationForm">
                     <form:input path="id" type="hidden"></form:input>
@@ -34,8 +34,6 @@
                     </div>
                     <div class="col-md-2">
                         <button type="submit" id="btnAddStation">Save</button>
-                    </div>
-                    <div class="col-md-2">
                         <button type="submit" id="btnClearStation">Clear</button>
                     </div>
                 </form:form>

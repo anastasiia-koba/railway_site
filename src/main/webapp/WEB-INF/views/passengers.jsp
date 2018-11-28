@@ -14,34 +14,36 @@
 <jsp:include page="navbar.jsp"></jsp:include>
 
 <div class="container-fluid bg-light ">
-    <div class="row align-items-center justify-content-center">
-        <form:form method="POST" modelAttribute="finalRoutForm" action="${contextPath}/admin/passengers">
-            <spring:bind path="train.id">
-                <div class="col-md-2 pt-3">
-                    <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <label>Train name </label>
-                        <select id="comboboxTrain" name="train.id" path="train.id">
-                            <option></option>
-                            <c:forEach items="${trains}" var="train">
-                                <option value="${train.id}">${train.trainName.toString()}</option>
-                            </c:forEach>
-                        </select>
-                        <form:errors path="train"></form:errors>
+    <div class="container">
+        <div class="row">
+            <form:form method="POST" modelAttribute="finalRoutForm" action="${contextPath}/admin/passengers">
+                <spring:bind path="train.id">
+                    <div class="col-sm-2">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <label>Train name </label>
+                            <select id="comboboxTrain" name="train.id" path="train.id" class="form-control">
+                                <option></option>
+                                <c:forEach items="${trains}" var="train">
+                                    <option value="${train.trainName}">${train.trainName.toString()}</option>
+                                </c:forEach>
+                            </select>
+                            <form:errors path="train"></form:errors>
+                        </div>
                     </div>
-                </div>
-            </spring:bind>
-            <spring:bind path="rout.id">
-                <div class="col-md-2 pt-3">
-                    <div class="form-group" ${status.error ? 'has-error' : ''}>
-                        <label>Rout </label>
-                        <select id="comboboxRout" name="rout.id" path="rout.id">
-                            <option></option>
-                            <c:forEach items="${routs}" var="rout">
-                                <option value="${rout.id}">${rout.startStation.stationName.toString()} -
-                                        ${rout.endStation.stationName.toString()}</option>
-                            </c:forEach>
-                        </select>
-                        <form:errors path="rout"></form:errors>
+                </spring:bind>
+                <spring:bind path="rout.id">
+                    <div class="col-sm-2">
+                        <div class="form-group" ${status.error ? 'has-error' : ''}>
+                            <label>Rout </label>
+                            <select id="comboboxRout" name="rout.id" path="rout.id" class="form-control">
+                                <option></option>
+                                <c:forEach items="${routs}" var="rout">
+                                    <option value="${rout.routName}">${rout.routName} : ${rout.startStation.stationName.toString()} -
+                                            ${rout.endStation.stationName.toString()}</option>
+                                </c:forEach>
+                            </select>
+                            <form:errors path="rout"></form:errors>
+                        </div>
                     </div>
                 </spring:bind>
                 <spring:bind path="date">
@@ -53,12 +55,12 @@
                             <form:errors path="date"></form:errors>
                         </div>
                     </div>
+                </spring:bind>
+                <div class="col-sm-1">
+                    <button type="submit" class="btn btn-primary site-btn">Show passengers</button>
                 </div>
-            </spring:bind>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary btn-block">Show passengers</button>
-            </div>
-        </form:form>
+            </form:form>
+        </div>
     </div>
 </div>
 
@@ -76,9 +78,9 @@
             <tbody>
             <c:forEach items="${tickets}" var="ticket">
                 <tr>
-                    <td value="${ticket.user.id}">${ticket.user.surname.toString()} ${ticket.user.firstname.toString()}</td>
-                    <td value="${ticket.startStation.id}">${ticket.startStation.stationName.toString()}</td>
-                    <td value="${ticket.endStation.id}">${ticket.endStation.stationName.toString()}</td>
+                    <td>${ticket.user.surname} ${ticket.user.firstname}</td>
+                    <td>${ticket.startStation.stationName}</td>
+                    <td>${ticket.endStation.stationName}</td>
                 </tr>
             </c:forEach>
             </tbody>

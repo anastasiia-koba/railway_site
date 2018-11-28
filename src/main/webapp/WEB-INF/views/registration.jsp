@@ -13,6 +13,8 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/registration.css">
     <title>Create an account</title>
 </head>
 <body>
@@ -72,9 +74,9 @@
         </spring:bind>
         <spring:bind path="birthDate">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
+                <label class="col-sm-3 control-label">Date of Birth</label>
                 <div class="col-sm-9">
-                    <form:input type="date" path="birthDate" class="form-control"></form:input>
+                    <form:input type="date" name="birthDate" path="birthDate" class="form-control"></form:input>
                     <form:errors path="birthDate"></form:errors>
                 </div>
             </div>

@@ -41,7 +41,7 @@
                                              class="form-control">
                                     <option></option>
                                     <c:forEach items="${stationsFrom}" var="station">
-                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                        <option value="${station.stationName}">${station.stationName}</option>
                                     </c:forEach>
                                 </form:select>
                             </div>
@@ -55,7 +55,7 @@
                                 <form:select path="endStation" id="comboboxEnd" name="endStation" class="form-control">
                                     <option></option>
                                     <c:forEach items="${stationsTo}" var="station">
-                                        <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
+                                        <option value="${station.stationName}">${station.stationName}</option>
                                     </c:forEach>
                                 </form:select>
                                 <form:errors path="endStation"></form:errors>
@@ -87,20 +87,18 @@
                     <script id="template" type="text/x-handlebars-template">
                         {{#each routs}}
                         <tr>
-                            <td value="{{routName}}">{{routName}}</td>
-                            <td value="{{startStation.stationName}}">{{startStation.stationName}}</td>
-                            <td value="{{endStation.stationName}}">{{endStation.stationName}}</td>
-                            <form method="POST" action="${contextPath}/admin/routs">
-                                <td>
-                                    <input type="hidden" id="idRout-{{@index}}" value="{{id}}">
-                                    <button id="btnChangeRout-{{@index}}"
-                                            onclick="routEdit('{{@index}}')">Change
-                                    </button>
-                                    <button id="btnDeleteRout-{{@index}}"
-                                            onclick="routDelete('{{@index}}')">Delete
-                                    </button>
-                                </td>
-                            </form>
+                            <td>{{routName}}</td>
+                            <td>{{startStation.stationName}}</td>
+                            <td>{{endStation.stationName}}</td>
+                            <td>
+                                <input type="hidden" id="idRout-{{@index}}" value="{{id}}">
+                                <button id="btnChangeRout-{{@index}}"
+                                        onclick="routEdit('{{@index}}')">Change
+                                </button>
+                                <button id="btnDeleteRout-{{@index}}"
+                                        onclick="routDelete('{{@index}}')">Delete
+                                </button>
+                            </td>
                         </tr>
                         {{/each}}
                     </script>
