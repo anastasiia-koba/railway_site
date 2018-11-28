@@ -149,20 +149,26 @@ public class FinalRoutServiceImpl implements FinalRoutService {
 
     @Override
     public Map<Long, LocalTime> getMapDeparture(Set<FinalRout> finalRouts) {
+        Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
 
-        Map<Long, LocalTime> mapDeparture = finalRouts.stream().collect(Collectors.toMap(e -> e.getId(),
-                                            e -> routService.getRoutSectionByRoutAndDepartureStation(e.getRout(),
-                                            e.getRout().getStartStation()).getDepartureTime()));
+        for (FinalRout finalRout : finalRouts) {
+            LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), finalRout.getRout().getStartStation()) != null ?
+                    routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), finalRout.getRout().getStartStation()).getDepartureTime() : null;
+            mapDeparture.put(finalRout.getId(), timeDeparture);
+        }
 
         return mapDeparture;
     }
 
     @Override
     public Map<Long, LocalTime> getMapArrival(Set<FinalRout> finalRouts) {
+        Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
 
-        Map<Long, LocalTime> mapArrival = finalRouts.stream().collect(Collectors.toMap(e -> e.getId(),
-                                            e -> routService.getRoutSectionByRoutAndDestinationStation(e.getRout(),
-                                            e.getRout().getEndStation()).getArrivalTime()));
+        for (FinalRout finalRout : finalRouts) {
+            LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), finalRout.getRout().getEndStation()) != null ?
+                    routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), finalRout.getRout().getEndStation()).getArrivalTime(): null ;
+            mapArrival.put(finalRout.getId(), timeArrival);
+        }
 
         return mapArrival;
     }
