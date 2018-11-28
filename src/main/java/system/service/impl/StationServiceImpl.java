@@ -9,6 +9,8 @@ import system.dao.api.StationDao;
 import system.entity.Station;
 import system.service.api.StationService;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -83,7 +85,9 @@ public class StationServiceImpl implements StationService {
     @Override
     public List<Station> findAll() {
         try {
-            return stationDao.findAll();
+            List<Station> list = stationDao.findAll();
+            Collections.sort(list, Comparator.comparing(Station::getStationName));
+            return list;
         } catch (DaoException e) {
             e.printStackTrace();
             log.error("Find All Stations failed ");
