@@ -211,7 +211,6 @@
     </div>
 </div>
 <script>
-    // $('#btnSearchRout').click(function () {
     function searchRout() {
         event.preventDefault();
 
@@ -266,11 +265,11 @@
         event.preventDefault();
 
         var rout = $('#routId').val();
-        // var object = {sectionForm: $('#sectionForm').serialize()};
 
         $.post("${contextPath}/admin/sections?save", $('#sectionForm').serialize()+"&routId="+rout).done(function (result) {
             $('#sectionMessage').empty().text(result);
             getSectionList(rout);
+            getSearchList();
         }).fail(function (e) {
             alert('Error: ' + JSON.stringify(e));
         });
@@ -303,7 +302,11 @@
         });
     }
 
-    $('#btnAllSections').click(function () {
+    $('#btnAllSections').click( function () {
+        getSearchList();
+    })
+
+    function getSearchList() {
         event.preventDefault();
 
         var from = $('#comboboxSectionFrom').val();
@@ -319,7 +322,7 @@
         }).fail(function (e) {
             alert('Error: ' + e);
         });
-    })
+    }
 
     function sectionAdd(index) {
         event.preventDefault();
@@ -348,6 +351,7 @@
         $.post("${contextPath}/admin/sections/all?delete", object).done(function (result) {
             $('#sectionMessage').empty().text(result);
             getSectionList(rout);
+            getSearchList();
         }).fail(function () {
             alert('Delete rout failed');
         });

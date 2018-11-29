@@ -15,6 +15,7 @@ public interface RoutService {
     void delete(Rout rout);
     Rout findById(Long id);
     List<Rout> findAll();
+    List<Rout> findAllValid();
     Rout findByName(String routName);
     List<Rout> findByStartStationAndEndStation(Station start, Station end);
     List<Rout> findByRoutSection(RoutSection routSection);

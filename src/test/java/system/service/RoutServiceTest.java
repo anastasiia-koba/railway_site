@@ -214,17 +214,28 @@ public class RoutServiceTest {
     @Test
     public void testSortRoutSections() {
         List<RoutSection> result = new ArrayList<>();
-
         routService.sortRoutSections(routSections, result, start);
+
         assertEquals(3, result.size());
         assertEquals(0, routSections.size());
+        assertEquals("station1", result.get(0).getDeparture().getStationName());
     }
 
     @Test
-    public void testIsRoutWellBuilt() throws DaoException {
+    public void testIsRoutWellBuiltTrue() throws DaoException {
         when(routDao.getRoutSectionInRout(rout)).thenReturn(routSections);
 
         Boolean res = routService.isRoutWellBuilt(rout);
         assertEquals(true, res);
+    }
+
+    @Test
+    public void testIsRoutWellBuiltFalse() throws DaoException {
+        List<RoutSection> prep = routSections;
+        prep.remove(0);
+        when(routDao.getRoutSectionInRout(rout)).thenReturn(prep);
+
+        Boolean res = routService.isRoutWellBuilt(rout);
+        assertEquals(false, res);
     }
 }

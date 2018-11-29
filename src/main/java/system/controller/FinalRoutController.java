@@ -38,7 +38,8 @@ public class FinalRoutController {
     public String getAdminFinalRoutsPage(Model model) {
         model.addAttribute("finalRoutForm", new FinalRout());
         model.addAttribute("trains", trainService.findAll());
-        model.addAttribute("routs", routService.findAll());
+
+        model.addAttribute("routs", routService.findAllValid());
 
         model.addAttribute("selectedTab", "finalrout-tab");
 

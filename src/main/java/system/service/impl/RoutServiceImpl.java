@@ -90,7 +90,25 @@ public class RoutServiceImpl implements RoutService {
             return routDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find All Routs failed ");
+            log.error("Find All Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public List<Rout> findAllValid() {
+        try {
+            List<Rout> routs = routDao.findAll();
+            List<Rout> result = new ArrayList<>();
+
+            for (Rout rout: routs) {
+                if (isRoutWellBuilt(rout))
+                    result.add(rout);
+            }
+            return result;
+        } catch (DaoException e) {
+            e.printStackTrace();
+            log.error("Find All Valid Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -227,11 +245,15 @@ public class RoutServiceImpl implements RoutService {
         try {
             List<RoutSection> routSections = routDao.getRoutSectionInRout(rout);
 
-            int countNotSorted = 0;
-            sortRoutSections(routSections, new ArrayList<>(), rout.getStartStation());
+            if (routSections.isEmpty())
+                return false;
+
+            int countNotSorted;
+            List<RoutSection> result = new ArrayList<>();
+            sortRoutSections(routSections, result, rout.getStartStation());
             countNotSorted = routSections.size();
 
-            if (countNotSorted == 0)
+            if ((countNotSorted == 0) && result.get(result.size()-1).getDestination().equals(rout.getEndStation()))
                 return true;
             else
                 return false;
