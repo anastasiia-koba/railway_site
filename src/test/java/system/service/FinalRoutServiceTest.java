@@ -67,7 +67,10 @@ public class FinalRoutServiceTest {
         rout2.setStartStation(new Station("station2"));
         rout2.setEndStation(new Station("station3"));
 
-        finalRout2 = new FinalRout(train2, rout2, LocalDate.of(2018, 11, 20));
+        finalRout2 = new FinalRout();
+        finalRout2.setTrain(train2);
+        finalRout2.setRout(rout2);
+        finalRout2.setDate(LocalDate.of(2018, 11, 20));
         finalRout2.setId(2L);
 
         finalRouts1 = Stream.of(finalRout).collect(Collectors.toSet());
