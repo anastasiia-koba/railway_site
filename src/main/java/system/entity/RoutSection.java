@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.annotations.WhereJoinTable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -61,5 +62,7 @@ public class RoutSection extends BaseEntity {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "routSections")
+    @WhereJoinTable(clause = "deleted = false")
+    @SQLDelete(sql="UPDATE routs_by_sections SET deleted = true WHERE rout_id = ? AND rout_section_id = ?")
     private Set<Rout> routs;
 }

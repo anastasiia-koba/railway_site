@@ -1,5 +1,6 @@
 package system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,25 +29,25 @@ public class Station extends BaseEntity {
     @Column(name = "stationname")
     private String stationName;
 
-    @Transient
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "departure",
                orphanRemoval = true)
     private Set<RoutSection> sectionsFrom;
 
-    @Transient
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "destination",
                orphanRemoval = true)
     private Set<RoutSection> sectionsTo;
 
-    @Transient
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "startStation",
             orphanRemoval = true)
     private Set<Rout> routsFrom;
 
-    @Transient
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "endStation",
             orphanRemoval = true)

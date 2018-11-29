@@ -280,12 +280,6 @@ public class AdminController {
     public String deleteRoutSection(@RequestParam("sectionId") Long routSectionId) {
         RoutSection sectionForDelete = routSectionService.findById(routSectionId);
 
-        List<Rout> listRouts = routService.findByRoutSection(sectionForDelete);
-        for (Rout deleteFrom : listRouts) {
-            deleteFrom.getRoutSections().remove(sectionForDelete);
-            routService.save(deleteFrom);
-        }
-
         routSectionService.delete(sectionForDelete);
 
         return "Section from "+sectionForDelete.getDeparture().getStationName()+" to "+

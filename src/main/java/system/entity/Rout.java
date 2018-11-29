@@ -1,12 +1,12 @@
 package system.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -43,8 +43,13 @@ public class Rout extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "routs_by_sections", joinColumns = @JoinColumn(name = "rout_id"),
             inverseJoinColumns = @JoinColumn(name = "rout_section_id"))
+    @WhereJoinTable(clause = "deleted = false")
+    @SQLDelete(sql="UPDATE routs_by_sections SET deleted = true WHERE rout_id = ? AND rout_section_id = ?")
     private Set<RoutSection> routSections;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "rout", orphanRemoval = true)
+    private Set<FinalRout> finalRouts;
 
     public Rout(String routName) {
         this.routName = routName;
