@@ -36,8 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         try {
             user = userDao.findByUsername(username);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Load user {} failed ", user.getUsername());
+            log.error("Load user {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
         }
 
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();

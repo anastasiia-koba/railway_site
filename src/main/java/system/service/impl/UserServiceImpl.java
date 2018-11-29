@@ -52,11 +52,8 @@ public class UserServiceImpl implements UserService {
         {
             userDao.create(user);
             log.info("Created User {} ", user.getUsername());
-        }
-        catch (DaoException e)
-        {
-            e.printStackTrace();
-            log.error("Create User {} failed ", user.getUsername());
+        } catch (DaoException e) {
+            log.error("Create User {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -67,8 +64,7 @@ public class UserServiceImpl implements UserService {
             userDao.remove(user);
             log.info("Deleted User {} ", user.getUsername());
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Delete User {} failed ", user.getUsername());
+            log.error("Delete User {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -77,8 +73,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.findByUsername(username);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find User by Name {} failed ", username);
+            log.error("Find User by Name {} failed: {}: {} ", username, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -88,8 +83,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.findById(id);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find User by Id {} failed ", id);
+            log.error("Find User by Id {} failed: {}: {} ", id, e.getErrorCode(), e.getMessage());
         }
         return null;
     }

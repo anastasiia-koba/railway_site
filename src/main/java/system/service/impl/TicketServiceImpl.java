@@ -36,8 +36,7 @@ public class TicketServiceImpl implements TicketService {
             ticketDao.create(ticket);
             log.info("Created Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Create Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Create Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -48,8 +47,7 @@ public class TicketServiceImpl implements TicketService {
             ticketDao.update(ticket);
             log.info("Updated Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Update Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Update Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -60,8 +58,7 @@ public class TicketServiceImpl implements TicketService {
             ticketDao.remove(ticket);
             log.info("Delete Ticket for User {} ", ticket.getUser().getUsername());
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Delete Ticket for User {} failed ", ticket.getUser().getUsername());
+            log.error("Delete Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -70,8 +67,7 @@ public class TicketServiceImpl implements TicketService {
         try {
             return ticketDao.findById(id);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Ticket by Id {} failed ", id);
+            log.error("Find Ticket by Id {} failed: {}: {} ", id, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -81,8 +77,7 @@ public class TicketServiceImpl implements TicketService {
         try {
             return ticketDao.findByUser(user);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Ticket by User {} failed ", user.getUsername());
+            log.error("Find Ticket by User {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -92,9 +87,8 @@ public class TicketServiceImpl implements TicketService {
         try {
             return ticketDao.findByFinalRout(finalRout);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
+            log.error("Find Tickets by Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -121,9 +115,8 @@ public class TicketServiceImpl implements TicketService {
 
             return countTickets;
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Tickets by Rout id {} Between Departure {} And Destination {} failed ", finalRout.getId(),
-                    start.getStationName(), end.getStationName());
+            log.error("Find Tickets by Rout id {} Between Departure {} And Destination {} failed: {}: {} ", finalRout.getId(),
+                    start.getStationName(), end.getStationName(), e.getErrorCode(), e.getMessage());
         }
 
         return null;
@@ -134,9 +127,8 @@ public class TicketServiceImpl implements TicketService {
         try {
             return ticketDao.isAnyBodyInFinalRoutWithUserData(finalRout, user);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Tickets by Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
+            log.error("Find Tickets by Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
 
         return false;

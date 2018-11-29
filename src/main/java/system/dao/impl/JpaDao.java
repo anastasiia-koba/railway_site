@@ -1,7 +1,6 @@
 package system.dao.impl;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.Dao;
 
@@ -24,14 +23,13 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
     public void create(E entity) throws DaoException {
         try {
             entityManager.persist(entity);
-        } catch(EntityExistsException e) {
-            e.printStackTrace();
+        } catch (EntityExistsException e) {
             throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
             throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
-        } catch(TransactionRequiredException e) {
-            e.printStackTrace();
+        } catch (TransactionRequiredException e) {
+            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+        } catch (Exception e) {
             throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
         }
     }
@@ -41,10 +39,8 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         try {
             entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
         } catch (TransactionRequiredException e) {
-            e.printStackTrace();
             throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
         }
     }
@@ -54,13 +50,10 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         try {
             entityManager.merge(entity);
         } catch (TransactionRequiredException e) {
-            e.printStackTrace();
             throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
         }
     }

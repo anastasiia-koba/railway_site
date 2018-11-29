@@ -49,8 +49,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
                         finalRout.getRout().getEndStation().getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.error("Update Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                        finalRout.getRout().getEndStation().getStationName());
+                log.error("Update Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
             }
         } else {
             try {
@@ -59,8 +59,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
                         finalRout.getRout().getEndStation().getStationName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                log.error("Create Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                        finalRout.getRout().getEndStation().getStationName());
+                log.error("Create Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
+                        finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
             }
         }
     }
@@ -74,8 +74,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
                     finalRout.getRout().getEndStation().getStationName());
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Delete Final Rout from {} to {} failed ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
+            log.error("Delete Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
+                    finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findById(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find Final Rout by Id {} failed ", id);
+            log.error("Find Final Rout by Id {} failed: {}: {} ", id, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find All Final Routs failed ");
+            log.error("Find All Final Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -107,7 +107,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByDate(date);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find Final Rout by Date {} failed ", date);
+            log.error("Find Final Rout by Date {} failed: {}: {} ", date, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -118,7 +118,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByStationAndDate(station, date);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find Final Rout by Station {} and Date {} failed ", station.getStationName(), date);
+            log.error("Find Final Rout by Station {} and Date {} failed: {}: {} ", station.getStationName(), date,
+                    e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -129,8 +130,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByStationToStationOnDate(start, end, date);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find Final Rout by Start Station {} and End Station {} and Date {} failed ", start.getStationName(),
-                    end.getStationName(), date);
+            log.error("Find Final Rout by Start Station {} and End Station {} and Date {} failed: {}: {} ", start.getStationName(),
+                    end.getStationName(), date, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -141,8 +142,8 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             return finalRoutDao.findByRoutAndTrainAndDate(rout, train, date);
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Find Final Rout by Rout id {} and Train {} and Date {} failed ", rout.getId(),
-                    train.getTrainName(), date);
+            log.error("Find Final Rout by Rout id {} and Train {} and Date {} failed: {}: {} ", rout.getId(),
+                    train.getTrainName(), date, e.getErrorCode(), e.getMessage());
         }
         return null;
     }

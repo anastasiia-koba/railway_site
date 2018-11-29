@@ -34,16 +34,14 @@ public class StationServiceImpl implements StationService {
                 stationDao.update(stationForChange);
                 log.info("Updated Station {} ", station.getStationName());
             } catch (DaoException e) {
-                e.printStackTrace();
-                log.error("Update Station {} failed", station.getStationName());
+                log.error("Update Station {} failed: {}: {} ", station.getStationName(), e.getErrorCode(), e.getMessage());
             }
         } else {
             try {
                 stationDao.create(station);
                 log.info("Created Station {} ", station.getStationName());
             } catch (DaoException e) {
-                e.printStackTrace();
-                log.error("Create Station {} failed", station.getStationName());
+                log.error("Create Station {} failed: {}: {} ", station.getStationName(), e.getErrorCode(), e.getMessage());
             }
         }
     }
@@ -55,8 +53,7 @@ public class StationServiceImpl implements StationService {
             stationDao.remove(station);
             log.info("Deleted Station {} ", station.getStationName());
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Delete Station {} failed", station.getStationName());
+            log.error("Delete Station {} failed: {}: {} ", station.getStationName(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -65,8 +62,7 @@ public class StationServiceImpl implements StationService {
         try {
             return stationDao.findByName(stationName);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Station by Name {} failed ", stationName);
+            log.error("Find Station by Name {} failed: {}: {} ", stationName, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -76,8 +72,7 @@ public class StationServiceImpl implements StationService {
         try {
             return stationDao.findById(id);
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find Station by Id {} failed ", id);
+            log.error("Find Station by Id {} failed: {}: {} ", id, e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -89,8 +84,7 @@ public class StationServiceImpl implements StationService {
             Collections.sort(list, Comparator.comparing(Station::getStationName));
             return list;
         } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Find All Stations failed ");
+            log.error("Find All Stations failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
         return null;
     }
