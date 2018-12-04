@@ -67,7 +67,6 @@ public class RoutServiceImpl implements RoutService {
             log.info("Deleted Rout from {} to {} ", rout.getStartStation().getStationName(),
                     rout.getEndStation().getStationName());
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Delete Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                     rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -78,7 +77,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.findById(id);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout by Id {} failed: {}: {} ", id, e.getErrorCode(), e.getMessage());
         }
         return null;
@@ -89,7 +87,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.findAll();
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find All Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
         return null;
@@ -107,7 +104,6 @@ public class RoutServiceImpl implements RoutService {
             }
             return result;
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find All Valid Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
         return null;
@@ -118,7 +114,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.findByName(routName);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout by routName {} failed: {}: {} ", routName, e.getErrorCode(), e.getMessage());
         }
         return null;
@@ -129,7 +124,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.findByStartStationAndEndStation(start, end);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout by Departure {} and Destination {} failed: {}: {} ", start.getStationName(),
                     end.getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -141,7 +135,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.findByRoutSection(routSection);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout by routSection {} failed: {}: {} ", routSection.getId(), e.getErrorCode(), e.getMessage());
         }
         return null;
@@ -159,7 +152,6 @@ public class RoutServiceImpl implements RoutService {
 
             return result;
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout Section by Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                     rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -171,7 +163,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.getRoutSectionByRoutAndDepartureStation(rout, departureStation);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout Section by Rout id {} And Departure {} failed: {}: {} ", rout.getId(), departureStation.getStationName(),
                     e.getErrorCode(), e.getMessage());
         }
@@ -183,7 +174,6 @@ public class RoutServiceImpl implements RoutService {
         try {
             return routDao.getRoutSectionByRoutAndDestinationStation(rout, destinationStation);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout Section by Rout id {} And Destination {} failed: {}: {} ", rout.getId(),
                     destinationStation.getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -201,7 +191,6 @@ public class RoutServiceImpl implements RoutService {
 
             return result;
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Rout Sections in Rout {}, Departure {} And Destination {} failed: {}: {} ", rout.getRoutName(),
                     departure.getStationName(), destination.getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -220,7 +209,6 @@ public class RoutServiceImpl implements RoutService {
 
             return price;
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Find Price by Rout id {} Between Departure {} And Destination {} failed: {}: {} ", rout.getId(),
                     departure.getStationName(), destination.getStationName(), e.getErrorCode(), e.getMessage());
         }
@@ -260,7 +248,6 @@ public class RoutServiceImpl implements RoutService {
             else
                 return false;
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Validate built rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                     rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
