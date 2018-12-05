@@ -11,8 +11,11 @@
 <div class="sidenav">
     <nav>
         <ul class="nav nav-pills nav-stacked">
+            <li role="presentation" class="${selectedTab == 'account-tab' ? 'active' : '' }">
+                <a href="${contextPath}/user/account">Account</a>
+            </li>
             <li role="presentation" class="${selectedTab == 'profile-tab' ? 'active' : '' }">
-                <a href="${contextPath}/user/profile">User profile</a>
+                <a href="${contextPath}/user/profile">Profile</a>
             </li>
             <li role="presentation" class="${selectedTab == 'ticket-tab' ? 'active' : '' }">
                 <a href="${contextPath}/user/tickets">Tickets</a>

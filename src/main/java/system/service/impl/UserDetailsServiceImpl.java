@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.UserDao;
 import system.entity.Role;
-import system.entity.UserProfile;
+import system.entity.UserData;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        UserProfile user = new UserProfile();
+        UserData user = new UserData();
 
         try {
             user = userDao.findByUsername(username);

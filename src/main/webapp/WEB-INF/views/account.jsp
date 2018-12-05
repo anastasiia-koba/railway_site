@@ -24,47 +24,44 @@
 <jsp:include page="userNavbar.jsp"></jsp:include>
 
 <div class="tab-content" id="containerContainingTabs">
-    <div class="tab-pane ${selectedTab == 'profile-tab' ? 'active' : ''} text-style" id="profile-tab">
+    <div class="tab-pane ${selectedTab == 'account-tab' ? 'active' : ''} text-style" id="profile-tab">
         <div class="container">
             <form:form modelAttribute="userForm" id="userForm" class="form-horizontal"
-                       role="form" data-toggle="validator">
+                       data-toggle="validator" role="form">
                 <h2 id="message"></h2>
                 <form:input path="id" id="idForm" type="hidden"></form:input>
-                <spring:bind path="firstname">
+                <spring:bind path="username">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                        <label for="username" class="col-sm-3 control-label">Login</label>
                         <div class="col-sm-9">
-                            <form:input type="text" id="firstname" placeholder="First name"
+                            <form:input type="text" id="username" placeholder="Username"
                                         class="form-control"
                                         autofocus="true"
-                                        path="firstname"></form:input>
-                            <form:errors path="firstname"></form:errors>
+                                        path="username"></form:input>
+                            <form:errors path="username"></form:errors>
                         </div>
                     </div>
                 </spring:bind>
-                <spring:bind path="surname">
+                <spring:bind path="password">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <label for="surname" class="col-sm-3 control-label">Last Name</label>
+                        <label for="password" class="col-sm-3 control-label">Password</label>
                         <div class="col-sm-9">
-                            <form:input type="text" id="surname" placeholder="Last name"
-                                        class="form-control"
-                                        autofocus="true"
-                                        path="surname"></form:input>
-                            <form:errors path="surname"></form:errors>
+                            <form:input type="password" path="password" class="form-control"
+                                        placeholder="Password"></form:input>
+                            <form:errors path="password"></form:errors>
                         </div>
                     </div>
                 </spring:bind>
-                <spring:bind path="birthDate">
+                <spring:bind path="confirmPassword">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <label class="col-sm-3 control-label">Date of Birth</label>
+                        <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
                         <div class="col-sm-9">
-                            <form:input type="date" name="birthDate" path="birthDate"
-                                        class="form-control"></form:input>
-                            <form:errors path="birthDate"></form:errors>
+                            <form:input type="password" path="confirmPassword" class="form-control"
+                                        placeholder="Confirm your password"></form:input>
+                            <form:errors path="validPasswords"></form:errors>
                         </div>
                     </div>
                 </spring:bind>
-
                 <button type="submit" class="btn btn-primary btn-block" id="btnSave">Save</button>
             </form:form> <!-- /form -->
         </div> <!-- ./container -->
@@ -74,7 +71,7 @@
     $('#btnSave').click(function () {
         event.preventDefault();
 
-        $.post("${contextPath}/user/profile", $('#userForm').serialize()).done(function (result) {
+        $.post("${contextPath}/user/account", $('#userForm').serialize()).done(function (result) {
             $('#message').empty().text(result);
         }).fail(function (e) {
             alert('Error: ' + JSON.stringify(e));
@@ -83,3 +80,4 @@
 </script>
 </body>
 </html>
+

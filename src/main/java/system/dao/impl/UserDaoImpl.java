@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.UserDao;
+import system.entity.UserData;
 import system.entity.UserProfile;
 
 import javax.persistence.Query;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,11 +16,11 @@ import java.util.List;
  */
 @Slf4j
 @Repository
-public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
+public class UserDaoImpl extends JpaDao<Long, UserData> implements UserDao {
     @Override
-    public UserProfile findByUsername(String username) throws DaoException {
+    public UserData findByUsername(String username) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT u FROM UserProfile u WHERE u.username = :username");
+            Query q = entityManager.createQuery("SELECT u FROM UserData u WHERE u.username = :username");
             q.setParameter("username", username);
 
             List results = q.getResultList();
@@ -26,7 +28,7 @@ public class UserDaoImpl extends JpaDao<Long, UserProfile> implements UserDao {
                 log.debug("User {} is not founded", username);
                 return null; // handle no-results case
             } else {
-                return (UserProfile) results.get(0);
+                return (UserData) results.get(0);
             }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());

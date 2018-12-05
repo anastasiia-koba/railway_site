@@ -1,4 +1,4 @@
-DROP TABLE tickets, user_roles, users, roles, routs_by_sections, routs, rout_section,
+DROP TABLE tickets, user_roles, profiles, users, roles, routs_by_sections, routs, rout_section,
            trains_routs, trains, stations;
 
 -- Table: users
@@ -6,6 +6,14 @@ CREATE TABLE users (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
+  deleted BIT NOT NULL DEFAULT 0
+)
+  ENGINE = InnoDB;
+
+-- Table: profiles
+CREATE TABLE profiles (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
   surname  VARCHAR(255),
   firstname VARCHAR(255),
   birthdate DATE,
@@ -113,6 +121,7 @@ CREATE TABLE trains_routs (
 -- Table: tickets
 CREATE TABLE tickets (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  profile_id INT NOT NULL,
   user_id INT NOT NULL,
   train_rout_id INT NOT NULL,
   price INT NOT NULL,
@@ -120,6 +129,7 @@ CREATE TABLE tickets (
   end_station_id INT NOT NULL,
   deleted BIT NOT NULL DEFAULT 0,
 
+  FOREIGN KEY (profile_id) REFERENCES profiles (id) ,
   FOREIGN KEY (user_id) REFERENCES users (id) ,
   FOREIGN KEY (train_rout_id) REFERENCES trains_routs (id),
   FOREIGN KEY (start_station_id) REFERENCES stations (id),
@@ -127,11 +137,13 @@ CREATE TABLE tickets (
 )
   ENGINE = InnoDB;
 
-
 -- Insert data
 
-INSERT INTO users VALUES (1, 'admin', '$2a$10$45wOcCHPJvqgoGGH1OGkBOsz41taOaQfIOiTfrFVrUAB9OJtEtyLC', null, null, null, 0);
-INSERT INTO users VALUES (2, 'user', '$2a$10$L27PfL99nAwCsT/fyK7cH.wyyOlNCn9RTQwb1Aw8zwPGpN.Xw1qwq', 'Ivanov', 'Ivan', '1992.10.21', 0);
+INSERT INTO users VALUES (1, 'admin', '$2a$10$45wOcCHPJvqgoGGH1OGkBOsz41taOaQfIOiTfrFVrUAB9OJtEtyLC', 0);
+INSERT INTO users VALUES (2, 'user', '$2a$10$L27PfL99nAwCsT/fyK7cH.wyyOlNCn9RTQwb1Aw8zwPGpN.Xw1qwq', 0);
+
+INSERT INTO profiles VALUES (1, 2, 'Ivanov', 'Ivan', '1992.10.21', 0);
+
 
 INSERT INTO roles VALUES (1, 'ROLE_USER', 0);
 INSERT INTO roles VALUES (2, 'ROLE_ADMIN', 0);
@@ -147,10 +159,10 @@ INSERT INTO rout_section VALUES (1, 1, 3, 340, 300, "11:12:00", "15:30:00", 0);
 INSERT INTO rout_section VALUES (2, 3, 2, 450, 350, "15:45:00", "21:00:00", 0);
 
 INSERT INTO routs VALUES (1, '001', 1, 2, 0);
-INSERT INTO routs_by_sections VALUES (1, 1);
-INSERT INTO routs_by_sections VALUES (1, 2);
+INSERT INTO routs_by_sections VALUES (1, 1, 0);
+INSERT INTO routs_by_sections VALUES (1, 2, 0);
 
 INSERT INTO trains VALUES (1, 'T-1', 50, 0);
 INSERT INTO trains_routs VALUES (1, 1, 1, '2018.11.05', 0);
 
-INSERT INTO tickets VALUES (1, 2, 1, '350', 3, 2, 0);
+INSERT INTO tickets VALUES (1, 1, 2, 1, '350', 3, 2, 0);

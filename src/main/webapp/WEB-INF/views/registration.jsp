@@ -23,68 +23,38 @@
 <div class="container">
     <form:form method="POST" modelAttribute="userForm" id="userForm" class="form-horizontal" role="form"
                data-toggle="validator">
-        <h2>Create your account</h2>
-        <spring:bind path="username">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="username" class="col-sm-3 control-label">Login</label>
-                <div class="col-sm-9">
-                    <form:input type="text" id="username" placeholder="Username" class="form-control" autofocus="true"
-                                path="username"></form:input>
-                    <form:errors path="username"></form:errors>
+        <h2>Create account</h2>
+            <spring:bind path="username">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <label for="username" class="col-sm-3 control-label">Login</label>
+                    <div class="col-sm-9">
+                        <form:input type="text" id="username" placeholder="Username" class="form-control"
+                                    autofocus="true"
+                                    path="username"></form:input>
+                        <form:errors path="username"></form:errors>
+                    </div>
                 </div>
-            </div>
-        </spring:bind>
-        <spring:bind path="firstname">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="firstName" class="col-sm-3 control-label">First Name</label>
-                <div class="col-sm-9">
-                    <form:input type="text" id="firstname" placeholder="First name" class="form-control"
-                                autofocus="true"
-                                path="firstname"></form:input>
-                    <form:errors path="firstname"></form:errors>
+            </spring:bind>
+            <spring:bind path="password">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <label for="password" class="col-sm-3 control-label">Password</label>
+                    <div class="col-sm-9">
+                        <form:input type="password" path="password" class="form-control"
+                                    placeholder="Password"></form:input>
+                        <form:errors path="password"></form:errors>
+                    </div>
                 </div>
-            </div>
-        </spring:bind>
-        <spring:bind path="surname">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="surname" class="col-sm-3 control-label">Last Name</label>
-                <div class="col-sm-9">
-                    <form:input type="text" id="surname" placeholder="Last name" class="form-control" autofocus="true"
-                                path="surname"></form:input>
-                    <form:errors path="surname"></form:errors>
+            </spring:bind>
+            <spring:bind path="confirmPassword">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
+                    <div class="col-sm-9">
+                        <form:input type="password" path="confirmPassword" class="form-control"
+                                    placeholder="Confirm your password"></form:input>
+                        <form:errors path="validPasswords"></form:errors>
+                    </div>
                 </div>
-            </div>
-        </spring:bind>
-        <spring:bind path="password">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="password" class="col-sm-3 control-label">Password</label>
-                <div class="col-sm-9">
-                    <form:input type="password" path="password" class="form-control"
-                                placeholder="Password"></form:input>
-                    <form:errors path="password"></form:errors>
-                </div>
-            </div>
-        </spring:bind>
-        <spring:bind path="confirmPassword">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label for="password" class="col-sm-3 control-label">Confirm Password</label>
-                <div class="col-sm-9">
-                    <form:input type="password" path="confirmPassword" class="form-control"
-                                placeholder="Confirm your password"></form:input>
-                    <form:errors path="validPasswords"></form:errors>
-                </div>
-            </div>
-        </spring:bind>
-        <spring:bind path="birthDate">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label class="col-sm-3 control-label">Date of Birth</label>
-                <div class="col-sm-9">
-                    <form:input type="date" name="birthDate" path="birthDate" class="form-control"></form:input>
-                    <form:errors path="birthDate"></form:errors>
-                </div>
-            </div>
-        </spring:bind>
-
+            </spring:bind>
         <button type="submit" class="btn btn-primary btn-block">Register</button>
     </form:form> <!-- /form -->
 </div> <!-- ./container -->

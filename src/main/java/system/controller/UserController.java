@@ -6,11 +6,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import system.entity.UserData;
 import system.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,33 +36,35 @@ public class UserController {
     @Autowired
     private TicketService ticketService;
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    @GetMapping(value = "/registration")
     public String register(Model model){
-        model.addAttribute("userForm", new UserProfile());
+        model.addAttribute("userForm", new UserData());
 
         return "registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String register(@Valid @ModelAttribute("userForm") UserProfile userForm,
+    @PostMapping(value = "/registration")
+    public String register(@Valid @ModelAttribute("userForm") UserData userData,
                                BindingResult bindingResult, Model model){
 
         if (bindingResult.hasErrors()){
             return "registration";
-        } else if (userService.findByUsername(userForm.getUsername()) != null) {
+        } else if (userService.findByUsername(userData.getUsername()) != null) {
             bindingResult.rejectValue("username", "username.duplicate","Such username already exists.");
             return "registration";
         }
 
-        userService.save(userForm);
-        log.info("User {} has logged in", userForm.getUsername());
+        userService.createUser(userData);
+        log.info("User {} has logged in", userData.getUsername());
 
-        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
+        securityService.autoLogin(userData.getUsername(), userData.getPassword());
 
-        return "redirect:/home";
+        model.addAttribute("userForm", new UserProfile());
+        model.addAttribute("selectedTab", "profile-tab");
+        return "userprofile";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping(value = "/login")
     public String login(Model model, String error, String logout){
         if (error != null){
             model.addAttribute("error", "Login or password is incorrect.");
@@ -78,8 +80,15 @@ public class UserController {
 
     @GetMapping(value = "/user/profile")
     public String getUserprofilePage(@AuthenticationPrincipal User activeUser, Model model) {
-        UserProfile user = userService.findByUsername(activeUser.getUsername());
-        model.addAttribute("userForm", user);
+        UserData user = userService.findByUsername(activeUser.getUsername());
+
+        UserProfile profile = user.getUserProfile();
+        if (profile == null) {
+            profile = new UserProfile();
+            profile.setUserData(user);
+        }
+
+        model.addAttribute("userForm", profile);
         model.addAttribute("selectedTab", "profile-tab");
 
         return "userprofile";
@@ -87,21 +96,51 @@ public class UserController {
 
     @PostMapping(value = "/user/profile")
     @ResponseBody
-    public String changeUserprofile(@Valid @ModelAttribute("userForm") UserProfile user,
-                                  BindingResult bindingResult, Model model) {
+    public String changeUserprofile(@AuthenticationPrincipal User activeUser,
+            @Valid @ModelAttribute("userForm") UserProfile userProfile,
+                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "Errors in fileds";
+            return "Errors in fields";
         }
 
-        userService.save(user);
+        UserData userData = userService.findByUsername(activeUser.getUsername());
+        userProfile.setUserData(userData);
+        if (userProfile.getId() == null) {
+            userService.createProfile(userProfile);
+        } else
+            userService.saveProfile(userProfile);
 
-        return "Success";
+        return "Changes were saved";
+    }
+
+    @GetMapping(value = "/user/account")
+    public String getAccountPage(@AuthenticationPrincipal User activeUser, Model model) {
+        UserData user = userService.findByUsername(activeUser.getUsername());
+        model.addAttribute("userForm", user);
+        model.addAttribute("selectedTab", "account-tab");
+
+        return "account";
+    }
+
+    @PostMapping(value = "/user/account")
+    @ResponseBody
+    public String changeAccount(@Valid @ModelAttribute("userForm") UserData userData,
+                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "Errors in fields";
+        }
+//TODO Error during managed flush [Validation failed
+        userService.saveUser(userData);
+
+        return "Changes were saved";
     }
 
     @GetMapping(value = "/user/tickets")
     public String getUserTickets(@AuthenticationPrincipal User activeUser, Model model) {
-        UserProfile user = userService.findByUsername(activeUser.getUsername());
-        model.addAttribute("tickets", ticketService.findByUser(user));
+        UserData user = userService.findByUsername(activeUser.getUsername());
+        UserProfile profile = user.getUserProfile();
+        //TODO ALL TICKETS IN ORDER
+        model.addAttribute("tickets", ticketService.findByUser(profile));
         model.addAttribute("selectedTab", "ticket-tab");
 
         return "userTickets";

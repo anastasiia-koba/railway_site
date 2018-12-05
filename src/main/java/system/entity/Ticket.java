@@ -1,5 +1,6 @@
 package system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,4 +39,9 @@ public class Ticket extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "end_station_id", referencedColumnName = "id", nullable = false)
     private Station endStation;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private UserData userData;
 }

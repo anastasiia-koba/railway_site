@@ -6,19 +6,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import system.DaoException;
+import system.dao.api.RoutDao;
 import system.dao.api.TicketDao;
-import system.entity.Rout;
-import system.entity.RoutSection;
-import system.entity.Station;
-import system.entity.Ticket;
-import system.entity.UserProfile;
-import system.entity.Train;
-import system.entity.FinalRout;
-import system.service.api.RoutService;
+import system.entity.*;
 import system.service.impl.TicketServiceImpl;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,11 +30,12 @@ public class TicketServiceTest {
     private TicketDao ticketDao;
 
     @Mock
-    private RoutService routService;
+    private RoutDao routDao;
 
     @InjectMocks
     private TicketServiceImpl ticketService;
 
+    private UserData userData;
     private UserProfile userProfile;
     private Train train;
     private Rout rout;
@@ -52,10 +48,15 @@ public class TicketServiceTest {
     public void setup(){
         MockitoAnnotations.initMocks(this);
 
+        userData = new UserData();
+        userData.setId(1L);
+        userData.setUsername("user");
+        userData.setPassword("useruser");
+
         userProfile = new UserProfile();
         userProfile.setId(1L);
-        userProfile.setUsername("user");
-        userProfile.setPassword("useruser");
+        userProfile.setSurname("Ivanov");
+        userProfile.setFirstname("Ivan");
 
         train = new Train("testTrain", 50);
         train.setId(1L);
@@ -111,7 +112,9 @@ public class TicketServiceTest {
     public void save() throws DaoException {
         ticket.setPrice(400);
 
-        ticketService.save(ticket);
+        List<Ticket> tickets = new ArrayList<>();
+        tickets.add(ticket);
+        ticketService.save(tickets);
         verify(ticketDao, times(1)).update(ticket);
         verify(ticketDao, never()).create(ticket);
         verify(ticketDao, never()).remove(ticket);
@@ -157,8 +160,8 @@ public class TicketServiceTest {
         Station start = new Station("station2");
         Station end = new Station("station4");
 
-        when(routService.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, start, end)).thenReturn(routSections);
-        when(routService.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, ticket.getStartStation(), ticket.getEndStation())).thenReturn(routSections);
+        when(routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, start, end)).thenReturn(routSections);
+        when(routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, ticket.getStartStation(), ticket.getEndStation())).thenReturn(routSections);
         when(ticketDao.findByFinalRout(finalRout)).thenReturn(tickets);
 
         Integer count = ticketService.findCountTicketsByFinalRoutAndStartAndEndStations(finalRout, start, end);
@@ -180,8 +183,8 @@ public class TicketServiceTest {
         Station start = new Station("station2");
         Station end = new Station("station4");
 
-        when(routService.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, start, end)).thenReturn(routSections);
-        when(routService.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, ticket.getStartStation(), ticket.getEndStation())).thenReturn(routSections);
+        when(routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, start, end)).thenReturn(routSections);
+        when(routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(rout, ticket.getStartStation(), ticket.getEndStation())).thenReturn(routSections);
         when(ticketDao.findByFinalRout(finalRout)).thenReturn(tickets);
 
         Map<Long, Integer> result = ticketService.getMapFreePlacesInCustomRout(finalRouts, start, end);
