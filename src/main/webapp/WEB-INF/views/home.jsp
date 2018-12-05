@@ -13,104 +13,111 @@
 <html lang="en">
 <html>
 <head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 
     <title>Railway Home</title>
 </head>
 <body>
-
 <jsp:include page="navbar.jsp"></jsp:include>
 
 <div id="top-filter" class="top-filter tfilter-box hidden-xs" data-spy="affix" data-offset-top="197">
     <div class="container">
         <div class="row">
-            <form method="POST" id="searchForm" action="${contextPath}/">
-                <div class="col-sm-2">
-                    <div class="form-group" ${status.error ? 'has-error' : ''}>
-                        <label>From where? </label>
-                        <select id="comboboxFrom" name="stationsFrom" placeholder="From where?" class="form-control">
-                            <option></option>
-                            <c:forEach items="${stationsFrom}" var="station">
-                                <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+            <div class="col-sm-2">
+                <div class="form-group" ${status.error ? 'has-error' : ''}>
+                    <label>From where? </label>
+                    <select id="comboboxFrom" name="stationsFrom" placeholder="From where?" class="form-control">
+                        <option></option>
+                        <c:forEach items="${stationsFrom}" var="station">
+                            <option value="${station.stationName}">${station.stationName}</option>
+                        </c:forEach>
+                    </select>
                 </div>
-                <div class="col-sm-2">
-                    <div class="form-group" ${status.error ? 'has-error' : ''}>
-                        <label>To where? </label>
-                        <select id="comboboxTo" name="stationsTo" placeholder="To where?" class="form-control">
-                            <option></option>
-                            <c:forEach items="${stationsTo}" var="station">
-                                <option value="${station.stationName.toString()}">${station.stationName.toString()}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group" ${status.error ? 'has-error' : ''}>
+                    <label>To where? </label>
+                    <select id="comboboxTo" name="stationsTo" placeholder="To where?" class="form-control">
+                        <option></option>
+                        <c:forEach items="${stationsTo}" var="station">
+                            <option value="${station.stationName}">${station.stationName}</option>
+                        </c:forEach>
+                    </select>
                 </div>
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Date: </label>
-                        <input type="date" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>"
-                               max="2020-06-04" min="2018-10-25">
-                    </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group" ${status.error ? 'has-error' : ''}>
+                    <label>Count passengers</label>
+                    <input type="number" id="places" value="1" class="form-control"/>
                 </div>
-                <div class="col-sm-1">
-                    <input type="submit" id="search" class="btn btn-primary site-btn" value="Search"/>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>Date: </label>
+                    <input type="date" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>"
+                           max="2020-06-04" min="2018-10-25">
                 </div>
-            </form>
+            </div>
+            <div class="col-md-2">
+                <button onclick="searchRout()" id="search" class="btn btn-primary site-btn"> Search</button>
+            </div>
         </div>
     </div>
 </div>
 
-<c:if test="${routs != null}">
-    <div class="container search-table">
-        <div class="search-list">
-            <h3>${stationFrom.stationName} -> ${stationTo.stationName}</h3>
-            <h3>${routs.size()} Routs Found</h3>
-            <table class="table" id="myTableRouts">
-                <thead>
+<div class="container search-table" hidden>
+    <div class="search-list">
+        <h3 id="buildMessage"></h3>
+        <h3 id="countRoutMessage"></h3>
+        <table class="table" id="myTableRouts">
+            <thead>
+            <tr>
+                <th>Rout number</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Time of departure</th>
+                <th>Time of arrival</th>
+                <th>Travel time</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <script id="templateFinals" type="text/x-handlebars-template">
+                {{#each routs}}
                 <tr>
-                    <th>Rout number</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Time of departure</th>
-                    <th>Time of arrival</th>
-                    <th>Travel time</th>
-                    <th>Price</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${routs}" var="rout">
-                    <tr>
-                        <td>${rout.rout.routName.toString()}</td>
-                        <td>${rout.rout.startStation.stationName.toString()}</td>
-                        <td>${rout.rout.endStation.stationName.toString()}</td>
-                        <td>${departures[rout.id]}</td>
-                        <td>${arrivals[rout.id]}</td>
-                        <td>${times[rout.id]}</td>
-                        <td>${prices[rout.id]}</td>
-                        <td>
-                            <form method="POST" action="${contextPath}/buy" ${error != null ? 'has-error' : ''}>
-                                <input type="hidden" name="routId" value="${rout.id}">
-                                <input type="hidden" name="stationFrom" value="${stationFrom.id}">
-                                <input type="hidden" name="stationTo" value="${stationTo.id}">
-                                <c:if test="${freePlaces[rout.id] != 0}">
-                                    <input type="submit" id="btnBuy" name="buy" value="Buy">
-                                </c:if>
+                    <td>{{routName}}</td>
+                    <td>{{startStation}}</td>
+                    <td>{{endStation}}</td>
+                    <td>{{departureTime}}</td>
+                    <td>{{arrivalTime}}</td>
+                    <td>{{travelTime}}</td>
+                    <td>{{price}}</td>
+                    <td>
+                        <form method="POST" action="${contextPath}/preorder"
+                              class="form-group ${status.error != null ? 'has-error' : ''}">
+                            <input type="hidden" id="idFinal-{{@index}}" name="routId" value="{{id}}">
+                            <input type="hidden" name="stationFrom" id="from-{{@index}}">
+                            <input type="hidden" name="stationTo" id="to-{{@index}}">
+                            <input type="submit" id="btnBuy-{{@index}}" name="buy" value="Buy"/>
                             <br/>
-                                <span>${error}</span>
-                            </form>
-                                ${freePlaces[rout.id]} places
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+                            <%--<div id="error-{{@index}}"></div>--%>
+                            {{freePlace}} places
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </script>
+            </tbody>
+        </table>
     </div>
-</c:if>
+</div>
+<script type="text/javascript" src="${contextPath}/resources/js/home.js"></script>
+<script>
+    var contextPath = '${contextPath}';
+</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package system.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
@@ -7,16 +9,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import system.entity.FinalRout;
 import system.entity.Station;
 import system.entity.Ticket;
 import system.entity.UserProfile;
 import system.service.api.*;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -41,67 +43,54 @@ public class MainController {
     @Autowired
     private TicketService ticketService;
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public String welcome(Model model){
+    private List<UserProfile> preOrder = new ArrayList<>();
+
+    @GetMapping(value = {"/", "/home"})
+    public String getHomePage(Model model){
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("routs", null);
-
-        model.addAttribute("arrivals", null);
-        model.addAttribute("departures", null);
-
-        model.addAttribute("stationFrom", new Station());
-        model.addAttribute("stationTo", new Station());
-
-        model.addAttribute("price", null);
 
         return "home";
     }
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.POST)
-    public String getSearchResult(@RequestParam("stationsFrom") Station stationFrom,
-                                  @RequestParam("stationsTo") Station stationTo,
+    @GetMapping(value = "/search")
+    @ResponseBody
+    public String getSearchResult(@RequestParam("from") String from,
+                                  @RequestParam("to") String to,
                                   @RequestParam("date")
                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                  Model model){
-
-        model.addAttribute("stationsFrom", stationService.findAll());
-        model.addAttribute("stationsTo", stationService.findAll());
-
-        model.addAttribute("routs", null);
-
-        model.addAttribute("arrivals", null);
-        model.addAttribute("departures", null);
-
-        model.addAttribute("stationFrom", new Station());
-        model.addAttribute("stationTo", new Station());
-
+                                  @RequestParam("count") Integer count){
         //TODO check input
 
-        stationFrom = stationService.findByName(stationFrom.getStationName());
-        stationTo = stationService.findByName(stationTo.getStationName());
+        Station stationFrom = stationService.findByName(from);
+        Station stationTo = stationService.findByName(to);
 
         Set<FinalRout> finalRoutSet = finalRoutService.findByStationToStationOnDate(stationFrom, stationTo, date);
-        model.addAttribute("routs", finalRoutSet);
-
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDepartureByStation(finalRoutSet, stationFrom);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrivalByStation(finalRoutSet, stationTo);
         Map<Long, LocalTime> mapTimeInTravel = finalRoutService.getMapTimeInTravel(finalRoutSet, stationFrom, stationTo);
         Map<Long, Integer> mapPrice = finalRoutService.getMapPriceInCustomRout(finalRoutSet, stationFrom, stationTo);
         Map<Long, Integer> mapPlaces = ticketService.getMapFreePlacesInCustomRout(finalRoutSet, stationFrom, stationTo);
 
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-        model.addAttribute("times", mapTimeInTravel);
+        JsonArray jsonValues = new JsonArray();
 
-        model.addAttribute("stationFrom", stationFrom);
-        model.addAttribute("stationTo", stationTo);
+        JsonObject json;
+        for (FinalRout finalRout: finalRoutSet) {
+            json = new JsonObject();
 
-        model.addAttribute("prices", mapPrice);
-        model.addAttribute("freePlaces", mapPlaces);
+            json.addProperty("id", finalRout.getId());
+            json.addProperty("routName", finalRout.getRout().getRoutName());
+            json.addProperty("startStation", finalRout.getRout().getStartStation().getStationName());
+            json.addProperty("endStation", finalRout.getRout().getEndStation().getStationName());
+            json.addProperty("departureTime", mapDeparture.get(finalRout.getId()).toString());
+            json.addProperty("arrivalTime", mapArrival.get(finalRout.getId()).toString());
+            json.addProperty("travelTime", mapTimeInTravel.get(finalRout.getId()).toString());
+            json.addProperty("price", mapPrice.get(finalRout.getId()).toString());
+            json.addProperty("freePlace", mapPlaces.get(finalRout.getId()).toString());
 
-        return "home";
+            jsonValues.add(json);
+        }
+        return jsonValues.toString();
     }
 
     @Secured(value={"ROLE_USER"})
