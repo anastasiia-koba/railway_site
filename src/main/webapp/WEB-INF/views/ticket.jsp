@@ -63,32 +63,9 @@
     </div>
 </div>
 
-<div class="container">
-    <h3>Passenger</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Date of Birth</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>${user.surname}</td>
-            <td>${user.firstname}</td>
-            <td>${user.birthDate}</td>
-        </tr>
-        </tbody>
-    </table>
-    <button onclick="showAddUser()" class="btn btn-primary btn-block">Add passenger</button>
-</div>
-
-
 <div class="container passengers-table">
     <div class="list">
-        <h3>Additional passengers</h3>
+        <h3>Passengers</h3>
         <div id="userMessage"></div>
         <table class="table" id="myTablePassengers">
             <thead>
@@ -123,6 +100,7 @@
             </script>
             </tbody>
         </table>
+        <button onclick="showAddUser()" class="btn btn-primary btn-block">Add passenger</button>
     </div>
 </div>
 
@@ -157,23 +135,6 @@
         </div>
     </form> <!-- /form -->
 </div>
-
-<%--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">--%>
-<%--<div class="modal-dialog" role="document">--%>
-<%--<div class="modal-content">--%>
-<%--<div class="modal-header">--%>
-<%--<button type="button" class="close" data-dismiss="modal" aria-label="Close">--%>
-<%--<span aria-hidden="true">&times;</span>--%>
-<%--</button>--%>
-<%--<h4 class="modal-title" id="myModalLabel">You have successfully bought a ticket!</h4>--%>
-<%--</div>--%>
-<%--<div class="modal-footer">--%>
-<%--<button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
-<script type="text/javascript" src="${contextPath}/resources/js/ticket.js"></script>
 <script>
     var contextPath = '${contextPath}';
 </script>

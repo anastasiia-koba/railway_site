@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import system.entity.FinalRout;
-import system.entity.Station;
-import system.entity.Ticket;
-import system.entity.UserProfile;
+import system.entity.*;
 import system.service.api.*;
 
 import java.time.LocalDate;
@@ -102,12 +99,6 @@ public class MainController {
         UserData user = userService.findByUsername(activeUser.getUsername());
         UserProfile profile = user.getUserProfile();
 
-        if (profile == null || profile.getSurname().isEmpty()) {
-            model.addAttribute("userForm", new UserProfile());
-            model.addAttribute("selectedTab", "profile-tab");
-            return "userprofile";
-        }
-
         Station stationFrom = stationService.findByName(stationFromId);
         Station stationTo = stationService.findByName(stationToId);
 
@@ -122,6 +113,13 @@ public class MainController {
         model.addAttribute("user", profile);
 
         model.addAttribute("price", price);
+
+        if (profile == null || profile.getSurname().isEmpty()) {
+            preOrder = new ArrayList<>();
+        } else {
+            preOrder = new ArrayList<>();
+            preOrder.add(profile);
+        }
 
         return "ticket";
     }
@@ -231,18 +229,12 @@ public class MainController {
     @Secured(value={"ROLE_USER"})
     @ResponseBody
     @PostMapping(value = {"/buy", "/home/buy"}, params = "purchase")
-    public String buyTicket(@AuthenticationPrincipal User activeUser,
-                            @RequestParam("stationFrom") Long stationFromId,
+    public String buyTicket(@RequestParam("stationFrom") Long stationFromId,
                             @RequestParam("stationTo") Long stationToId,
                             @RequestParam("routId") Long routId,
                             @RequestParam("price") Integer price) {
 
         FinalRout finalRout = finalRoutService.findById(routId);
-
-        UserData user = userService.findByUsername(activeUser.getUsername());
-        UserProfile userProfile = user.getUserProfile();
-
-        preOrder.add(0, userProfile);
 
         Station start = stationService.findById(stationFromId);
         Station end = stationService.findById(stationToId);
