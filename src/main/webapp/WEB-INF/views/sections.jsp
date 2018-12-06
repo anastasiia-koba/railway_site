@@ -7,10 +7,11 @@
 <html lang="en">
 <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-
+    <script type="text/javascript" src="${contextPath}/resources/js/sections.js"></script>
     <title>Sections in routs</title>
 </head>
 <body>
@@ -37,6 +38,29 @@
                 <div class="col-md-2">
                     <button onclick="searchRout()">Search</button>
                 </div>
+            </div>
+        </div>
+
+        <div class="container" id="containerBackRout" hidden>
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-2 pt-3">
+                    <div class="form-group ">
+                        <label>Select rout </label>
+                        <select id="comboboxBack" name="routBack" class="form-control">
+                            <option></option>
+                            <c:forEach items="${routs}" var="rout">
+                                <option value="${rout.id}">${rout.routName.toString()}: ${rout.startStation.stationName.toString()}
+                                    -
+                                        ${rout.endStation.stationName.toString()}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button onclick="formBackRout()">Form back rout</button>
+                </div>
+                <br/>
+                <div id="errorBackMessage"></div>
             </div>
         </div>
 
@@ -110,7 +134,8 @@
 
         <div class="container" id="newSection" hidden>
             <h3>Create rout section</h3>
-            <form:form modelAttribute="sectionForm" id="sectionForm" name="sectionForm">
+            <form:form modelAttribute="sectionForm" id="sectionForm" name="sectionForm"
+                       role="form" data-toggle="validator">
                 <form:input path="id" id="idForm" type="hidden"></form:input>
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">

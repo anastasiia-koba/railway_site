@@ -1,14 +1,66 @@
+$().ready(function () {
+    $.validator.setDefaults({
+        highlight: function (element) {
+            $(element)
+                .closest('.form-group')
+                .addClass('has-error')
+        },
+        unhighlight: function (element) {
+            $(element)
+                .closest('.form-group')
+                .removeClass('has-error')
+        }
+    });
+
+    $('#sectionForm').validate({
+        rules: {
+            departure: "required",
+            destination: "required",
+            departureTime: "required",
+            arrivalTime: "required",
+            distance: "required",
+            price: "required"
+        },
+        messages: {
+            surname: "Please enter ",
+            departure: "Please enter departure station",
+            destination: "Please enter destination station",
+            departureTime: "Please enter departure time",
+            arrivalTime: "Please enter arrival time",
+            distance: "Please enter distance",
+            price: "Please enter price"
+        }
+    });
+});
+
+
 function searchRout() {
     event.preventDefault();
 
     clearSectionForm();
     $('#sectionMessage').text('');
+    $('#errorBackMessage').text('');
     var rout = $('#comboboxRout').val();
 
     $('.container').show();
     getSectionList(rout);
 }
 
+function formBackRout() {
+    event.preventDefault();
+
+    var rout = $('#routId').val();
+    var backRout = $('#comboboxBack').val();
+
+    var object = {rout: rout, backRout: backRout};
+
+    $.post(contextPath+"/admin/sections/form?back", object).done(function (result) {
+        $('#errorBackMessage').empty().text(result);
+        getSectionList(rout);
+    }).fail(function () {
+        alert('Delete rout failed');
+    });
+}
 
 function sectionEdit(index) {
     event.preventDefault();
@@ -19,6 +71,7 @@ function sectionEdit(index) {
 
     $.post(contextPath+"/admin/sections?change", object).done(function (result) {
         $('#sectionMessage').text('');
+        $('#errorBackMessage').text('');
 
         $('form[name=sectionForm]').val(result);
         $('#idForm').val(result.id);
@@ -43,6 +96,7 @@ function sectionDelete(index) {
 
     $.post(contextPath+"/admin/sections?delete", object).done(function (result) {
         $('#sectionMessage').empty().text(result);
+        $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
         alert('Delete rout failed');
@@ -56,6 +110,7 @@ $('#btnSaveSection').click(function () {
 
     $.post(contextPath+"/admin/sections?save", $('#sectionForm').serialize()+"&routId="+rout).done(function (result) {
         $('#sectionMessage').empty().text(result);
+        $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
     }).fail(function (e) {
@@ -80,6 +135,7 @@ function getSectionList(rout) {
     $.get(contextPath+"/admin/sections/rout?list", {routForSearch: rout}).done(function (result) {
         var data = JSON.parse(result);
         $("#buildMessage").empty().text(data.buildMessage);
+        $('#errorBackMessage').text('');
 
         // if (data.buildMessage == "Rout has errors") {
         //     $("#buildMessage").style.backgroundColor = 'red';
@@ -128,6 +184,7 @@ function sectionAdd(index) {
 
     $.post(contextPath+"/admin/sections/all?add", object).done(function (result) {
         $('#sectionMessage').empty().text(result);
+        $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
         alert('Delete section failed');
@@ -144,9 +201,11 @@ function sectionDeleteFromAll(index) {
 
     $.post(contextPath+"/admin/sections/all?delete", object).done(function (result) {
         $('#sectionMessage').empty().text(result);
+        $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
     }).fail(function () {
         alert('Delete section failed');
     });
 }
+

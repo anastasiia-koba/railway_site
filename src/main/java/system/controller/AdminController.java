@@ -186,6 +186,18 @@ public class AdminController {
         return jsonObject.toString();
     }
 
+    @PostMapping(value = "/sections/form", params = "back")
+    @ResponseBody
+    public String formBackRoutSection(@RequestParam("rout") Long routId,
+                                      @RequestParam("backRout") Long backId) {
+        Rout rout = routService.findById(routId);
+        Rout back = routService.findById(backId);
+
+        String result = routService.formBackRout(rout, back);
+
+        return result;
+    }
+
     @PostMapping(value = "/sections", params = "change")
     @ResponseBody
     public RoutSection changeRoutSection(@RequestParam("sectionId") Long sectionId) {

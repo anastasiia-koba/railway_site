@@ -26,4 +26,5 @@ public interface RoutService {
     Integer getPriceInRoutBetweenDepartureAndDestination(Rout rout, Station departure, Station destination);
     void sortRoutSections(List<RoutSection> routSections, List<RoutSection> result, Station start);
     Boolean isRoutWellBuilt(Rout rout);
+    String formBackRout(Rout rout, Rout back);
 }

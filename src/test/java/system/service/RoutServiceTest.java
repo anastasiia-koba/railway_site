@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import system.DaoException;
 import system.dao.api.RoutDao;
+import system.dao.api.RoutSectionDao;
 import system.entity.Rout;
 import system.entity.RoutSection;
 import system.entity.Station;
@@ -15,6 +16,7 @@ import system.service.impl.RoutServiceImpl;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,10 +32,14 @@ public class RoutServiceTest {
     @Mock
     private RoutDao routDao;
 
+    @Mock
+    private RoutSectionDao routSectionDao;
+
     @InjectMocks
     private RoutServiceImpl routService;
 
     private Rout rout;
+    private Rout back;
     private List<Rout> routs;
     private List<RoutSection> routSections;
     private RoutSection routSection;
@@ -45,13 +51,21 @@ public class RoutServiceTest {
 
         rout = new Rout();
         rout.setRoutName("testRout");
-        rout.setStartStation(new Station("station1"));
-        rout.setEndStation(new Station("station4"));
-
-        routs = Stream.of(rout).collect(Collectors.toList());
 
         start = new Station("station1");
         start.setId(1L);
+
+        Station end = new Station("station4");
+        rout.setStartStation(start);
+        rout.setEndStation(end);
+
+        back = new Rout();
+        back.setRoutName("backRout");
+        back.setStartStation(end);
+        back.setEndStation(start);
+
+        routs = Stream.of(rout).collect(Collectors.toList());
+
         routSection = new RoutSection();
         routSection.setDeparture(start);
         routSection.setDestination(new Station("station2"));
@@ -77,6 +91,7 @@ public class RoutServiceTest {
         routSection3.setArrivalTime(LocalTime.of(19, 50));
 
         routSections = Stream.of(routSection, routSection3, routSection2).collect(Collectors.toList());
+        back.setRoutSections(Stream.of(routSection, routSection3, routSection2).collect(Collectors.toSet()));
     }
 
     @Test
@@ -237,5 +252,16 @@ public class RoutServiceTest {
 
         Boolean res = routService.isRoutWellBuilt(rout);
         assertEquals(false, res);
+    }
+
+    @Test
+    public void testFormBackRout() throws DaoException {
+        String result = routService.formBackRout(rout, back);
+
+        verify(routDao, times(1)).update(rout);
+        verify(routDao, never()).create(rout);
+        verify(routDao, never()).remove(rout);
+
+        assertEquals("Back rout was formed successfully", result);
     }
 }

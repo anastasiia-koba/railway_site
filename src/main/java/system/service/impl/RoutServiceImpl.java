@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
 import system.dao.api.RoutDao;
+import system.dao.api.RoutSectionDao;
 import system.entity.Rout;
 import system.entity.RoutSection;
 import system.entity.Station;
 import system.service.api.RoutService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +28,9 @@ public class RoutServiceImpl implements RoutService {
 
     @Autowired
     private RoutDao routDao;
+
+    @Autowired
+    private RoutSectionDao routSectionDao;
 
     @Transactional
     @Override
@@ -98,7 +103,7 @@ public class RoutServiceImpl implements RoutService {
             List<Rout> routs = routDao.findAll();
             List<Rout> result = new ArrayList<>();
 
-            for (Rout rout: routs) {
+            for (Rout rout : routs) {
                 if (isRoutWellBuilt(rout))
                     result.add(rout);
             }
@@ -243,7 +248,7 @@ public class RoutServiceImpl implements RoutService {
             sortRoutSections(routSections, result, rout.getStartStation());
             countNotSorted = routSections.size();
 
-            if ((countNotSorted == 0) && result.get(result.size()-1).getDestination().equals(rout.getEndStation()))
+            if ((countNotSorted == 0) && result.get(result.size() - 1).getDestination().equals(rout.getEndStation()))
                 return true;
             else
                 return false;
@@ -252,5 +257,40 @@ public class RoutServiceImpl implements RoutService {
                     rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
         return false;
+    }
+
+    @Transactional
+    @Override
+    public String formBackRout(Rout rout, Rout back) {
+        if (!rout.getStartStation().equals(back.getEndStation()))
+            return "Error: start station doesn't match with end station in back rout";
+
+        if (!rout.getEndStation().equals(back.getStartStation()))
+            return "Error: end station doesn't match with start station in back rout";
+
+        Set<RoutSection> routSections = new HashSet<>();
+
+        try {
+            for (RoutSection routSection : back.getRoutSections()) {
+                RoutSection newSection = new RoutSection();
+                newSection.setDeparture(routSection.getDestination());
+                newSection.setDestination(routSection.getDeparture());
+                newSection.setDepartureTime(routSection.getDepartureTime());
+                newSection.setArrivalTime(routSection.getArrivalTime());
+                newSection.setPrice(routSection.getPrice());
+                newSection.setDistance(routSection.getDistance());
+
+                routSectionDao.create(newSection);
+                routSections.add(newSection);
+            }
+            rout.setRoutSections(routSections);
+            routDao.update(rout);
+            return "Back rout was formed successfully";
+        } catch (DaoException e) {
+            log.error("Forming rout {} by back rout {} failed: {} {}", rout.getRoutName(), back.getRoutName(),
+                    e.getErrorCode(), e.getMessage());
+        }
+
+        return null;
     }
 }
