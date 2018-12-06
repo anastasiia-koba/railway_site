@@ -41,7 +41,12 @@ public class UserProfile extends BaseEntity {
     @Column(name = "birthdate")
     private LocalDate birthDate;
 
+    @JsonIgnore
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserData userData;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "profile")
+    private Set<Ticket> tickets;
 }

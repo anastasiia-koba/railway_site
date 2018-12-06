@@ -5,6 +5,7 @@ import system.entity.Station;
 import system.entity.Ticket;
 import system.entity.UserProfile;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,8 @@ import java.util.Set;
  */
 public interface TicketService {
     void create(Ticket ticket);
-    void save(Ticket ticket);
+    List<Ticket> formTickets(List<UserProfile> userProfiles, Station start, Station end, FinalRout finalRout, Integer price);
+    String save(List<Ticket> tickets);
     void delete(Ticket ticket);
     Ticket findById(Long id);
     Set<Ticket> findByUser(UserProfile user);

@@ -5,15 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.DaoException;
+import system.dao.api.RoutDao;
 import system.dao.api.TicketDao;
 import system.entity.*;
-import system.service.api.RoutService;
 import system.service.api.TicketService;
+import system.service.api.UserService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,28 +25,68 @@ public class TicketServiceImpl implements TicketService {
     private TicketDao ticketDao;
 
     @Autowired
-    private RoutService routService;
+    private RoutDao routDao;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
     public void create(Ticket ticket) {
         try {
             ticketDao.create(ticket);
-            log.info("Created Ticket for User {} ", ticket.getUser().getUsername());
+            log.info("Created Ticket for User {} {} ", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());
         } catch (DaoException e) {
-            log.error("Create Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
+            log.error("Create Ticket for User {} {} failed: {}: {} ", ticket.getProfile().getSurname(),
+                    ticket.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
         }
+    }
+
+    @Override
+    public List<Ticket> formTickets(List<UserProfile> userProfiles, Station start, Station end, FinalRout finalRout, Integer price) {
+        List<Ticket> tickets = new ArrayList<>();
+        UserData userData = userProfiles.get(0).getUserData();
+
+        for (UserProfile user : userProfiles) {
+            if (user.getId() == null) {//need create user
+                userService.createProfile(user);
+            }
+
+            Ticket ticket = new Ticket();
+            ticket.setProfile(user);
+            ticket.setUserData(userData);
+            ticket.setFinalRout(finalRout);
+            ticket.setStartStation(start);
+            ticket.setEndStation(end);
+            ticket.setPrice(price);
+
+            tickets.add(ticket);
+        }
+
+        return tickets;
     }
 
     @Transactional
     @Override
-    public void save(Ticket ticket) {
-        try {
-            ticketDao.update(ticket);
-            log.info("Updated Ticket for User {} ", ticket.getUser().getUsername());
-        } catch (DaoException e) {
-            log.error("Update Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
+    public String save(List<Ticket> tickets) {
+
+        for (Ticket ticket : tickets) {
+            //check repeating user data
+            if (isAnyBodyInFinalRoutWithUserData(ticket.getFinalRout(), ticket.getProfile())) {
+                return "User with Surname: " + ticket.getProfile().getSurname() + " Firstname: " + ticket.getProfile().getFirstname() +
+                        " Birthday: " + ticket.getProfile().getBirthDate() + " has already register. ";
+            }
+            //TODO check departure time train
+            try {
+                ticketDao.create(ticket);
+                log.info("Created Ticket for User {} {}", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());
+            } catch (DaoException e) {
+                log.error("Purchase Ticket for User {} {}failed: {}: {} ", ticket.getProfile().getSurname(),
+                        ticket.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
+            }
         }
+
+        return "Purchase order failed";
     }
 
     @Transactional
@@ -56,9 +94,10 @@ public class TicketServiceImpl implements TicketService {
     public void delete(Ticket ticket) {
         try {
             ticketDao.remove(ticket);
-            log.info("Delete Ticket for User {} ", ticket.getUser().getUsername());
+            log.info("Delete Ticket for User {} {}", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());
         } catch (DaoException e) {
-            log.error("Delete Ticket for User {} failed: {}: {} ", ticket.getUser().getUsername(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Ticket for User {} {} failed: {}: {} ", ticket.getProfile().getSurname(),
+                    ticket.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -75,9 +114,15 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Set<Ticket> findByUser(UserProfile user) {
         try {
-            return ticketDao.findByUser(user);
+            Set<Ticket> tickets = ticketDao.findByProfile(user);
+
+            if (user.getUserData() != null) {
+                tickets.addAll(ticketDao.findByUser(user.getUserData()));
+            }
+
+            return tickets;
         } catch (DaoException e) {
-            log.error("Find Ticket by User {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
+            log.error("Find Ticket by User {} {} failed: {}: {} ", user.getSurname(), user.getFirstname(), e.getErrorCode(), e.getMessage());
         }
         return null;
     }
@@ -96,15 +141,15 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end) {
         try {
-            List<RoutSection> routSections = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
-                                            start, end);
+            List<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                    start, end);
 
             Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
 
             Integer countTickets = 0;
 
-            for (Ticket ticket : tickets){
-                List<RoutSection> ticketSection = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+            for (Ticket ticket : tickets) {
+                List<RoutSection> ticketSection = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                         ticket.getStartStation(), ticket.getEndStation());
 
                 Set<RoutSection> intersect = ticketSection.stream().filter(routSections::contains).collect(Collectors.toSet());
@@ -138,7 +183,7 @@ public class TicketServiceImpl implements TicketService {
     public Map<Long, Integer> getMapFreePlacesInCustomRout(Set<FinalRout> finalRouts, Station from, Station to) {
         Map<Long, Integer> mapPlaces = new HashMap<>();
 
-        for (FinalRout finalRout: finalRouts) {
+        for (FinalRout finalRout : finalRouts) {
             mapPlaces.put(finalRout.getId(), finalRout.getTrain().getPlacesNumber() -
                     findCountTicketsByFinalRoutAndStartAndEndStations(finalRout, from, to));
         }

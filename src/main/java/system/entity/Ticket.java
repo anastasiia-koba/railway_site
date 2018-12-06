@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -21,9 +23,10 @@ import javax.persistence.*;
 @Where(clause="deleted = false")
 public class Ticket extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserProfile user;
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
+    private UserProfile profile;
 
     @ManyToOne
     @JoinColumn(name = "train_rout_id", referencedColumnName = "id", nullable = false)

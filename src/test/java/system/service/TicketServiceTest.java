@@ -75,7 +75,7 @@ public class TicketServiceTest {
 
         ticket = new Ticket();
         ticket.setPrice(300);
-        ticket.setUser(userProfile);
+        ticket.setProfile(userProfile);
         ticket.setFinalRout(finalRout);
         ticket.setStartStation(new Station("station2"));
         ticket.setEndStation(new Station("station3"));
@@ -115,8 +115,8 @@ public class TicketServiceTest {
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
         ticketService.save(tickets);
-        verify(ticketDao, times(1)).update(ticket);
-        verify(ticketDao, never()).create(ticket);
+        verify(ticketDao, times(1)).create(ticket);
+        verify(ticketDao, never()).update(ticket);
         verify(ticketDao, never()).remove(ticket);
     }
 
@@ -139,7 +139,8 @@ public class TicketServiceTest {
 
     @Test
     public void findByUser() throws DaoException {
-        when(ticketDao.findByUser(userProfile)).thenReturn(tickets);
+        when(ticketDao.findByUser(userData)).thenReturn(null);
+        when(ticketDao.findByProfile(userProfile)).thenReturn(tickets);
 
         Set<Ticket> result = ticketService.findByUser(userProfile);
         assertNotNull(result);

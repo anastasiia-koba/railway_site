@@ -5,6 +5,7 @@ import system.DaoException;
 import system.dao.api.TicketDao;
 import system.entity.FinalRout;
 import system.entity.Ticket;
+import system.entity.UserData;
 import system.entity.UserProfile;
 
 import javax.persistence.Query;
@@ -18,9 +19,10 @@ import java.util.Set;
 @Repository
 public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
     @Override
-    public Set<Ticket> findByUser(UserProfile user) throws DaoException {
+    public Set<Ticket> findByUser(UserData user) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT t FROM Ticket t WHERE t.user = :user");
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
+                    "inner join fetch t.profile tk WHERE t.userData = :user ");
             q.setParameter("user", user);
 
             Set<Ticket> tickets = new HashSet<>(q.getResultList());
@@ -31,6 +33,23 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
         } catch (Exception e) {
             throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by User  Failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Set<Ticket> findByProfile(UserProfile user) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t WHERE t.profile = :user");
+            q.setParameter("user", user);
+
+            Set<Ticket> tickets = new HashSet<>(q.getResultList());
+            return tickets;
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile  Failed: " + e.getMessage());
         }
     }
 
@@ -55,7 +74,7 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
     public Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
-                    "inner join fetch t.user user WHERE t.finalRout = :finalRout " +
+                    "inner join fetch t.profile user WHERE t.finalRout = :finalRout " +
                     "AND user.surname = :surname AND user.firstname = :firstname " +
                     "AND user.birthDate = :birthdate");
             q.setParameter("finalRout", finalRout);

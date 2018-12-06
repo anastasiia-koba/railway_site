@@ -6,10 +6,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import system.entity.Ticket;
 import system.entity.UserData;
 import system.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,8 @@ import system.service.api.TicketService;
 import system.service.api.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 
 /**

@@ -24,7 +24,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 /**
- * Controller for {@link system.entity.FinalRout}'s pages.
+ * Controller for search {@link system.entity.FinalRout} and {@link system.entity.Ticket}'s pages.
  */
 @Controller
 public class MainController {
@@ -94,48 +94,32 @@ public class MainController {
     }
 
     @Secured(value={"ROLE_USER"})
-    @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/preorder", "/home/preorder"})
     public String getBuyTicketPage(@AuthenticationPrincipal User activeUser,
-                                   @RequestParam("stationFrom") Long stationFromId,
-                                   @RequestParam("stationTo") Long stationToId,
+                                   @RequestParam("stationFrom") String stationFromId,
+                                   @RequestParam("stationTo") String stationToId,
                                    @RequestParam("routId") Long routId, Model model) {
+        UserData user = userService.findByUsername(activeUser.getUsername());
+        UserProfile profile = user.getUserProfile();
 
-        UserProfile user = userService.findByUsername(activeUser.getUsername());
+        if (profile == null || profile.getSurname().isEmpty()) {
+            model.addAttribute("userForm", new UserProfile());
+            model.addAttribute("selectedTab", "profile-tab");
+            return "userprofile";
+        }
 
-        Station stationFrom = stationService.findById(stationFromId);
-        Station stationTo = stationService.findById(stationToId);
+        Station stationFrom = stationService.findByName(stationFromId);
+        Station stationTo = stationService.findByName(stationToId);
 
         FinalRout finalRout = finalRoutService.findById(routId);
 
-        model.addAttribute("stationFrom", stationFrom);
-        model.addAttribute("stationTo", stationTo);
-
-        Set<FinalRout> finalRoutSet = finalRoutService.findByStationToStationOnDate(stationFrom, stationTo, finalRout.getDate());
-        model.addAttribute("routs", finalRoutSet);
-
-        Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDepartureByStation(finalRoutSet, stationFrom);
-        Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrivalByStation(finalRoutSet, stationTo);
-        Map<Long, LocalTime> mapTimeInTravel = finalRoutService.getMapTimeInTravel(finalRoutSet, stationFrom, stationTo);
-        Map<Long, Integer> mapPrice = finalRoutService.getMapPriceInCustomRout(finalRoutSet, stationFrom, stationTo);
-        Map<Long, Integer> mapPlaces = ticketService.getMapFreePlacesInCustomRout(finalRoutSet, stationFrom, stationTo);
-
-        model.addAttribute("arrivals", mapArrival);
-        model.addAttribute("departures", mapDeparture);
-        model.addAttribute("times", mapTimeInTravel);
-
-        model.addAttribute("prices", mapPrice);
-        model.addAttribute("freePlaces", mapPlaces);
-
-//        if (ticketService.isAnyBodyInFinalRoutWithUserData(finalRout, user)) {
-//            model.addAttribute("error", "User with such surname, firstname and birth date has already register. ");
-//            return "home";
-//        }
-
         Integer price = routService.getPriceInRoutBetweenDepartureAndDestination(finalRout.getRout(), stationFrom, stationTo);
 
+        model.addAttribute("stationFrom", stationFrom);
+        model.addAttribute("stationTo", stationTo);
         model.addAttribute("rout", finalRout);
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", profile);
 
         model.addAttribute("price", price);
 
@@ -143,24 +127,130 @@ public class MainController {
     }
 
     @Secured(value={"ROLE_USER"})
-    @RequestMapping(value = {"/buy", "/home/buy"}, method = RequestMethod.POST, params = "purchase")
+    @PostMapping(value = "/buy/passengers", params = "valid")
+    @ResponseBody
+    public String isRegisteredUser(@RequestParam("surname") String surname,
+                                   @RequestParam("firstname") String firstname,
+                                   @RequestParam("date")
+                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        UserProfile userProfile = userService.findByNamesAndDate(surname, firstname, date);
+
+        if (userProfile != null) {
+            return userProfile.getId().toString();
+        } else {
+            return "no user";
+        }
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @GetMapping(value = "/buy/passengers", params = "list")
+    @ResponseBody
+    public List<UserProfile> getListPassengerInOrder() {
+        return preOrder;
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @PostMapping(value = "/buy/passengers/add")
+    @ResponseBody
+    public String addPassengerToOrder(@RequestParam("passenger") Long userId) {
+        UserProfile user = userService.findProfileById(userId);
+        preOrder.add(user);
+
+        return "User was added to order";
+    }
+
+    private boolean isPassengerInOrder(UserProfile user) {
+        for (UserProfile userProfile: preOrder) {
+            if (userProfile.getSurname().equals(user.getSurname()) &&
+            userProfile.getFirstname().equals(user.getFirstname()) &&
+            userProfile.getBirthDate().equals(user.getBirthDate()))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @PostMapping(value = "/buy/passengers/add", params = "new")
+    @ResponseBody
+    public String addNewPassengerToOrder(@RequestParam("surname") String surname,
+                                         @RequestParam("firstname") String firstname,
+                                         @RequestParam("date")
+                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        UserProfile user = new UserProfile();
+        user.setSurname(surname);
+        user.setFirstname(firstname);
+        user.setBirthDate(date);
+
+        if (isPassengerInOrder(user))
+            return "This user has already added to order!";
+
+        preOrder.add(user);
+
+        return "User was added to order";
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @PostMapping(value = "/buy/passengers/change")
+    @ResponseBody
+    public UserProfile getPassengerInOrder(@RequestParam("id") String id,
+                                         @RequestParam("surname") String surname,
+                                         @RequestParam("firstname") String firstname,
+                                         @RequestParam("birthDay")
+                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        UserProfile user = new UserProfile();
+        for (UserProfile userProfile: preOrder) {
+            if (userProfile.getSurname().equals(surname) &&
+                    userProfile.getFirstname().equals(firstname) &&
+                    userProfile.getBirthDate().equals(date))
+             user = userProfile;
+        }
+
+        return user;
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @PostMapping(value = "/buy/passengers/delete")
+    @ResponseBody
+    public String deletePassengerFromOrder(@RequestParam("surname") String surname,
+                                           @RequestParam("firstname") String firstname,
+                                           @RequestParam("birthDay")
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        for (UserProfile userProfile: preOrder) {
+            if (userProfile.getSurname().equals(surname) &&
+                    userProfile.getFirstname().equals(firstname) &&
+                    userProfile.getBirthDate().equals(date)) {
+                preOrder.remove(userProfile);
+                break;
+            }
+        }
+
+        return "User "+surname+" "+firstname+" was deleted from order";
+    }
+
+    @Secured(value={"ROLE_USER"})
+    @ResponseBody
+    @PostMapping(value = {"/buy", "/home/buy"}, params = "purchase")
     public String buyTicket(@AuthenticationPrincipal User activeUser,
                             @RequestParam("stationFrom") Long stationFromId,
                             @RequestParam("stationTo") Long stationToId,
                             @RequestParam("routId") Long routId,
-                            @RequestParam("price") Integer price, Model model) {
+                            @RequestParam("price") Integer price) {
 
-        UserProfile user = userService.findByUsername(activeUser.getUsername());
+        FinalRout finalRout = finalRoutService.findById(routId);
 
-        Ticket ticket = new Ticket();
-        ticket.setUser(user);
-        ticket.setFinalRout(finalRoutService.findById(routId));
-        ticket.setStartStation(stationService.findById(stationFromId));
-        ticket.setEndStation(stationService.findById(stationToId));
-        ticket.setPrice(price);
+        UserData user = userService.findByUsername(activeUser.getUsername());
+        UserProfile userProfile = user.getUserProfile();
 
-        ticketService.save(ticket);
+        preOrder.add(0, userProfile);
 
-        return "redirect:/home";
+        Station start = stationService.findById(stationFromId);
+        Station end = stationService.findById(stationToId);
+
+        List<Ticket> tickets = ticketService.formTickets(preOrder, start, end, finalRout, price);
+
+        String result = ticketService.save(tickets);
+
+        return result;
     }
 }

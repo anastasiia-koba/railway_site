@@ -39,7 +39,7 @@
                     <tbody>
                     <c:forEach items="${tickets}" var="ticket">
                         <tr>
-                            <td>${ticket.user.surname} ${ticket.user.firstname}</td>
+                            <td>${ticket.profile.surname} ${ticket.profile.firstname}</td>
                             <td>${ticket.finalRout.rout.routName}</td>
                             <td>${ticket.finalRout.rout.startStation.stationName} - ${ticket.finalRout.rout.endStation.stationName}</td>
                             <td>${ticket.finalRout.date}</td>
