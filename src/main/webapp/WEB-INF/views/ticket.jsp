@@ -44,10 +44,11 @@
             <label>${stationFrom.stationName.toString()} - ${stationTo.stationName.toString()}</label>
         </div>
     </div>
+    <input type="hidden" id="priceForTicket" value="${price}">
     <div class="col-sm-2">
         <div class="form-group ">
             <label>Price: </label>
-            <label>${price}</label>
+            <label id="orderPrice">${price}</label>
         </div>
     </div>
     <div class="col-md-2">

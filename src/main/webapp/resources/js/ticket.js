@@ -46,7 +46,7 @@ function userEdit(index) {
 
     var object = {id: id, firstname: firstname, surname: surname, birthDay: birthDay};
 
-    $.post(contextPath+"/buy/passengers/change", object).done(function (result) {
+    $.post(contextPath + "/buy/passengers/change", object).done(function (result) {
         $('#userMessage').text('');
 
         $('form[name=passengerForm]').val(result);
@@ -68,7 +68,7 @@ function userDelete(index) {
 
     var object = {firstname: firstname, surname: surname, birthDay: birthDay};
 
-    $.post(contextPath+"/buy/passengers/delete", object).done(function (result) {
+    $.post(contextPath + "/buy/passengers/delete", object).done(function (result) {
         $('#userMessage').empty().text(result);
         getPassengerList();
     }).fail(function () {
@@ -85,8 +85,7 @@ $('#btnSave').click(function () {
 
     var obj = {surname: surname, firstname: firstname, date: birthDate};
 
-    $.post(contextPath+"/buy/passengers?valid", obj).done(function (result) {
-        // $('#userMessage').empty().text(result);
+    $.post(contextPath + "/buy/passengers?valid", obj).done(function (result) {
 
         if (result.toString().startsWith("no user")) {
             if (confirm("This user is not registered yet. Do you want add him as passenger?")) {
@@ -117,12 +116,10 @@ $('#btnClear').click(function () {
 function getPassengerList() {
     event.preventDefault();
 
-    // var from = $('#comboboxSectionFrom').val();
-    // var to = $('#comboboxSectionTo').val();
+    $.get(contextPath + "/buy/passengers?list").done(function (result) {
+        var price = $('#priceForTicket').val()*result.length;
+        $('#orderPrice').empty().text(price);
 
-    // var object = {section
-
-    $.get(contextPath+"/buy/passengers?list").done(function (result) {
         var data = {users: result};
         var template = Handlebars.compile($('#template').html());
         $("#myTablePassengers tr>td").remove();

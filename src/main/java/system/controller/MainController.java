@@ -181,7 +181,7 @@ public class MainController {
         user.setBirthDate(date);
 
         if (isPassengerInOrder(user))
-            return "This user has already added to order!";
+            return "Error: this user has already added to order!";
 
         preOrder.add(user);
 
@@ -240,6 +240,9 @@ public class MainController {
         Station end = stationService.findById(stationToId);
 
         List<Ticket> tickets = ticketService.formTickets(preOrder, start, end, finalRout, price);
+
+        if (tickets == null)
+            return "Error: no users in order";
 
         String result = ticketService.save(tickets);
 
