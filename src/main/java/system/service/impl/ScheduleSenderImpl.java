@@ -26,7 +26,7 @@ public class ScheduleSenderImpl implements ScheduleSender {
             TopicSession session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
             MessageProducer producer = session.createProducer(destination);
 
-            TextMessage textMessage = session.createTextMessage("Hello MDB");
+            TextMessage textMessage = session.createTextMessage(jsonObj);
             producer.setTimeToLive(TIME_TO_LIVE);
             producer.send(textMessage);
             log.info("Send JMS: "+jsonObj);
@@ -34,7 +34,7 @@ public class ScheduleSenderImpl implements ScheduleSender {
             session.close();
         } catch (JMSException e) {
             e.printStackTrace();
+            log.error("Send JMS message failed: {} {}", e.getErrorCode(), e.getMessage());
         }
-
     }
 }
