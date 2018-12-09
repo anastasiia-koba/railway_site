@@ -22,10 +22,13 @@ public interface FinalRoutService {
     Set<FinalRout> findByStationAndDate(Station station, LocalDate date);
     Set<FinalRout> findByStationToStationOnDate(Station start, Station end, LocalDate date);
     FinalRout findByRoutAndTrainAndDate(Rout rout, Train train, LocalDate date);
+    LocalTime getTimeDepartureByStation(FinalRout finalRout, Station station);
+    LocalTime getTimeArrivalByStation(FinalRout finalRout, Station station);
     Map<Long, LocalTime> getMapDeparture(Set<FinalRout> finalRouts);
     Map<Long, LocalTime> getMapArrival(Set<FinalRout> finalRouts);
     Map<Long, LocalTime> getMapDepartureByStation(Set<FinalRout> finalRouts, Station station);
     Map<Long, LocalTime> getMapArrivalByStation(Set<FinalRout> finalRouts, Station station);
     Map<Long, LocalTime> getMapTimeInTravel(Set<FinalRout> finalRouts, Station from, Station to);
     Map<Long, Integer> getMapPriceInCustomRout(Set<FinalRout> finalRouts, Station from, Station to);
+    Boolean isDepartureTimeIn10Minutes(FinalRout finalRout, Station station);
 }

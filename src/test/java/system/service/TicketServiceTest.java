@@ -9,6 +9,7 @@ import system.DaoException;
 import system.dao.api.RoutDao;
 import system.dao.api.TicketDao;
 import system.entity.*;
+import system.service.api.FinalRoutService;
 import system.service.impl.TicketServiceImpl;
 
 import java.time.LocalDate;
@@ -31,6 +32,9 @@ public class TicketServiceTest {
 
     @Mock
     private RoutDao routDao;
+
+    @Mock
+    private FinalRoutService finalRoutService;
 
     @InjectMocks
     private TicketServiceImpl ticketService;
@@ -114,6 +118,8 @@ public class TicketServiceTest {
 
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
+
+        when(finalRoutService.isDepartureTimeIn10Minutes(ticket.getFinalRout(), ticket.getStartStation())).thenReturn(false);
         ticketService.save(tickets);
         verify(ticketDao, times(1)).create(ticket);
         verify(ticketDao, never()).update(ticket);

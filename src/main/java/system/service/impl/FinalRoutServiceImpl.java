@@ -166,12 +166,26 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
+    public LocalTime getTimeDepartureByStation(FinalRout finalRout, Station station) {
+        LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
+                routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station).getDepartureTime() : null;
+
+        return timeDeparture;
+    }
+
+    @Override
+    public LocalTime getTimeArrivalByStation(FinalRout finalRout, Station station) {
+        LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
+                routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station).getArrivalTime(): null ;
+        return timeArrival;
+    }
+
+    @Override
     public Map<Long, LocalTime> getMapDepartureByStation(Set<FinalRout> finalRouts, Station station) {
         Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
 
         for (FinalRout finalRout : finalRouts) {
-            LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
-                    routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station).getDepartureTime() : null;
+            LocalTime timeDeparture = getTimeDepartureByStation(finalRout, station);
             mapDeparture.put(finalRout.getId(), timeDeparture);
         }
         return mapDeparture;
@@ -182,8 +196,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
         Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
 
         for (FinalRout finalRout : finalRouts) {
-            LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
-                    routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station).getArrivalTime(): null ;
+            LocalTime timeArrival = getTimeArrivalByStation(finalRout, station);
             mapArrival.put(finalRout.getId(), timeArrival);
         }
 
@@ -222,4 +235,28 @@ public class FinalRoutServiceImpl implements FinalRoutService {
         return mapPrice;
     }
 
+    @Override
+    public Boolean isDepartureTimeIn10Minutes(FinalRout finalRout, Station station) {
+        LocalDate departureDate = finalRout.getDate();
+        LocalDate currentDate = LocalDate.now();
+
+        if (currentDate.isBefore(departureDate)) {
+            return false;
+        } else if (currentDate.isAfter(departureDate)) {
+            return true;
+        }
+
+        LocalTime timeDeparture = getTimeDepartureByStation(finalRout, station);
+
+        Duration duration = Duration.between(LocalTime.now(), timeDeparture);
+        if (duration.getSeconds() < 0 )
+            return true;
+
+        LocalTime time = LocalTime.ofSecondOfDay(duration.getSeconds());
+        if (time.getHour() == 0 && time.getMinute() <= 10) {
+            return true;
+        }
+
+        return false;
+    }
 }

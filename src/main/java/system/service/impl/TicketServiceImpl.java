@@ -83,7 +83,11 @@ public class TicketServiceImpl implements TicketService {
                 return "User with Surname: " + ticket.getProfile().getSurname() + " Firstname: " + ticket.getProfile().getFirstname() +
                         " Birthday: " + ticket.getProfile().getBirthDate() + " has already register. ";
             }
-            //TODO check departure time train
+            //check departure train
+            if (finalRoutService.isDepartureTimeIn10Minutes(ticket.getFinalRout(), ticket.getStartStation())) {
+                return "Train's departure in less than 10 minutes";
+            }
+
             try {
                 ticketDao.create(ticket);
                 log.info("Created Ticket for User {} {}", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());

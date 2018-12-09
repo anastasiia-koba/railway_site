@@ -246,4 +246,12 @@ public class FinalRoutServiceTest {
         assertEquals(true, timeMap.containsValue(100));
         assertEquals(1, timeMap.size());
     }
+
+    @Test
+    public void isDepartureTimeIn10Minutes() {
+        when(routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), new Station("station2"))).thenReturn(routSection);
+
+        Boolean result = finalRoutService.isDepartureTimeIn10Minutes(finalRout, new Station("station2"));
+        assertEquals(true, result);
+    }
 }

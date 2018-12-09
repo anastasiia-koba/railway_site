@@ -170,11 +170,16 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
                 q.setParameter("rout", rout);
                 q.setParameter("departure", departure);
 
-                RoutSection routSection = (RoutSection) q.getSingleResult();
-                routSections.add(routSection);
 
-                departure = routSection.getDestination();
-                endStation = departure;
+                List results = q.getResultList();
+                if (results.isEmpty()) {
+                    return null; // handle no-results case
+                } else {
+                    RoutSection routSection = (RoutSection) results.get(0);
+                    routSections.add(routSection);
+                    departure = routSection.getDestination();
+                    endStation = departure;
+                }
             }
 
             return routSections;
