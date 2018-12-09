@@ -37,15 +37,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${tickets}" var="ticket">
+                    <c:forEach items="${tickets}" var="ticket" varStatus="loop">
                         <tr>
                             <td>${ticket.profile.surname} ${ticket.profile.firstname}</td>
                             <td>${ticket.finalRout.rout.routName}</td>
-                            <td>${ticket.finalRout.rout.startStation.stationName} - ${ticket.finalRout.rout.endStation.stationName}</td>
+                            <td>${ticket.finalRout.rout.startStation.stationName}
+                                - ${ticket.finalRout.rout.endStation.stationName}</td>
                             <td>${ticket.finalRout.date}</td>
                             <td>${ticket.startStation.stationName}</td>
                             <td>${ticket.endStation.stationName}</td>
                             <td>${ticket.price}</td>
+                            <td>
+                                <form method="GET" action="${contextPath}/user/tickets">
+                                    <input type="hidden" id="idTicket-${loop.index}" name="ticketId"
+                                           value="${ticket.id}">
+                                    <input type="submit" id="btnPrint-${loop.index}" name="pdf" value="PDF"/>
+                                </form>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>

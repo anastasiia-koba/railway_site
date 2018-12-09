@@ -222,6 +222,13 @@
             <artifactId>jms-api</artifactId>
             <version>1.1-rev-1</version>
         </dependency>
+
+        <!-- Needed for IText PDF View -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.9</version>
+        </dependency>
     </dependencies>
 
     <build>

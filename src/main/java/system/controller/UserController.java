@@ -5,10 +5,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import system.entity.Ticket;
 import system.entity.UserData;
 import system.entity.UserProfile;
@@ -19,9 +17,6 @@ import system.service.api.TicketService;
 import system.service.api.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
-
 
 /**
  * Controller for {@link system.entity.UserProfile}'s pages.
@@ -146,5 +141,10 @@ public class UserController {
         model.addAttribute("selectedTab", "ticket-tab");
 
         return "userTickets";
+    }
+
+    @GetMapping(value = "/user/tickets", params = "pdf")
+    public ModelAndView printTicket(@RequestParam("ticketId") Long ticketId) {
+        return new ModelAndView("pdfView", "ticket", ticketService.findById(ticketId));
     }
 }
