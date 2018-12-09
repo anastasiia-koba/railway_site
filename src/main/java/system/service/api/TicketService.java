@@ -18,7 +18,7 @@ public interface TicketService {
     String save(List<Ticket> tickets);
     void delete(Ticket ticket);
     Ticket findById(Long id);
-    Set<Ticket> findByUser(UserProfile user);
+    List<Ticket> findByUser(UserProfile user);
     Set<Ticket> findByFinalRout(FinalRout finalRout);
     Integer findCountTicketsByFinalRoutAndStartAndEndStations(FinalRout finalRout, Station start, Station end);
     Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user);

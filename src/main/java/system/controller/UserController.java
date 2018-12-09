@@ -136,7 +136,7 @@ public class UserController {
     public String getUserTickets(@AuthenticationPrincipal User activeUser, Model model) {
         UserData user = userService.findByUsername(activeUser.getUsername());
         UserProfile profile = user.getUserProfile();
-        //TODO ALL TICKETS IN ORDER
+
         model.addAttribute("tickets", ticketService.findByUser(profile));
         model.addAttribute("selectedTab", "ticket-tab");
 

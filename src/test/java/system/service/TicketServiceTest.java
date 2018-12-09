@@ -148,7 +148,7 @@ public class TicketServiceTest {
         when(ticketDao.findByUser(userData)).thenReturn(null);
         when(ticketDao.findByProfile(userProfile)).thenReturn(tickets);
 
-        Set<Ticket> result = ticketService.findByUser(userProfile);
+        List<Ticket> result = ticketService.findByUser(userProfile);
         assertNotNull(result);
         assertEquals(1, result.size());
     }

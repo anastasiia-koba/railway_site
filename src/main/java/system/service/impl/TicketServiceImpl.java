@@ -124,15 +124,17 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Set<Ticket> findByUser(UserProfile user) {
+    public List<Ticket> findByUser(UserProfile user) {
         try {
             Set<Ticket> tickets = ticketDao.findByProfile(user);
 
             if (user.getUserData() != null) {
                 tickets.addAll(ticketDao.findByUser(user.getUserData()));
             }
-
-            return tickets;
+            List<Ticket> ticketList = new ArrayList<>(tickets);
+            Collections.sort(ticketList, Comparator.comparing(a -> a.getFinalRout().getDate()));
+            Collections.reverse(ticketList);
+            return ticketList;
         } catch (DaoException e) {
             log.error("Find Ticket by User {} {} failed: {}: {} ", user.getSurname(), user.getFirstname(), e.getErrorCode(), e.getMessage());
         }
