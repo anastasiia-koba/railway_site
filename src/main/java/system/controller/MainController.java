@@ -107,6 +107,9 @@ public class MainController {
         model.addAttribute("stationFrom", stationFrom);
         model.addAttribute("stationTo", stationTo);
         model.addAttribute("rout", finalRout);
+        model.addAttribute("userForm", new UserProfile());
+        model.addAttribute("departureTime", finalRoutService.getTimeDepartureByStation(finalRout, stationFrom));
+        model.addAttribute("arrivalTime", finalRoutService.getTimeArrivalByStation(finalRout, stationTo));
 
         model.addAttribute("user", profile);
 
@@ -125,11 +128,9 @@ public class MainController {
     @Secured(value={"ROLE_USER"})
     @PostMapping(value = "/buy/passengers", params = "valid")
     @ResponseBody
-    public String isRegisteredUser(@RequestParam("surname") String surname,
-                                   @RequestParam("firstname") String firstname,
-                                   @RequestParam("date")
-                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        UserProfile userProfile = userService.findByNamesAndDate(surname, firstname, date);
+    public String isRegisteredUser(@Valid @ModelAttribute("userForm") UserProfile profile) {
+        UserProfile userProfile = userService.findByNamesAndDate(profile.getSurname(), profile.getFirstname(),
+                profile.getBirthDate());
 
         if (userProfile != null) {
             return userProfile.getId().toString();
@@ -169,14 +170,11 @@ public class MainController {
     @Secured(value={"ROLE_USER"})
     @PostMapping(value = "/buy/passengers/add", params = "new")
     @ResponseBody
-    public String addNewPassengerToOrder(@RequestParam("surname") String surname,
-                                         @RequestParam("firstname") String firstname,
-                                         @RequestParam("date")
-                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public String addNewPassengerToOrder(@Valid @ModelAttribute("userForm") UserProfile profile) {
         UserProfile user = new UserProfile();
-        user.setSurname(surname);
-        user.setFirstname(firstname);
-        user.setBirthDate(date);
+        user.setSurname(profile.getSurname());
+        user.setFirstname(profile.getFirstname());
+        user.setBirthDate(profile.getBirthDate());
 
         if (isPassengerInOrder(user))
             return "Error: this user has already added to order!";

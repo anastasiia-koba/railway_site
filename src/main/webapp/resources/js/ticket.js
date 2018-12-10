@@ -1,33 +1,36 @@
-// $(document).ready(function () {
-    $('#btnBuy').click(function () {
-        event.preventDefault();
+function buy() {
+    event.preventDefault();
 
-        var routId = $("#routId").val();
-        var stationFrom = $("#stationFrom").val();
-        var stationTo = $("#stationTo").val();
-        var price = $("#price").val();
+    var routId = $("#routId").val();
+    var stationFrom = $("#stationFrom").val();
+    var stationTo = $("#stationTo").val();
+    var price = $("#price").val();
 
-        var object = {stationFrom: stationFrom, stationTo: stationTo, routId: routId, price: price};
+    var object = {stationFrom: stationFrom, stationTo: stationTo, routId: routId, price: price};
 
-        $.post(contextPath+"/buy?purchase", object).done(function (result) {
-            if (result.toString().startsWith("ok")) {
-                alert("You have successfully bought tickets!");
-                window.location = contextPath + "/home"
+    $.post(contextPath + "/buy?purchase", object).done(function (result) {
+        if (result.toString().startsWith("ok")) {
+            alert("You have successfully bought tickets!");
+            window.location = contextPath + "/home";
+        } else {
+            if (result.toString().startsWith("Train")) {
+                alert(result);
+                window.location = contextPath + "/home";
             } else {
                 $('#errorMessage').empty().text(result);
             }
-        }).fail(function () {
-            $('#errorMessage').empty().text('Purchase ticket faile');
-        });
-
+        }
+    }).fail(function () {
+        $('#errorMessage').empty().text('Purchase ticket failed');
     });
-// });
+
+}
 
 function showAddUser() {
     event.preventDefault();
 
     clearPassengerForm();
-    $('.container').show();
+    $('#contPassenger').show();
 }
 
 function clearPassengerForm() {
@@ -54,8 +57,8 @@ function userEdit(index) {
         $('#firstname').val(result.firstname);
         $('#surname').val(result.surname);
         $('#birthDate').val(result.birthDate);
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#userMessage').empty().text('Edit user from order failed');
     });
 }
 
@@ -72,52 +75,42 @@ function userDelete(index) {
         $('#userMessage').empty().text(result);
         getPassengerList();
     }).fail(function () {
-        alert('Delete user from order failed');
+        $('#userMessage').empty().text('Delete user from order failed');
     });
 }
 
-$('#btnSave').click(function () {
+function save() {
     event.preventDefault();
 
-    var firstname = $('#firstname').val();
-    var surname = $('#surname').val();
-    var birthDate = $('#birthDate').val();
-
-    var obj = {surname: surname, firstname: firstname, date: birthDate};
-
-    $.post(contextPath + "/buy/passengers?valid", obj).done(function (result) {
+    $.post(contextPath + "/buy/passengers?valid", $('#passengerForm').serialize()).done(function (result) {
 
         if (result.toString().startsWith("no user")) {
             if (confirm("This user is not registered yet. Do you want add him as passenger?")) {
-                $.post(contextPath + "/buy/passengers/add?new", obj).done(function (result) {
+                $.post(contextPath + "/buy/passengers/add?new", $('#passengerForm').serialize()).done(function (result) {
                     $('#userMessage').empty().text(result);
+                    getPassengerList();
                 }).fail(function () {
-                    alert('Adding user to order failed ');
+                    $('#userMessage').empty().text('Adding user to order failed ');
                 });
             }
         } else {
             $.post(contextPath + "/buy/passengers/add", {passenger: result.toString()}).done(function (result) {
                 $('#userMessage').empty().text(result);
+                getPassengerList();
             }).fail(function () {
-                alert('Adding user to order failed ');
+                $('#userMessage').empty().text('Adding user to order failed ');
             });
         }
-
-        getPassengerList();
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        $('#userMessage').empty().text('Adding user to order failed ');
     });
-})
-
-$('#btnClear').click(function () {
-    clearPassengerForm();
-})
+}
 
 function getPassengerList() {
     event.preventDefault();
 
     $.get(contextPath + "/buy/passengers?list").done(function (result) {
-        var price = $('#priceForTicket').val()*result.length;
+        var price = $('#priceForTicket').val() * result.length;
         $('#orderPrice').empty().text(price);
 
         var data = {users: result};
