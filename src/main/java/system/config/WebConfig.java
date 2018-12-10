@@ -10,11 +10,13 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
 import java.util.List;
+import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
@@ -40,6 +42,25 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ResourceBundleViewResolver resolver = new ResourceBundleViewResolver();
         resolver.setOrder(1);
         resolver.setBasename("views");
+        return resolver;
+    }
+
+    @Bean
+    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
+        SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
+        Properties exceptionMappings = new Properties();
+
+        exceptionMappings.put("java.lang.Exception", "errors");
+        exceptionMappings.put("java.lang.RuntimeException", "errors");
+        exceptionMappings.setProperty(NullPointerException.class.getName(), "errors");
+        exceptionMappings.put(".PageNotFound", "errors");
+
+        resolver.setExceptionMappings(exceptionMappings);
+        resolver.addStatusCode("/errors.jsp", 404);
+        resolver.addStatusCode("/errors.jsp", 500);
+        resolver.setDefaultErrorView("/errors.jsp");
+        resolver.setDefaultStatusCode(400);
+
         return resolver;
     }
 
