@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -28,6 +29,14 @@ public class Station extends BaseEntity {
     @NotBlank(message = "This field is required.")
     @Column(name = "stationname")
     private String stationName;
+
+    @NotNull(message = "This field is required.")
+    @Column(name = "latitude")
+    private Float latitude;
+
+    @NotNull(message = "This field is required.")
+    @Column(name = "longitude")
+    private Float longitude;
 
     @JsonIgnore
     @EqualsAndHashCode.Exclude

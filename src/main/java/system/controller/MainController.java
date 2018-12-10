@@ -9,13 +9,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import system.entity.*;
 import system.service.api.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -248,4 +246,20 @@ public class MainController {
 
         return result;
     }
+
+    @Secured(value={"ROLE_USER"})
+    @GetMapping(value = "/buy/map")
+    @ResponseBody
+    public List<RoutSection> getMapOfOrder(@RequestParam("stationFrom") Long stationFromId,
+                                           @RequestParam("stationTo") Long stationToId,
+                                           @RequestParam("routId") Long routId) {
+        Station start = stationService.findById(stationFromId);
+        Station end = stationService.findById(stationToId);
+        FinalRout finalRout = finalRoutService.findById(routId);
+
+        List<RoutSection> result = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+                start, end);
+        return result;
+    }
+
 }

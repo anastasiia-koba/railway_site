@@ -33,17 +33,27 @@ function stationEdit(index) {
 
     var object = {stationId: station};
 
-    $.post(contextPath+"/admin/stations?change", object).done(function (result) {
+    $.post(contextPath + "/admin/stations?change", object).done(function (result) {
         $('#stationMessage').text('');
 
-        for (var list = Object.keys(result), i = list.length, form = document.forms.namedItem('stationForm'); i--;) {
-            if (form[list[i]]) {
-                form[list[i]].value = result[list[i]];
-            }
+
+        $('form[name=stationForm]').val(result);
+        $('#idForm').val(result.id);
+        $('#stationName').val(result.stationName);
+        $('#latitude').val(result.latitude);
+        $('#longitude').val(result.longitude);
+
+        if (theMarker != undefined) {
+            mymap.removeLayer(theMarker);
         }
-        // $("#btnChangeStation-"+index).prop("disabled", true);
-    }).fail(function (e) {
-        alert('Error: ' + e);
+        ;
+
+        var latitude = $('#latitude').val();
+        var longitude = $('#longitude').val();
+        theMarker = L.marker([latitude, longitude]).addTo(mymap)
+            .bindPopup($('#stationName').val()).openPopup();
+    }).fail(function () {
+        alert('Edit station failed');
     });
 }
 
@@ -54,7 +64,7 @@ function stationDelete(index) {
 
     var object = {stationId: station};
 
-    $.post(contextPath+"/admin/stations?delete", object).done(function (result) {
+    $.post(contextPath + "/admin/stations?delete", object).done(function (result) {
         $('#stationMessage').empty().text(result);
         getStationList();
     }).fail(function () {
@@ -65,29 +75,45 @@ function stationDelete(index) {
 $('#btnAddStation').click(function () {
     event.preventDefault();
 
-    $.post(contextPath+"/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
+    $.post(contextPath + "/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
         $('#stationMessage').empty().text(result);
+
+        if (theMarker != undefined) {
+            mymap.removeLayer(theMarker);
+        }
+        ;
+
+        var latitude = $('#latitude').val();
+        var longitude = $('#longitude').val();
+        theMarker = L.marker([latitude, longitude]).addTo(mymap)
+            .bindPopup($('#stationName').val()).openPopup();
+
         getStationList();
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        alert('Add station failed');
     });
 })
 
 $('#btnClearStation').click(function () {
     event.preventDefault();
-    $('form input[type="text"], form input[type="hidden"]').val('');
+    $('form input[type="text"], form input[type="hidden"], form input[type="number"]').val('');
+    if (theMarker != undefined) {
+        mymap.removeLayer(theMarker);
+        theMarker = undefined;
+    }
+    ;
 })
 
 function getStationList() {
     event.preventDefault();
 
-    $.get(contextPath+"/admin/stations?list", {}).done(function (result) {
+    $.get(contextPath + "/admin/stations?list", {}).done(function (result) {
         var data = {stations: result};
         var template = Handlebars.compile($('#template').html());
         $("#myTableStations tr>td").remove();
         $('.table').append(template(data));
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        alert("Get station's list failed");
     });
 }
 

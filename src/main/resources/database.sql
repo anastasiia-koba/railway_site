@@ -46,6 +46,8 @@ CREATE TABLE user_roles (
 CREATE TABLE stations (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
   stationname VARCHAR(255) NOT NULL,
+  latitude FLOAT NOT NULL,
+  longitude FLOAT NOT NULL,
   deleted BIT NOT NULL DEFAULT 0
 )
   ENGINE = InnoDB;
@@ -151,9 +153,9 @@ INSERT INTO roles VALUES (2, 'ROLE_ADMIN', 0);
 INSERT INTO user_roles VALUES (1, 2);
 INSERT INTO user_roles VALUES (2, 1);
 
-INSERT INTO stations VALUES (1, 'Jerusalem', 0);
-INSERT INTO stations VALUES (2, 'Haifa', 0);
-INSERT INTO stations VALUES (3, 'Tel Aviv', 0);
+INSERT INTO stations VALUES (1, 'Jerusalem',31.769, 35.216, 0);
+INSERT INTO stations VALUES (2, 'Haifa', 32.818, 34.988, 0);
+INSERT INTO stations VALUES (3, 'Tel Aviv', 32.080, 34.780, 0);
 
 INSERT INTO rout_section VALUES (1, 1, 3, 340, 300, "11:12:00", "15:30:00", 0);
 INSERT INTO rout_section VALUES (2, 3, 2, 450, 350, "15:45:00", "21:00:00", 0);
