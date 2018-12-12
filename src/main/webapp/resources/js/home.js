@@ -27,10 +27,19 @@ function searchRout() {
             $("#from-" + index).val(from);
             $("#to-" + index).val(to);
             if (value.freePlace-count > 0) {
-                $('btnBuy-'+index).prop("disabled", false);
+                $('#btnBuy-'+index).prop("disabled", false);
+                $('#error-'+index).text('');
             } else {
-                $('btnBuy-'+index).prop("disabled", true);
-            }
+                $('#btnBuy-'+index).prop("disabled", true);
+                $('#error-'+index).text('Not enough free seats');
+            };
+            if (!value.available) {
+                $('#btnBuy-'+index).prop("disabled", false);
+                $('#error-'+index).text('');
+            } else {
+                $('#btnBuy-'+index).prop("disabled", true);
+                $('#error-'+index).text("Train's departure is in less than 10 minutes");
+            };
         })
     }).fail(function () {
         $('#buildMessage').empty().text('Search rout failed');

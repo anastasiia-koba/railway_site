@@ -41,7 +41,7 @@ public class MainController {
     private List<UserProfile> preOrder = new ArrayList<>();
 
     @GetMapping(value = {"/", "/home"})
-    public String getHomePage(Model model){
+    public String getHomePage(Model model) {
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
 
@@ -53,8 +53,7 @@ public class MainController {
     public String getSearchResult(@RequestParam("from") String from,
                                   @RequestParam("to") String to,
                                   @RequestParam("date")
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                  @RequestParam("count") Integer count){
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         //TODO check input
 
         Station stationFrom = stationService.findByName(from);
@@ -82,6 +81,7 @@ public class MainController {
             json.addProperty("travelTime", mapTimeInTravel.get(finalRout.getId()).toString());
             json.addProperty("price", mapPrice.get(finalRout.getId()).toString());
             json.addProperty("freePlace", mapPlaces.get(finalRout.getId()).toString());
+            json.addProperty("available", finalRoutService.isDepartureTimeIn10Minutes(finalRout, stationFrom));
 
             jsonValues.add(json);
         }
