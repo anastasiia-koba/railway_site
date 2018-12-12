@@ -54,11 +54,11 @@
                     <input type="number" id="places" value="1" class="form-control"/>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label>Date: </label>
-                    <input type="date" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>"
-                           max="2020-06-04" min="2018-10-25">
+                    <input type="datetime-local" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>T08:30"
+                           min="2018-11-01T08:30" max="2020-06-30T16:30">
                 </div>
             </div>
             <div class="col-md-2">
@@ -102,9 +102,10 @@
                             <input type="hidden" id="idFinal-{{@index}}" name="routId" value="{{id}}">
                             <input type="hidden" name="stationFrom" id="from-{{@index}}">
                             <input type="hidden" name="stationTo" id="to-{{@index}}">
+
                             <input type="submit" id="btnBuy-{{@index}}" name="buy" value="Buy"/>
                             <br/>
-                            <%--<div id="error-{{@index}}"></div>--%>
+                            <div id="error-{{@index}}"></div>
                             {{freePlace}} places
                         </form>
                     </td>

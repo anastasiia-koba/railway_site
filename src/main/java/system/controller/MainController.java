@@ -16,6 +16,7 @@ import system.service.api.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -54,12 +55,14 @@ public class MainController {
     public String getSearchResult(@RequestParam("from") String from,
                                   @RequestParam("to") String to,
                                   @RequestParam("date")
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
         //TODO check input
 
         Station stationFrom = stationService.findByName(from);
         Station stationTo = stationService.findByName(to);
 
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
         Set<FinalRout> finalRoutSet = finalRoutService.findByStationToStationOnDate(stationFrom, stationTo, date);
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDepartureByStation(finalRoutSet, stationFrom);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrivalByStation(finalRoutSet, stationTo);
@@ -71,6 +74,9 @@ public class MainController {
 
         JsonObject json;
         for (FinalRout finalRout: finalRoutSet) {
+            if (time.compareTo(mapDeparture.get(finalRout.getId())) > 0)
+                continue;
+
             json = new JsonObject();
 
             json.addProperty("id", finalRout.getId());
