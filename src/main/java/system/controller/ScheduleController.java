@@ -4,19 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import system.entity.FinalRout;
 import system.entity.Station;
 import system.service.api.FinalRoutService;
-import system.service.api.RoutService;
 import system.service.api.StationService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,12 +29,9 @@ public class ScheduleController {
     private StationService stationService;
 
     @Autowired
-    private RoutService routService;
-
-    @Autowired
     private FinalRoutService finalRoutService;
 
-    @RequestMapping(value = "/schedule", method = RequestMethod.GET)
+    @GetMapping(value = "/schedule")
     public String getSchedule(Model model){
         model.addAttribute("stations", stationService.findAll());
         model.addAttribute("station", new Station());
@@ -46,7 +42,7 @@ public class ScheduleController {
         return "schedule";
     }
 
-    @RequestMapping(value = "/schedule", method = RequestMethod.POST)
+    @PostMapping(value = "/schedule")
     public String getScheduleByStation(@ModelAttribute Station station,
                                        @RequestParam("date")
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,

@@ -30,11 +30,11 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
             return finalRouts;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Date Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Date Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Date Failed: " + e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
             return finalRouts;
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Date Failed: " + e.getMessage());
         }
     }
 
@@ -63,11 +63,11 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
             return finalRouts;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Station and Date Failed: " + e.getMessage());
         }
     }
 
@@ -86,11 +86,11 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
             return finalRouts;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Two Stations and Date Failed: " + e.getMessage());
         }
     }
 
@@ -112,11 +112,11 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
                 return (FinalRout) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Rout, Train and Date Failed: " + e.getMessage());
         }
     }
 }

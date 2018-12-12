@@ -33,11 +33,11 @@ public class UserProfileDaoImpl extends JpaDao<Long, UserProfile> implements Use
                 return (UserProfile) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Names and Birthday Failed: " + e.getMessage());
         }
     }
 }

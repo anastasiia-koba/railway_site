@@ -58,7 +58,7 @@ function formBackRout() {
         $('#errorBackMessage').empty().text(result);
         getSectionList(rout);
     }).fail(function () {
-        alert('Delete rout failed');
+        $('#sectionMessage').text('Delete rout failed');
     });
 }
 
@@ -81,8 +81,8 @@ function sectionEdit(index) {
         $('#timeArrival').val(result.arrivalTime);
         $('#distance').val(result.distance);
         $('#price').val(result.price);
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#sectionMessage').text('Edit section failed');
     });
 }
 
@@ -99,7 +99,7 @@ function sectionDelete(index) {
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
-        alert('Delete rout failed');
+        $('#sectionMessage').text('Delete rout failed');
     });
 }
 
@@ -113,8 +113,8 @@ $('#btnSaveSection').click(function () {
         $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        $('#sectionMessage').text('Save section failed');
     });
 })
 
@@ -147,8 +147,8 @@ function getSectionList(rout) {
         var template = Handlebars.compile($('#templateSections').html());
         $("#myTableSections tr>td").remove();
         $('#myTableSections').append(template(rs));
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        $('#sectionMessage').text("Get section's list failed");
     });
 }
 
@@ -170,7 +170,7 @@ function getSearchList() {
         $("#myTableAllSections tr>td").remove();
         $('#myTableAllSections').append(template(data));
     }).fail(function (e) {
-        alert('Error: ' + e);
+        $('#sectionMessage').text("Get existing section's list");
     });
 }
 
@@ -187,7 +187,7 @@ function sectionAdd(index) {
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
-        alert('Delete section failed');
+        $('#sectionMessage').text('Delete section failed');
     });
 }
 
@@ -205,7 +205,7 @@ function sectionDeleteFromAll(index) {
         getSectionList(rout);
         getSearchList();
     }).fail(function () {
-        alert('Delete section failed');
+        $('#sectionMessage').text('Delete section failed');
     });
 }
 

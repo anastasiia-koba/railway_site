@@ -51,12 +51,6 @@ public class AdminScheduleController {
         return "realSchedule";
     }
 
-//    @PostMapping(value = "/schedule")
-//    public String sendText() {
-//        scheduleSender.sendMessage("Hello MQ");
-//        return "realSchedule";
-//    }
-
     @GetMapping(value = "/schedule/list")
     @ResponseBody
     public String getScheduleList(@RequestParam("station") Station station,

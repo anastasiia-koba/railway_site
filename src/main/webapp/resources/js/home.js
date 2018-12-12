@@ -1,6 +1,3 @@
-// $(document).ready(function () {
-//     $('#searchForm').submit(function (event) {
-
 function searchRout() {
     event.preventDefault();
 
@@ -29,13 +26,13 @@ function searchRout() {
         data.forEach(function (value, index) {
             $("#from-" + index).val(from);
             $("#to-" + index).val(to);
-            if (value.freeFlace-count > 0) {
+            if (value.freePlace-count > 0) {
                 $('btnBuy-'+index).prop("disabled", false);
             } else {
                 $('btnBuy-'+index).prop("disabled", true);
             }
         })
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        $('#buildMessage').empty().text('Search rout failed');
     });
 }

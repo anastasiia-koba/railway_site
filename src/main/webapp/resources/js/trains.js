@@ -12,8 +12,8 @@ function trainEdit(index) {
         $('#idForm').val(result.id);
         $('#trainName').val(result.trainName);
         $('#placesNumber').val(result.placesNumber);
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#trainMessage').text('Edit train failed');
     });
 }
 
@@ -28,7 +28,7 @@ function trainDelete(index) {
         $('#trainMessage').empty().text(result);
         getTrainList();
     }).fail(function () {
-        alert('Delete rout failed');
+        $('#trainMessage').text('Delete rout failed');
     });
 }
 
@@ -38,8 +38,8 @@ $('#btnAddTrain').click(function () {
     $.post(contextPath+"/admin/trains?save", $('#trainForm').serialize()).done(function (result) {
         $('#trainMessage').empty().text(result);
         getTrainList();
-    }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+    }).fail(function () {
+        $('#trainMessage').text('Save train failed');
     });
 })
 
@@ -56,8 +56,8 @@ function getTrainList() {
         var template = Handlebars.compile($('#template').html());
         $("#myTableTrains tr>td").remove();
         $('.table').append(template(data));
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#trainMessage').text("Get train's list failed");
     });
 }
 

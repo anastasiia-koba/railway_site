@@ -21,7 +21,7 @@ import java.util.Properties;
 @EnableJpaRepositories("system.dao")
 public class DataConfig {
     private static final String PROP_DATABASE_DRIVER = "jdbc.driverClassName";
-    private static final String PROP_DATABASE_PASSWORD = "jdbc.password";
+    private static final String PROP_DATABASE_PASS = "jdbc.password";
     private static final String PROP_DATABASE_URL = "jdbc.url";
     private static final String PROP_DATABASE_USERNAME = "jdbc.username";
     private static final String PROP_HIBERNATE_DIALECT = "db.hibernate.dialect";
@@ -39,7 +39,7 @@ public class DataConfig {
         dataSource.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
         dataSource.setUrl(env.getRequiredProperty(PROP_DATABASE_URL));
         dataSource.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
-        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
+        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASS));
 
         return dataSource;
     }

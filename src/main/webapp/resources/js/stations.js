@@ -36,7 +36,6 @@ function stationEdit(index) {
     $.post(contextPath + "/admin/stations?change", object).done(function (result) {
         $('#stationMessage').text('');
 
-
         $('form[name=stationForm]').val(result);
         $('#idForm').val(result.id);
         $('#stationName').val(result.stationName);
@@ -45,15 +44,14 @@ function stationEdit(index) {
 
         if (theMarker != undefined) {
             mymap.removeLayer(theMarker);
-        }
-        ;
+        };
 
         var latitude = $('#latitude').val();
         var longitude = $('#longitude').val();
         theMarker = L.marker([latitude, longitude]).addTo(mymap)
             .bindPopup($('#stationName').val()).openPopup();
     }).fail(function () {
-        alert('Edit station failed');
+        $('#stationMessage').text('Edit station failed');
     });
 }
 
@@ -68,7 +66,7 @@ function stationDelete(index) {
         $('#stationMessage').empty().text(result);
         getStationList();
     }).fail(function () {
-        alert('Delete station failed');
+        $('#stationMessage').text('Delete station failed');
     });
 }
 
@@ -80,8 +78,7 @@ $('#btnAddStation').click(function () {
 
         if (theMarker != undefined) {
             mymap.removeLayer(theMarker);
-        }
-        ;
+        };
 
         var latitude = $('#latitude').val();
         var longitude = $('#longitude').val();
@@ -90,7 +87,7 @@ $('#btnAddStation').click(function () {
 
         getStationList();
     }).fail(function () {
-        alert('Add station failed');
+        $('#stationMessage').text('Add station failed');
     });
 })
 
@@ -100,8 +97,7 @@ $('#btnClearStation').click(function () {
     if (theMarker != undefined) {
         mymap.removeLayer(theMarker);
         theMarker = undefined;
-    }
-    ;
+    };
 })
 
 function getStationList() {
@@ -113,7 +109,7 @@ function getStationList() {
         $("#myTableStations tr>td").remove();
         $('.table').append(template(data));
     }).fail(function () {
-        alert("Get station's list failed");
+        $('#stationMessage').text("Get station's list failed");
     });
 }
 

@@ -28,11 +28,11 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             Set<Ticket> tickets = new HashSet<>(q.getResultList());
             return tickets;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by User  Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User  Failed: " + e.getMessage());
         }
     }
 
@@ -45,11 +45,11 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             Set<Ticket> tickets = new HashSet<>(q.getResultList());
             return tickets;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by Profile  Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile  Failed: " + e.getMessage());
         }
     }
 
@@ -62,11 +62,11 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             Set<Ticket> tickets = new HashSet<>(q.getResultList());
             return tickets;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
         }
     }
 
@@ -90,11 +90,11 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
                 return true;
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
         }
     }
 }

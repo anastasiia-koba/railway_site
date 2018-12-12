@@ -30,11 +30,11 @@ public class StationDaoImpl extends JpaDao<Long, Station> implements StationDao 
                 return (Station) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class StationDaoImpl extends JpaDao<Long, Station> implements StationDao 
             Query q = entityManager.createQuery("SELECT s FROM Station s");
             return q.getResultList();
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find All Stations Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find All Stations Failed: " + e.getMessage());
         }
     }
 }

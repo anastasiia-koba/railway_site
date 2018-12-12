@@ -24,13 +24,13 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         try {
             entityManager.persist(entity);
         } catch (EntityExistsException e) {
-            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_INSERT, e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_INSERT, e.getMessage());
         } catch (TransactionRequiredException e) {
-            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_INSERT, e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._FAIL_TO_INSERT, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_INSERT, e.getMessage());
         }
     }
 
@@ -39,9 +39,9 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         try {
             entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_DELETE, e.getMessage());
         } catch (TransactionRequiredException e) {
-            throw new DaoException(DaoException._FAIL_TO_DELETE, e.getMessage());
+            throw new DaoException(DaoException.FAIL_TO_DELETE, e.getMessage());
         }
     }
 
@@ -50,11 +50,11 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
         try {
             entityManager.merge(entity);
         } catch (TransactionRequiredException e) {
-            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+            throw new DaoException(DaoException.UPDATE_FAILED, e.getMessage());
         } catch (PersistenceException e) {
-            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+            throw new DaoException(DaoException.UPDATE_FAILED, e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._UPDATE_FAILED, e.getMessage());
+            throw new DaoException(DaoException.UPDATE_FAILED, e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
             E obj = entityManager.find(entityClass, id);
             return obj;
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, e.getMessage());
         }
     }
 }

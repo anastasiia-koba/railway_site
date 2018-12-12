@@ -33,7 +33,6 @@ public class ScheduleSenderImpl implements ScheduleSender {
             connection.close();
             session.close();
         } catch (JMSException e) {
-            e.printStackTrace();
             log.error("Send JMS message failed: {} {}", e.getErrorCode(), e.getMessage());
         }
     }

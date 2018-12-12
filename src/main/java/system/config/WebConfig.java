@@ -50,15 +50,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
         Properties exceptionMappings = new Properties();
 
-        exceptionMappings.put("java.lang.Exception", "errors");
-        exceptionMappings.put("java.lang.RuntimeException", "errors");
-        exceptionMappings.setProperty(NullPointerException.class.getName(), "errors");
-        exceptionMappings.put(".PageNotFound", "errors");
+        String view = "errors";
+
+        exceptionMappings.put("java.lang.Exception", view);
+        exceptionMappings.put("java.lang.RuntimeException", view);
+        exceptionMappings.setProperty(NullPointerException.class.getName(), view);
+        exceptionMappings.put(".PageNotFound", view);
 
         resolver.setExceptionMappings(exceptionMappings);
-        resolver.addStatusCode("/errors.jsp", 404);
-        resolver.addStatusCode("/errors.jsp", 500);
-        resolver.setDefaultErrorView("/errors.jsp");
+        resolver.addStatusCode(view, 404);
+        resolver.addStatusCode(view, 500);
+        resolver.setDefaultErrorView(view);
         resolver.setDefaultStatusCode(400);
 
         return resolver;

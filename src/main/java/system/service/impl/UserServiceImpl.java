@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         try {
             roles.add(roleDao.findById(1L));
         } catch (DaoException e) {
-            e.printStackTrace();
+            log.error("Create Role {} failed: {}: {} ", user.getUsername(), e.getErrorCode(), e.getMessage());
         }
 
         user.setRoles(roles);

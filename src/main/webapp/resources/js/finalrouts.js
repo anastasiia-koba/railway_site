@@ -13,8 +13,8 @@ function finalEdit(index) {
         $('#date').val(result.date);
         $('#comboboxTrain').val(result.train.id);
         $('#comboboxRout').val(result.rout.id);
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#finalRoutMessage').text('Edit final rout failed ');
     });
 }
 
@@ -29,7 +29,7 @@ function finalDelete(index) {
         $('#finalRoutMessage').empty().text(result);
         getFinalList();
     }).fail(function () {
-        alert('Delete final rout failed');
+        $('#finalRoutMessage').text('Delete final rout failed');
     });
 }
 
@@ -40,7 +40,7 @@ $('#btnSaveFinal').click(function () {
         $('#finalRoutMessage').empty().text(result);
         getFinalList();
     }).fail(function (e) {
-        alert('Error: ' + JSON.stringify(e));
+        $('#finalRoutMessage').text('Save final rout failed');
     });
 })
 
@@ -59,8 +59,8 @@ function getFinalList() {
         var template = Handlebars.compile($('#template').html());
         $("#myTableFinalRouts tr>td").remove();
         $('.table').append(template(data));
-    }).fail(function (e) {
-        alert('Error: ' + e);
+    }).fail(function () {
+        $('#finalRoutMessage').text("Get final rout's list failed ");
     });
 }
 

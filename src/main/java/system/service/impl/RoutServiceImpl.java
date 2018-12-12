@@ -47,7 +47,6 @@ public class RoutServiceImpl implements RoutService {
                 log.info("Updated Rout from {} to {} ", rout.getStartStation().getStationName(),
                         rout.getEndStation().getStationName());
             } catch (DaoException e) {
-                e.printStackTrace();
                 log.error("Update Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                         rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
             }
@@ -57,7 +56,6 @@ public class RoutServiceImpl implements RoutService {
                 log.info("Created Rout from {} to {} ", rout.getStartStation().getStationName(),
                         rout.getEndStation().getStationName());
             } catch (DaoException e) {
-                e.printStackTrace();
                 log.error("Create Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                         rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
             }

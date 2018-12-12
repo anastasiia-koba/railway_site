@@ -34,6 +34,7 @@ public class Train extends BaseEntity {
 
     public Train(String trainName) {
         this.trainName = trainName;
+        this.placesNumber = 0;
     }
 
     public Train(String trainName, Integer placesNumber) {

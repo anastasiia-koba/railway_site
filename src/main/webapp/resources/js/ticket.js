@@ -10,12 +10,14 @@ function buy() {
 
     $.post(contextPath + "/buy?purchase", object).done(function (result) {
         if (result.toString().startsWith("ok")) {
-            alert("You have successfully bought tickets!");
-            window.location = contextPath + "/home";
+            if (confirm("You have successfully bought tickets! Go to home page?")) {
+                window.location = contextPath + "/home";
+            };
         } else {
             if (result.toString().startsWith("Train")) {
-                alert(result);
-                window.location = contextPath + "/home";
+                if (confirm(result+" Go to home page?")) {
+                    window.location = contextPath + "/home";
+                };
             } else {
                 $('#errorMessage').empty().text(result);
             }
@@ -130,10 +132,10 @@ function getMap() {
     var object = {stationFrom: stationFrom, stationTo: stationTo, routId: routId};
 
     $.get(contextPath + "/buy/map", object).done(function (result) {
-        var mymap = L.map('mapid').setView([32.08, 34.78], 3);
+        var mymap = L.map('mapid').setView([32.08, 34.78], 4);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            maxZoom: 7,
+            maxZoom: 9,
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
                 '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
                 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -160,7 +162,7 @@ function getMap() {
             mymap.fitBounds(polyline.getBounds());
         });
     }).fail(function () {
-        alert('Show map of order failed ');
+        $('#userMessage').empty().text('Show map of order failed ');
     });
 }
 

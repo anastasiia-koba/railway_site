@@ -5,7 +5,7 @@
     <title>Home</title>
 </head>
 <body>
-<h3>This is default exception page</h3>
+<h3>This is exception page</h3>
 <h1>${errorMsg}</h1>
 <p>Exception: <b>${exception}</b></p>
 <a href="/">Go Home</a>

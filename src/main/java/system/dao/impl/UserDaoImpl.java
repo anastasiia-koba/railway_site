@@ -5,10 +5,8 @@ import org.springframework.stereotype.Repository;
 import system.DaoException;
 import system.dao.api.UserDao;
 import system.entity.UserData;
-import system.entity.UserProfile;
 
 import javax.persistence.Query;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -31,11 +29,11 @@ public class UserDaoImpl extends JpaDao<Long, UserData> implements UserDao {
                 return (UserData) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
         }
     }
 }

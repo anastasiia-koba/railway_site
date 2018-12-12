@@ -29,11 +29,11 @@ public class TrainDaoImpl extends JpaDao<Long, Train> implements TrainDao {
                 return (Train) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find Train by Name Failed: " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class TrainDaoImpl extends JpaDao<Long, Train> implements TrainDao {
             Query q = entityManager.createQuery("SELECT t FROM Train t");
             return q.getResultList();
         } catch (Exception e) {
-            throw new DaoException(DaoException._SQL_ERROR, "Find All Trains Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find All Trains Failed: " + e.getMessage());
         }
     }
 }

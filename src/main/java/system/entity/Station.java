@@ -64,5 +64,7 @@ public class Station extends BaseEntity {
 
     public Station(String stationName) {
         this.stationName = stationName;
+        this.latitude = 0f;
+        this.longitude = 0f;
     }
 }
