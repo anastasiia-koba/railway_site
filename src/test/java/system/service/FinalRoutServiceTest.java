@@ -172,7 +172,7 @@ public class FinalRoutServiceTest {
         when(routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), finalRout.getRout().getStartStation())).
                 thenReturn(routSection);
 
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapDeparture(finalRouts1);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapDeparture(new ArrayList<>(finalRouts1));
         assertEquals(true, timeMap.containsValue(LocalTime.of(14, 10)));
         assertEquals(1, timeMap.size());
     }
@@ -182,7 +182,7 @@ public class FinalRoutServiceTest {
         when(routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), finalRout.getRout().getEndStation())).
                 thenReturn(routSection);
 
-        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrival(finalRouts1);
+        Map<Long, LocalTime> timeMap = finalRoutService.getMapArrival(new ArrayList<>(finalRouts1));
         assertEquals(true, timeMap.containsValue(LocalTime.of(17, 30)));
         assertEquals(1, timeMap.size());
     }

@@ -41,6 +41,9 @@ public class FinalRoutController {
 
         model.addAttribute("routs", routService.findAllValid());
 
+        model.addAttribute("startpage", 1);
+        model.addAttribute("endpage", finalRoutService.findAll().size()/10);
+
         model.addAttribute("selectedTab", "finalrout-tab");
 
         return "finalrouts";
@@ -48,10 +51,16 @@ public class FinalRoutController {
 
     @GetMapping(params = "list")
     @ResponseBody
-    public String getListFinalRouts() {
+    public String getListFinalRoutsByPage(@RequestParam("page_id") int page_id) {
         JsonArray jsonValues = new JsonArray();
 
-        Set<FinalRout> finalRouts = finalRoutService.findAll();
+        int total = 10;
+
+        if (page_id != 1) {
+            page_id= (page_id-1)*total+1;
+        }
+        
+        List<FinalRout> finalRouts = finalRoutService.findAllByPage(page_id);
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 

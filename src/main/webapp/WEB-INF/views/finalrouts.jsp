@@ -112,6 +112,11 @@
                     </script>
                     </tbody>
                 </table>
+                <ul class="pagination pagination-sm">
+                    <c:forEach begin="${startpage}" end="${endpage}" var="p">
+                        <li class="page-item"><a href="#" id="page-${p}" onclick="getFinalList(${p})">${p}</a>
+                    </c:forEach>
+                </ul>
             </div>
         </div>
     </div>

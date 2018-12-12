@@ -50,11 +50,14 @@ $('#btnClearFinal').click(function () {
     $('form[name=finalRoutForm]').trigger('reset');
 })
 
-function getFinalList() {
+function getStartList() {
+    getFinalList(1);
+}
+
+function getFinalList(index) {
     event.preventDefault();
 
-    $.getJSON(contextPath+"/admin/finalrouts?list", {}).done(function (result) {
-        // var prep = JSON.parse(result);
+    $.getJSON(contextPath+"/admin/finalrouts?list", {page_id: index}).done(function (result) {
         var data = {finalrouts: $.parseJSON(result)};
         var template = Handlebars.compile($('#template').html());
         $("#myTableFinalRouts tr>td").remove();
@@ -64,4 +67,4 @@ function getFinalList() {
     });
 }
 
-window.onload = getFinalList;
+window.onload = getStartList;

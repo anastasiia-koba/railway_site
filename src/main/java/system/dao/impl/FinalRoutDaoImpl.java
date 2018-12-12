@@ -46,7 +46,21 @@ public class FinalRoutDaoImpl extends JpaDao<Long, FinalRout> implements FinalRo
             Set<FinalRout> finalRouts = new HashSet<>(q.getResultList());
             return finalRouts;
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Date Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Find all final routs Failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<FinalRout> findAllByPage(int pageid, int total) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT r FROM FinalRout r order by r.date DESC");
+            q.setFirstResult(pageid-1);
+            q.setMaxResults(total);
+
+            List<FinalRout> finalRouts = q.getResultList();
+            return finalRouts;
+        } catch (Exception e) {
+            throw new DaoException(DaoException.SQL_ERROR, "Find all final routs by page Failed: " + e.getMessage());
         }
     }
 
