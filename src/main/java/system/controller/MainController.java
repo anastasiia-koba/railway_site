@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import system.entity.*;
 import system.service.api.*;
 
@@ -88,6 +89,15 @@ public class MainController {
         return jsonValues.toString();
     }
 
+    @Secured(value={"ROLE_USER"})
+    @GetMapping(value = {"/preorder", "/home/preorder", "/buy/**", "/home/buy/**", "/preorder", "/home/preorder"})
+    public ModelAndView getPageOrderWithoutData() {
+        ModelAndView errorPage = new ModelAndView("errors");
+        String errorMsg = "First you need to choose rout";
+        errorPage.addObject("errorMsg", errorMsg);
+        return errorPage;
+    }
+    
     @Secured(value={"ROLE_USER"})
     @PostMapping(value = {"/preorder", "/home/preorder"})
     public String getBuyTicketPage(@AuthenticationPrincipal User activeUser,
