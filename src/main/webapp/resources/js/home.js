@@ -3,8 +3,38 @@ function searchRout() {
 
     var from = $('#comboboxFrom').val();
     var to = $('#comboboxTo').val();
+
+    var access = true;
+
+    if (from == "") {
+        $('#messageFrom').text("Departure required!");
+        access = false;
+    } else
+        $('#messageFrom').text('');
+
+    if (to == "") {
+        $('#messageTo').text("Destination required!");
+        access = false;
+    } else
+        $('#messageTo').text('');
+
     var date = $('#date').val();
     var count = $('#places').val();
+
+    if (date == "") {
+        $('#dateMsg').text("Date required!");
+        access = false;
+    } else
+        $('#dateMsg').text('');
+
+    if (count == "") {
+        $('#countMsg').text("Count passengers required!");
+        access = false;
+    } else
+        $('#countMsg').text('');
+
+    if (!access)
+        return;
 
     var object = { from: from,
         to: to,

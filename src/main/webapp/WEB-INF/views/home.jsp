@@ -29,6 +29,7 @@
                             <option value="${station.stationName}">${station.stationName}</option>
                         </c:forEach>
                     </select>
+                    <div id="messageFrom"></div>
                 </div>
             </div>
             <div class="col-sm-2">
@@ -41,12 +42,14 @@
                             <option value="${station.stationName}">${station.stationName}</option>
                         </c:forEach>
                     </select>
+                    <div id="messageTo"></div>
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group" ${status.error ? 'has-error' : ''}>
                     <label>Count passengers</label>
                     <input type="number" id="places" value="1" class="form-control"/>
+                    <div id="countMsg"></div>
                 </div>
             </div>
             <div class="col-sm-3">
@@ -54,6 +57,7 @@
                     <label>Date: </label>
                     <input type="datetime-local" name="date" id="date" class="form-control" value="<%=LocalDate.now()%>T08:30"
                            min="2018-11-01T08:30" max="2020-06-30T16:30">
+                    <div id="dateMsg"></div>
                 </div>
             </div>
             <div class="col-md-2">
