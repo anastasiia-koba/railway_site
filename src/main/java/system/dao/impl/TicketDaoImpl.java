@@ -72,6 +72,24 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
     }
 
     @Override
+    public Ticket findById(Long id) throws DaoException {
+        try {
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
+                    "inner join fetch t.profile tk WHERE t.id = :id ");
+            q.setParameter("id", id);
+            List results = q.getResultList();
+
+            if (results.isEmpty()) {
+                return null; // handle no-results case
+            } else {
+                return (Ticket) results.get(0);
+            }
+        } catch (IllegalStateException e) {
+            throw new DaoException(DaoException.SQL_ERROR, e.getMessage());
+        }
+    }
+
+    @Override
     public Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) throws DaoException {
         try {
             Query q = entityManager.createQuery("SELECT t FROM Ticket t " +

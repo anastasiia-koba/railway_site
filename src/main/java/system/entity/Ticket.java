@@ -23,8 +23,7 @@ import javax.persistence.*;
 @Where(clause="deleted = false")
 public class Ticket extends BaseEntity {
 
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private UserProfile profile;
 

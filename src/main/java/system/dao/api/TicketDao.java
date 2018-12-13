@@ -13,5 +13,6 @@ public interface TicketDao extends Dao<Long, Ticket> {
     Set<Ticket> findByUser(UserData user) throws DaoException;
     Set<Ticket> findByProfile(UserProfile user) throws DaoException;
     Set<Ticket> findByFinalRout(FinalRout finalRout) throws DaoException;
+    Ticket findById(Long id) throws DaoException;
     Boolean isAnyBodyInFinalRoutWithUserData(FinalRout finalRout, UserProfile user) throws DaoException;
 }
