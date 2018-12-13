@@ -24,7 +24,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2 pt-3">
                     <div class="form-group ">
-                        <label>Select rout </label>
+                        <label>Select route </label>
                         <select id="comboboxRout" name="routForSearch" class="form-control">
                             <option></option>
                             <c:forEach items="${routs}" var="rout">
@@ -45,7 +45,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2 pt-3">
                     <div class="form-group ">
-                        <label>Select rout </label>
+                        <label>Select route </label>
                         <select id="comboboxBack" name="routBack" class="form-control">
                             <option></option>
                             <c:forEach items="${routs}" var="rout">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button onclick="formBackRout()">Form back rout</button>
+                    <button onclick="formBackRout()">Form back route</button>
                 </div>
                 <br/>
                 <div id="errorBackMessage"></div>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="container" id="containerExistSection" hidden>
-            <h3>Choose rout section</h3>
+            <h3>Choose route section</h3>
             <div class="col-md-2 pt-3">
                 <div class="form-group">
                     <label>Select start section </label>
@@ -133,7 +133,7 @@
         <input type="hidden" id="routId">
 
         <div class="container" id="newSection" hidden>
-            <h3>Create rout section</h3>
+            <h3>Create route section</h3>
             <form:form modelAttribute="sectionForm" id="sectionForm" name="sectionForm"
                        data-toggle="validator">
                 <form:input path="id" id="idForm" type="hidden"></form:input>
@@ -165,38 +165,38 @@
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <label>Departure time</label>
                     <form:input type="time" id="timeDeparture" placeholder="Departure time" class="form-control"
-                                path="departureTime"></form:input>
+                                path="departureTime" required="required"></form:input>
                     <form:errors path="departureTime"></form:errors>
                 </div>
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <label>Arrival time</label>
                     <form:input type="time" id="timeArrival" placeholder="Arrival time" class="form-control"
-                                path="arrivalTime"></form:input>
+                                path="arrivalTime" required="required"></form:input>
                     <form:errors path="arrivalTime"></form:errors>
                 </div>
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <label>Distance</label>
-                    <form:input type="text" id="distance" placeholder="Distance" class="form-control"
-                                path="distance"></form:input>
+                    <form:input type="number" id="distance" placeholder="Distance" class="form-control"
+                                path="distance" required="required"></form:input>
                     <form:errors path="distance"></form:errors>
                 </div>
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <label>Price</label>
-                    <form:input type="text" id="price" placeholder="Price" class="form-control"
-                                path="price"></form:input>
+                    <form:input type="number" id="price" placeholder="Price" class="form-control"
+                                path="price" required="required"></form:input>
                     <form:errors path="price"></form:errors>
                 </div>
 
                 <div class="col-md-3">
                     <button type="submit" id="btnSaveSection">Save</button>
-                    <button type="submit" id="btnClearSection">Clear</button>
+                    <button type="button" id="btnClearSection">Clear</button>
                 </div>
             </form:form>
         </div>
 
         <div class="container rout-table" hidden>
             <div class="list">
-                <h3>Build rout</h3>
+                <h3>Build route</h3>
                 <h3 id="buildMessage"></h3>
                 <div id="sectionMessage"></div>
                 <table class="table" id="myTableSections">

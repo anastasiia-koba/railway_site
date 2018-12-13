@@ -47,7 +47,7 @@
                             <label>${rout.rout.routName}</label>
                         </div>
                         <div class="form-group ">
-                            <label>Train's rout: </label>
+                            <label>Train's route: </label>
                             <label>${rout.rout.startStation.stationName}
                                 - ${rout.rout.endStation.stationName}</label>
                         </div>
@@ -56,7 +56,7 @@
                             <label>${rout.date.toString()}</label>
                         </div>
                         <div class="form-group ">
-                            <label>Your rout: </label>
+                            <label>Your route: </label>
                             <label>${stationFrom.stationName} - ${stationTo.stationName}</label>
                         </div>
                         <div class="form-group ">

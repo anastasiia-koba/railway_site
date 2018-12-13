@@ -55,7 +55,7 @@
         <table class="table" id="myTable">
             <thead>
             <tr>
-                <th>Rout</th>
+                <th>Route</th>
                 <th>From</th>
                 <th>To</th>
                 <th>Arrival time</th>
@@ -73,6 +73,7 @@
                 </tr>
             </c:forEach>
             </tbody>
+        </table>
     </div>
 </div>
 </body>

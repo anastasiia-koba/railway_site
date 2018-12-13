@@ -15,7 +15,7 @@
                 <a href="${contextPath}/admin/stations">Stations</a>
             </li>
             <li role="presentation" class="${selectedTab == 'rout-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/routs">Routs</a>
+                <a href="${contextPath}/admin/routs">Routes</a>
             </li>
             <li role="presentation" class="${selectedTab == 'section-tab' ? 'active' : '' }">
                 <a href="${contextPath}/admin/sections">Sections in routs</a>
@@ -24,7 +24,7 @@
                 <a href="${contextPath}/admin/trains">Trains</a>
             </li>
             <li role="presentation" class="${selectedTab == 'finalrout-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/finalrouts">Train's rout</a>
+                <a href="${contextPath}/admin/finalrouts">Train's route</a>
             </li>
         </ul>
     </nav>

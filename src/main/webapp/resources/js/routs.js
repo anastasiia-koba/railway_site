@@ -14,7 +14,7 @@ function routEdit(index) {
         $('#comboboxStart').val(result.startStation.stationName);
         $('#comboboxEnd').val(result.endStation.stationName);
     }).fail(function () {
-        $('#routMessage').text('Edit rout failed');
+        $('#routMessage').text('Edit route failed');
     });
 }
 
@@ -29,7 +29,7 @@ function routDelete(index) {
         $('#routMessage').empty().text("Rout " + result + " was deleted");
         getRoutList();
     }).fail(function () {
-        $('#routMessage').text('Delete rout failed');
+        $('#routMessage').text('Delete route failed');
     });
 }
 
@@ -59,7 +59,7 @@ function getRoutList() {
         $("#myTableRouts tr>td").remove();
         $('.table').append(template(data));
     }).fail(function (e) {
-        $('#routMessage').text("Get rout's list failed");
+        $('#routMessage').text("Get route's list failed");
     });
 }
 

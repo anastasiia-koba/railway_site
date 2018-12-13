@@ -74,7 +74,7 @@
         <table class="table" id="myTableRouts">
             <thead>
             <tr>
-                <th>Rout number</th>
+                <th>Route number</th>
                 <th>From</th>
                 <th>To</th>
                 <th>Time of departure</th>

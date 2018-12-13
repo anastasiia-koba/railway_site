@@ -28,15 +28,15 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="${contextPath}/home">Home</a></li>
                     <li><a href="${contextPath}/schedule">Schedule</a></li>
-                    <li><a href="#">Contact</a></li>
 
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
                         <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
                             <li class="dropdown">
-                                <a href="${contextPath}/admin" data-toggle="dropdown">Admin <span class="caret"></span></a>
+                                <a href="${contextPath}/admin/stations" data-toggle="dropdown">Admin <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="${contextPath}/admin/passengers">Passengers</a></li>
-                                    <li><a href="${contextPath}/admin/stations">Build routs</a></li>
+                                    <li><a href="${contextPath}/admin/stations">Build routes</a></li>
+                                    <li><a href="${contextPath}/admin/schedule">Real schedule</a></li>
                                 </ul>
                             </li>
                         </c:if>
@@ -44,7 +44,7 @@
 
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
                         <c:if test="${pageContext.request.isUserInRole('USER')}">
-                            <li><a href="${contextPath}/user/profile">Profile</a></li>
+                            <li><a href="${contextPath}/user/profile" id="profile">Profile</a></li>
                         </c:if>
                     </c:if>
 
@@ -57,7 +57,7 @@
                                onclick="document.forms['logoutForm'].submit()">Logout</a>
                         </c:if>
                         <c:if test="${pageContext.request.userPrincipal.name == null}">
-                            <a class="btn btn-default btn-outline btn-circle" href="${contextPath}/login">Sign in</a>
+                            <a class="btn btn-default btn-outline btn-circle" id="loginBtn" href="${contextPath}/login">Sign in</a>
                         </c:if>
                     </li>
                 </ul>

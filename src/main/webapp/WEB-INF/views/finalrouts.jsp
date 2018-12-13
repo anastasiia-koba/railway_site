@@ -77,7 +77,7 @@
                 <table class="table" id="myTableFinalRouts">
                     <thead>
                     <tr>
-                        <th>Rout name</th>
+                        <th>Route name</th>
                         <th>Train name</th>
                         <th>From station</th>
                         <th>To station</th>

@@ -54,7 +54,7 @@ public class AdminController {
         model.addAttribute("routs", routService.findAll());
         model.addAttribute("selectedTab", "rout-tab");
 
-        return "routs";
+        return "routes";
     }
 
     @GetMapping(value = "/sections")

@@ -10,8 +10,9 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-
-    <title>Routs</title>
+    <script type="text/javascript" src="${contextPath}/resources/js/routs.js"></script>
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
+    <title>Routes</title>
 </head>
 <body>
 <jsp:include page="navbar.jsp"></jsp:include>
@@ -26,9 +27,9 @@
                         <form:input path="id" id="idForm" type="hidden"></form:input>
                         <spring:bind path="routName">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <label>Rout name</label>
-                                <form:input type="text" id="routName" placeholder="New Rout" class="form-control"
-                                            path="routName"></form:input>
+                                <label>Route name</label>
+                                <form:input type="text" id="routName" placeholder="New Route" class="form-control"
+                                            path="routName" required="required"></form:input>
                                 <form:errors path="routName"></form:errors>
                             </div>
                         </spring:bind>
@@ -38,7 +39,7 @@
                             <div class="form-group ">
                                 <label>Select start </label>
                                 <form:select path="startStation" id="comboboxStart" name="startStation"
-                                             class="form-control">
+                                             class="form-control" required="required">
                                     <option></option>
                                     <c:forEach items="${stationsFrom}" var="station">
                                         <option value="${station.stationName}">${station.stationName}</option>
@@ -52,7 +53,8 @@
                         <div class="col-md-2 pt-3">
                             <div class="form-group">
                                 <label>Select end </label>
-                                <form:select path="endStation" id="comboboxEnd" name="endStation" class="form-control">
+                                <form:select path="endStation" id="comboboxEnd" name="endStation" class="form-control"
+                                             required="required">
                                     <option></option>
                                     <c:forEach items="${stationsTo}" var="station">
                                         <option value="${station.stationName}">${station.stationName}</option>
@@ -65,19 +67,19 @@
 
                     <div class="col-md-3">
                         <button type="submit" id="btnAddRout">Save</button>
-                        <button type="submit" id="btnClearRout">Clear</button>
+                        <button type="button" id="btnClearRout">Clear</button>
                     </div>
                 </form:form>
             </div>
         </div>
         <div class="container routs-table">
             <div class="list">
-                <h3>Routs</h3>
+                <h3>Routes</h3>
                 <div id="routMessage"></div>
                 <table class="table" id="myTableRouts">
                     <thead>
                     <tr>
-                        <th>Rout name</th>
+                        <th>Route name</th>
                         <th>Station from</th>
                         <th>Station to</th>
                         <th></th>
