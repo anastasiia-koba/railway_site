@@ -203,3 +203,26 @@ function sectionDeleteFromAll(index) {
     });
 }
 
+function fromSelect() {
+    event.preventDefault();
+
+    var from = $('#comboboxSecFrom').val();
+    var op = document.getElementById("comboboxSecTo").getElementsByTagName("option");
+    for (var i = 0; i < op.length; i++) {
+        (op[i].value == from)
+            ? op[i].disabled = true
+            : op[i].disabled = false ;
+    }
+}
+
+function toSelect() {
+    event.preventDefault();
+
+    var to = $('#comboboxSecTo').val();
+    var op = document.getElementById("comboboxSecFrom").getElementsByTagName("option");
+    for (var i = 0; i < op.length; i++) {
+        (op[i].value == to)
+            ? op[i].disabled = true
+            : op[i].disabled = false ;
+    }
+}

@@ -3,21 +3,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <html>
 <head>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-
+    <script type="text/javascript" src="${contextPath}/resources/js/home.js"></script>
     <title>Railway Home</title>
 </head>
 <body>
@@ -29,7 +22,8 @@
             <div class="col-sm-2">
                 <div class="form-group" ${status.error ? 'has-error' : ''}>
                     <label>From where? </label>
-                    <select id="comboboxFrom" name="stationsFrom" placeholder="From where?" class="form-control">
+                    <select id="comboboxFrom" name="stationsFrom" placeholder="From where?" class="form-control"
+                    onchange="fromSelect()">
                         <option></option>
                         <c:forEach items="${stationsFrom}" var="station">
                             <option value="${station.stationName}">${station.stationName}</option>
@@ -40,7 +34,8 @@
             <div class="col-sm-2">
                 <div class="form-group" ${status.error ? 'has-error' : ''}>
                     <label>To where? </label>
-                    <select id="comboboxTo" name="stationsTo" placeholder="To where?" class="form-control">
+                    <select id="comboboxTo" name="stationsTo" placeholder="To where?" class="form-control"
+                    onchange="toSelect()">
                         <option></option>
                         <c:forEach items="${stationsTo}" var="station">
                             <option value="${station.stationName}">${station.stationName}</option>

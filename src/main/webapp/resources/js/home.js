@@ -45,3 +45,27 @@ function searchRout() {
         $('#buildMessage').empty().text('Search rout failed');
     });
 }
+
+function fromSelect() {
+    event.preventDefault();
+
+    var from = $('#comboboxFrom').val();
+    var op = document.getElementById("comboboxTo").getElementsByTagName("option");
+    for (var i = 0; i < op.length; i++) {
+        (op[i].value == from)
+            ? op[i].disabled = true
+            : op[i].disabled = false ;
+    }
+}
+
+function toSelect() {
+    event.preventDefault();
+
+    var to = $('#comboboxTo').val();
+    var op = document.getElementById("comboboxFrom").getElementsByTagName("option");
+    for (var i = 0; i < op.length; i++) {
+        (op[i].value == to)
+            ? op[i].disabled = true
+            : op[i].disabled = false ;
+    }
+}

@@ -135,12 +135,12 @@
         <div class="container" id="newSection" hidden>
             <h3>Create rout section</h3>
             <form:form modelAttribute="sectionForm" id="sectionForm" name="sectionForm"
-                       role="form" data-toggle="validator">
+                       data-toggle="validator">
                 <form:input path="id" id="idForm" type="hidden"></form:input>
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select from where </label>
-                        <form:select id="comboboxSecFrom" name="departure" path="departure">
+                        <form:select id="comboboxSecFrom" name="departure" path="departure" onchange="fromSelect()">
                             <option></option>
                             <c:forEach items="${stationsFrom}" var="station">
                                 <option value="${station.stationName}">${station.stationName}</option>
@@ -153,7 +153,7 @@
                 <spring:bind path="destination">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select to where </label>
-                        <form:select id="comboboxSecTo" name="destination" path="destination">
+                        <form:select id="comboboxSecTo" name="destination" path="destination" onchange="toSelect()">
                             <option></option>
                             <c:forEach items="${stationsTo}" var="station">
                                 <option value="${station.stationName}">${station.stationName}</option>
