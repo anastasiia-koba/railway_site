@@ -82,6 +82,16 @@ public class AdminScheduleController {
         return jsonValues.toString();
     }
 
+    private JsonObject formMessage(Long stationId, Long routId, LocalDate date, int status) {
+        JsonObject json = new JsonObject();
+        json.addProperty("stationId", stationId);
+        json.addProperty("finalRoutId", routId);
+        json.addProperty("date", date.toString());
+        json.addProperty("status", status);
+
+        return json;
+    }
+
     @PostMapping(value = "/schedule/sendOnTime")
     @ResponseBody
     public String sendOnTime(@RequestParam("station") Station station,
@@ -90,11 +100,7 @@ public class AdminScheduleController {
                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         station = stationService.findByName(station.getStationName());
 
-        JsonObject json = new JsonObject();
-        json.addProperty("stationId", station.getId());
-        json.addProperty("finalRoutId", routId);
-        json.addProperty("date", date.toString());
-        json.addProperty("status", STATUS_ON_TIME);
+        JsonObject json = formMessage(station.getId(), routId, date, STATUS_ON_TIME);
 
         scheduleSender.sendMessage(json.toString());
         return "Send 'On Time' to Tablo for station "+station.getStationName()+" on date "+date;
@@ -108,11 +114,7 @@ public class AdminScheduleController {
                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         station = stationService.findByName(station.getStationName());
 
-        JsonObject json = new JsonObject();
-        json.addProperty("stationId", station.getId());
-        json.addProperty("finalRoutId", routId);
-        json.addProperty("date", date.toString());
-        json.addProperty("status", STATUS_DELAYED);
+        JsonObject json = formMessage(station.getId(), routId, date, STATUS_DELAYED);
 
         scheduleSender.sendMessage(json.toString());
         return "Send 'Delayed' to Tablo for station "+station.getStationName()+" on date "+date;
@@ -126,11 +128,7 @@ public class AdminScheduleController {
                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         station = stationService.findByName(station.getStationName());
 
-        JsonObject json = new JsonObject();
-        json.addProperty("stationId", station.getId());
-        json.addProperty("finalRoutId", routId);
-        json.addProperty("date", date.toString());
-        json.addProperty("status", STATUS_CANCELED);
+        JsonObject json = formMessage(station.getId(), routId, date, STATUS_CANCELED);
 
         scheduleSender.sendMessage(json.toString());
         return "Send 'Canceled' to Tablo for station "+station.getStationName()+" on date "+date;
