@@ -42,7 +42,9 @@ public class FinalRoutController {
         model.addAttribute("routs", routService.findAllValid());
 
         model.addAttribute("startpage", 1);
-        model.addAttribute("endpage", finalRoutService.findAll().size()/10);
+
+        int endpage = (int)Math.ceil(((double)finalRoutService.findAll().size())/10);
+        model.addAttribute("endpage", endpage);
 
         model.addAttribute("selectedTab", "finalrout-tab");
 
@@ -59,7 +61,7 @@ public class FinalRoutController {
         if (page_id != 1) {
             page_id= (page_id-1)*total+1;
         }
-        
+
         List<FinalRout> finalRouts = finalRoutService.findAllByPage(page_id);
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);

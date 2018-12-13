@@ -57,6 +57,7 @@
 
                 <spring:bind path="date">
                     <div class="col-md-2 pt-3">
+                        <label>Select date </label>
                         <form:input type="date" id="date" path="date" class="form-control" value="${finalRoutForm.date}"
                                     max="2020-06-04" min="2018-10-25"></form:input>
                     </div>

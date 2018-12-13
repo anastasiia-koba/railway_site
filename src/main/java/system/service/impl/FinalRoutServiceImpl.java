@@ -16,9 +16,7 @@ import system.service.api.RoutService;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -97,6 +95,17 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
+    public List<FinalRout> findAllByPage(int pageid) {
+        int total = 10;
+        try {
+            return finalRoutDao.findAllByPage(pageid, total);
+        } catch (DaoException e) {
+            log.error("Find All Final Rout by Page {} failed: {}: {} ", pageid, e.getErrorCode(), e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
     public Set<FinalRout> findByDate(LocalDate date) {
         try {
             return finalRoutDao.findByDate(date);
@@ -140,7 +149,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public Map<Long, LocalTime> getMapDeparture(Set<FinalRout> finalRouts) {
+    public Map<Long, LocalTime> getMapDeparture(List<FinalRout> finalRouts) {
         Map<Long, LocalTime> mapDeparture = new HashMap<>(); // Long - finalRout.id
 
         for (FinalRout finalRout : finalRouts) {
@@ -153,7 +162,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
     }
 
     @Override
-    public Map<Long, LocalTime> getMapArrival(Set<FinalRout> finalRouts) {
+    public Map<Long, LocalTime> getMapArrival(List<FinalRout> finalRouts) {
         Map<Long, LocalTime> mapArrival = new HashMap<>(); // Long - finalRout.id
 
         for (FinalRout finalRout : finalRouts) {
