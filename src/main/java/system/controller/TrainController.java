@@ -28,6 +28,8 @@ public class TrainController {
     @Autowired
     private FinalRoutService finalRoutService;
 
+    private String view = "trains";
+
     @GetMapping
     public String getAdminTrainsPage(Model model){
         model.addAttribute("finalRouts", finalRoutService.findAll());
@@ -35,7 +37,7 @@ public class TrainController {
 
         model.addAttribute("selectedTab", "train-tab");
 
-        return "trains";
+        return view;
     }
 
     @RequestMapping(value = "/date", method = RequestMethod.POST)
@@ -47,7 +49,7 @@ public class TrainController {
 
         model.addAttribute("selectedTab", "trains-tab");
 
-        return "trains";
+        return view;
     }
 
     @GetMapping(params = "list")

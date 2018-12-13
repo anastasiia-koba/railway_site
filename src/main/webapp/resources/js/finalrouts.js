@@ -27,7 +27,7 @@ function finalDelete(index) {
 
     $.post(contextPath+"/admin/finalrouts?delete", object).done(function (result) {
         $('#finalRoutMessage').empty().text(result);
-        getFinalList();
+        getFinalList(1);
     }).fail(function () {
         $('#finalRoutMessage').text('Delete final rout failed');
     });
@@ -38,8 +38,8 @@ $('#btnSaveFinal').click(function () {
 
     $.post(contextPath+"/admin/finalrouts?save", $('#finalRoutForm').serialize()).done(function (result) {
         $('#finalRoutMessage').empty().text(result);
-        getFinalList();
-    }).fail(function (e) {
+        getFinalList(1);
+    }).fail(function () {
         $('#finalRoutMessage').text('Save final rout failed');
     });
 })

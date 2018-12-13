@@ -95,7 +95,7 @@ function sectionDelete(index) {
     var object = {sectionId: section, routId: rout};
 
     $.post(contextPath+"/admin/sections?delete", object).done(function (result) {
-        $('#sectionMessage').empty().text(result);
+        $('#sectionMessage').empty().text("Section "+result+" was deleted");
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
@@ -109,7 +109,7 @@ $('#btnSaveSection').click(function () {
     var rout = $('#routId').val();
 
     $.post(contextPath+"/admin/sections?save", $('#sectionForm').serialize()+"&routId="+rout).done(function (result) {
-        $('#sectionMessage').empty().text(result);
+        $('#sectionMessage').empty().text("Section "+result+" was saved");
         $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
@@ -136,12 +136,6 @@ function getSectionList(rout) {
         var data = JSON.parse(result);
         $("#buildMessage").empty().text(data.buildMessage);
         $('#errorBackMessage').text('');
-
-        // if (data.buildMessage == "Rout has errors") {
-        //     $("#buildMessage").style.backgroundColor = 'red';
-        // } else {
-        //     $("#buildMessage").style.backgroundColor = 'green';
-        // }
 
         var rs = {sections : JSON.parse(data.sections)};
         var template = Handlebars.compile($('#templateSections').html());
@@ -183,7 +177,7 @@ function sectionAdd(index) {
     var object = {sectionId: section, routId: rout};
 
     $.post(contextPath+"/admin/sections/all?add", object).done(function (result) {
-        $('#sectionMessage').empty().text(result);
+        $('#sectionMessage').empty().text("Section "+result+" was saved");
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
@@ -200,7 +194,7 @@ function sectionDeleteFromAll(index) {
     var object = {sectionId: section};
 
     $.post(contextPath+"/admin/sections/all?delete", object).done(function (result) {
-        $('#sectionMessage').empty().text(result);
+        $('#sectionMessage').empty().text("Section "+result+" was deleted from all routs");
         $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();

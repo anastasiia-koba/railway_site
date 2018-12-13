@@ -63,7 +63,7 @@ function stationDelete(index) {
     var object = {stationId: station};
 
     $.post(contextPath + "/admin/stations?delete", object).done(function (result) {
-        $('#stationMessage').empty().text(result);
+        $('#stationMessage').empty().text("Station "+result+" was deleted");
         getStationList();
     }).fail(function () {
         $('#stationMessage').text('Delete station failed');
@@ -74,7 +74,7 @@ $('#btnAddStation').click(function () {
     event.preventDefault();
 
     $.post(contextPath + "/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
-        $('#stationMessage').empty().text(result);
+        $('#stationMessage').empty().text("Station "+result+" was saved");
 
         if (theMarker != undefined) {
             mymap.removeLayer(theMarker);

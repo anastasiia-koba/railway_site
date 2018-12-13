@@ -26,7 +26,7 @@ function routDelete(index) {
     var object = {routId: rout};
 
     $.post(contextPath+"/admin/routs?delete", object).done(function (result) {
-        $('#routMessage').empty().text(result);
+        $('#routMessage').empty().text("Rout " + result + " was deleted");
         getRoutList();
     }).fail(function () {
         $('#routMessage').text('Delete rout failed');
@@ -37,7 +37,7 @@ $('#btnAddRout').click(function () {
     event.preventDefault();
 
     $.post(contextPath+"/admin/routs?save", $('#routForm').serialize()).done(function (result) {
-        $('#routMessage').empty().text(result);
+        $('#routMessage').empty().text("Rout " + result + " was saved");
         getRoutList();
     }).fail(function () {
         $('#routMessage').text('Save rout failed');

@@ -17,7 +17,6 @@ import system.service.api.StationService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -94,7 +93,7 @@ public class AdminController {
 
         stationService.delete(stationForDelete);
 
-        return "Station " + stationForDelete.getStationName() + " was deleted";
+        return stationForDelete.getStationName();
     }
 
     @PostMapping(value = "/stations", params = "save")
@@ -102,7 +101,6 @@ public class AdminController {
     public String saveStation(@Valid @ModelAttribute("stationForm") Station station,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            //TODO validation
             return "Save station " + station.getStationName() + " failed: name must be not empty.";
         } else if (stationService.findByName(station.getStationName()) != null) {
             return "Save station " + station.getStationName() + " failed: such name already exists.";
@@ -110,7 +108,7 @@ public class AdminController {
 
         stationService.save(station);
 
-        return "Station " + station.getStationName() + " was saved";
+        return  station.getStationName();
     }
 
     @GetMapping(value = "/routs", params = "list")
@@ -134,7 +132,7 @@ public class AdminController {
 
         routService.delete(routForChange);
 
-        return "Rout " + routForChange.getRoutName() + " was deleted";
+        return routForChange.getRoutName();
     }
 
     @PostMapping(value = "/routs", params = "save")
@@ -142,7 +140,6 @@ public class AdminController {
     public String saveRout(@Valid @ModelAttribute("routForm") Rout rout,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            //TODO validation
             return "Fields are required";
         }
 
@@ -151,7 +148,7 @@ public class AdminController {
 
         routService.save(rout);
 
-        return "Rout " + rout.getRoutName() + " was saved";
+        return rout.getRoutName();
     }
 
     @GetMapping(value = "/sections/rout", params = "list")
@@ -215,8 +212,8 @@ public class AdminController {
         rout.getRoutSections().remove(sectionForDelete);
         routService.save(rout);
 
-        return "Section from "+sectionForDelete.getDeparture().getStationName()+" to "+
-                sectionForDelete.getDestination().getStationName()+" was deleted";
+        return sectionForDelete.getDeparture().getStationName()+" "+
+                sectionForDelete.getDestination().getStationName();
     }
 
     @PostMapping(value = "/sections", params = "save")
@@ -250,7 +247,7 @@ public class AdminController {
             routService.save(rout);
         }
 
-        return "Section from "+routSection.getDeparture().getStationName()+" to "+routSection.getDestination().getStationName()+" was saved";
+        return routSection.getDeparture().getStationName()+" "+routSection.getDestination().getStationName();
     }
 
     @GetMapping(value = "/sections/list")
@@ -283,8 +280,8 @@ public class AdminController {
         rout.getRoutSections().add(sectionForAdd);
         routService.save(rout);
 
-        return "Section from "+sectionForAdd.getDeparture().getStationName()+" to "+
-                sectionForAdd.getDestination().getStationName()+" was saved";
+        return sectionForAdd.getDeparture().getStationName()+" "+
+                sectionForAdd.getDestination().getStationName();
     }
 
     @PostMapping(value = "/sections/all", params = "delete")
@@ -294,8 +291,7 @@ public class AdminController {
 
         routSectionService.delete(sectionForDelete);
 
-        return "Section from "+sectionForDelete.getDeparture().getStationName()+" to "+
-                sectionForDelete.getDestination().getStationName()+" was deleted " +
-                "from all routs";
+        return sectionForDelete.getDeparture().getStationName()+" "+
+                sectionForDelete.getDestination().getStationName();
     }
 }
