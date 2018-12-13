@@ -56,7 +56,8 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
     @Override
     public Set<Ticket> findByFinalRout(FinalRout finalRout) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT t FROM Ticket t WHERE t.finalRout = :finalRout");
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
+                    "inner join fetch t.profile user WHERE t.finalRout = :finalRout");
             q.setParameter("finalRout", finalRout);
 
             Set<Ticket> tickets = new HashSet<>(q.getResultList());

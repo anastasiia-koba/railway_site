@@ -36,13 +36,15 @@ public class PassengerController {
     @Autowired
     private FinalRoutService finalRoutService;
 
+    private String view = "passengers";
+
     @GetMapping
     public String getPassengerPage(Model model){
         model.addAttribute("trains", trainService.findAll());
         model.addAttribute("routs", routService.findAll());
         model.addAttribute("finalRoutForm", new FinalRout());
 
-        return "passengers";
+        return view;
     }
 
     @PostMapping
@@ -53,13 +55,14 @@ public class PassengerController {
         model.addAttribute("routs", routService.findAll());
 
         if (bindingResult.hasErrors()) {
-            return "passengers";
+            return view;
         }
-
+        rout.setRout(routService.findByName(rout.getRout().getRoutName()));
+        rout.setTrain(trainService.findByName(rout.getTrain().getTrainName()));
         rout = finalRoutService.findByRoutAndTrainAndDate(rout.getRout(), rout.getTrain(), rout.getDate());
         model.addAttribute("tickets", ticketService.findByFinalRout(rout));
         model.addAttribute("finalRoutForm", new FinalRout());
 
-        return "passengers";
+        return view;
     }
 }
