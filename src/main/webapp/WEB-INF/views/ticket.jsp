@@ -7,19 +7,17 @@
 <html lang="en">
 <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 
-    <script type="text/javascript" src="${contextPath}/resources/js/registration.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
             integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
             crossorigin=""></script>
-
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
     <title>Buy ticket</title>
 </head>
 <body>
@@ -114,14 +112,15 @@
                             <button onclick="showAddUser()" class="btn btn-primary pull-right">Add passenger</button>
                             <br/>
                             <div id="contPassenger" hidden>
-                                <form:form id="passengerForm" modelAttribute="passengerForm" name="passengerForm">
+                                <form:form id="passengerForm" modelAttribute="userForm" name="passengerForm" role="form"
+                                    data-toggle="validator">
                                     <form:input path="id" id="idForm" type="hidden"/>
                                     <div class="form-group ${status.error ? 'has-error' : ''}">
                                         <spring:bind path="firstname">
                                             <label for="firstName">First Name</label>
                                             <form:input path="firstname" type="text" id="firstname"
                                                         placeholder="First name"
-                                                        class="form-control"/>
+                                                        class="form-control" required="required"/>
                                             <form:errors path="firstname"></form:errors>
                                         </spring:bind>
                                     </div>
@@ -129,7 +128,7 @@
                                         <spring:bind path="surname">
                                             <label for="surname">Last Name</label>
                                             <form:input path="surname" type="text" id="surname" placeholder="Last name"
-                                                        class="form-control"/>
+                                                        class="form-control" required="required"/>
                                             <form:errors path="surname"></form:errors>
                                         </spring:bind>
                                     </div>
@@ -137,11 +136,11 @@
                                         <spring:bind path="birthDate">
                                             <label for="birthDate">Date of Birth</label>
                                             <form:input type="date" id="birthDate" path="birthDate"
-                                                        class="form-control"/>
+                                                        class="form-control" required="required"/>
                                             <form:errors path="birthDate"></form:errors>
                                         </spring:bind>
                                     </div>
-                                    <button onclick="save()" id="btnSave">Save passenger</button>
+                                    <button type="submit" onclick="save()" id="btnSave">Save passenger</button>
                                 </form:form> <!-- /form -->
                             </div>
                         </div>

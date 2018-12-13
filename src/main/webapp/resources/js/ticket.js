@@ -81,7 +81,7 @@ function userDelete(index) {
     });
 }
 
-function save() {
+$('#passengerForm').submit(function (event) {
     event.preventDefault();
 
     $.post(contextPath + "/buy/passengers?valid", $('#passengerForm').serialize()).done(function (result) {
@@ -106,7 +106,7 @@ function save() {
     }).fail(function () {
         $('#userMessage').empty().text('Adding user to order failed ');
     });
-}
+})
 
 function getPassengerList() {
     event.preventDefault();

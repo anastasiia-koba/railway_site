@@ -71,7 +71,7 @@
     </div>
 </div>
 <script>
-    $('#btnSave').click(function () {
+    $('#userForm').submit(function (event) {
         event.preventDefault();
 
         $.post("${contextPath}/user/profile", $('#userForm').serialize()).done(function (result) {

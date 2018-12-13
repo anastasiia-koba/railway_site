@@ -8,10 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
     <title>Schedule</title>
 </head>
 <body>
@@ -24,7 +21,8 @@
                 <div class="col-sm-2">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Station </label>
-                        <select id="comboboxStation" name="station" path="station" class="form-control">
+                        <select id="comboboxStation" name="station" path="station" class="form-control"
+                                required="required">
                             <option></option>
                             <c:forEach items="${stations}" var="station">
                                 <option value="${station.stationName}">${station.stationName.toString()}</option>
@@ -37,7 +35,7 @@
                     <div class="form-group" ${status.error ? 'has-error' : ''}>
                         <label>Date: </label>
                         <input type="date" name="date" class="form-control" value="<%=LocalDate.now()%>"
-                               max="2020-06-04" min="2018-10-25">
+                               required="required" max="2020-06-04" min="2018-10-25">
                         <span>${error}</span>
                     </div>
                 </div>

@@ -6,8 +6,7 @@
 </head>
 <body>
 <h3>This is exception page</h3>
-<h1>${errorMsg}</h1>
-<p>Exception: <b>${exception}</b></p>
+<h1>${errorMsg} ${exception}</h1>
 <a href="/">Go Home</a>
 </body>
 </html>

@@ -7,7 +7,6 @@
 <html lang="en">
 <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
@@ -37,13 +36,13 @@
                         <form:form name="stationForm" id="stationForm" class="form-group"
                                    modelAttribute="stationForm"
                                    role="form" data-toggle="validator">
-                            <form:input path="id" type="hidden"></form:input>
+                            <form:input path="id" id="idForm" type="hidden"></form:input>
                             <spring:bind path="stationName">
                                 <div class="form-group ${status.error ? 'has-error' : ''}">
                                     <form:input type="text"
                                                 id="stationName" placeholder="New Station"
                                                 class="form-control"
-                                                path="stationName"/>
+                                                path="stationName" required="required"/>
                                     <form:errors path="stationName"></form:errors>
                                 </div>
                             </spring:bind>
@@ -52,7 +51,7 @@
                                     <form:input type="number" step="any" min="-180" max="180"
                                                 id="latitude" placeholder="Latitude"
                                                 class="form-control"
-                                                path="latitude"/>
+                                                path="latitude" required="required"/>
                                     <form:errors path="latitude"></form:errors>
                                 </div>
                             </spring:bind>
@@ -61,12 +60,12 @@
                                     <form:input type="number" step="any" min="-90" max="90" id="longitude"
                                                 placeholder="Longitude"
                                                 class="form-control"
-                                                path="longitude"/>
+                                                path="longitude" required="required"/>
                                     <form:errors path="longitude"></form:errors>
                                 </div>
                             </spring:bind>
                             <button type="submit" id="btnAddStation">Save</button>
-                            <button type="submit" id="btnClearStation">Clear</button>
+                            <button type="button" id="btnClearStation">Clear</button>
                         </form:form>
                         <div class="form-group">
                             <h3>Stations</h3>
@@ -121,7 +120,6 @@
     }).addTo(mymap);
 
     var theMarker = {};
-
 
     function onMapClick(e) {
         if (theMarker != undefined) {

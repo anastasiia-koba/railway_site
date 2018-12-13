@@ -1,31 +1,3 @@
-$().ready(function () {
-    $.validator.setDefaults({
-        highlight: function (element) {
-            $(element)
-                .closest('.form-group')
-                .addClass('has-error')
-        },
-        unhighlight: function (element) {
-            $(element)
-                .closest('.form-group')
-                .removeClass('has-error')
-        }
-    });
-
-    $('#stationForm').validate({
-        rules: {
-            stationName: {
-                required: true
-            }
-        },
-        messages: {
-            stationName: {
-                required: "Please enter stationName",
-            }
-        }
-    });
-});
-
 function stationEdit(index) {
     event.preventDefault();
 
@@ -63,33 +35,42 @@ function stationDelete(index) {
     var object = {stationId: station};
 
     $.post(contextPath + "/admin/stations?delete", object).done(function (result) {
-        $('#stationMessage').empty().text("Station "+result+" was deleted");
+        if (result.toString().startsWith("Error:")) {
+            $('#stationMessage').empty().text(result);
+        } else {
+            $('#stationMessage').empty().text("Station " + result + " was deleted");
+        }
         getStationList();
     }).fail(function () {
         $('#stationMessage').text('Delete station failed');
     });
 }
 
-$('#btnAddStation').click(function () {
-    event.preventDefault();
+$('#stationForm').submit(function (event) {
+        event.preventDefault();
 
-    $.post(contextPath + "/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
-        $('#stationMessage').empty().text("Station "+result+" was saved");
+        $.post(contextPath + "/admin/stations?save", $('#stationForm').serialize()).done(function (result) {
+            if (result.toString().startsWith("Error:")) {
+                $('#stationMessage').empty().text(result);
+            } else {
+                $('#stationMessage').empty().text("Station " + result + " was saved");
+            }
 
-        if (theMarker != undefined) {
-            mymap.removeLayer(theMarker);
-        };
+            if (theMarker != undefined) {
+                mymap.removeLayer(theMarker);
+            };
 
-        var latitude = $('#latitude').val();
-        var longitude = $('#longitude').val();
-        theMarker = L.marker([latitude, longitude]).addTo(mymap)
-            .bindPopup($('#stationName').val()).openPopup();
+            var latitude = $('#latitude').val();
+            var longitude = $('#longitude').val();
+            theMarker = L.marker([latitude, longitude]).addTo(mymap)
+                .bindPopup($('#stationName').val()).openPopup();
 
-        getStationList();
-    }).fail(function () {
-        $('#stationMessage').text('Add station failed');
-    });
+            getStationList();
+        }).fail(function () {
+            $('#stationMessage').text('Add station failed');
+        });
 })
+
 
 $('#btnClearStation').click(function () {
     event.preventDefault();

@@ -11,7 +11,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-
+    <script type="text/javascript" src="${contextPath}/resources/js/finalrouts.js"></script>
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
     <title>Train's rout</title>
 </head>
 <body>
@@ -27,7 +28,8 @@
                     <div class="col-md-2 pt-3">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
                             <label>Select train </label>
-                            <form:select path="train" id="comboboxTrain" name="train" class="form-control">
+                            <form:select path="train" id="comboboxTrain" name="train" class="form-control"
+                                         required="required">
                                 <option></option>
                                 <c:forEach items="${trains}" var="train">
                                     <option value="${train.trainName}">${train.trainName}</option>
@@ -41,8 +43,9 @@
                 <spring:bind path="rout">
                     <div class="col-md-2 pt-3">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <label>Select rout </label>
-                            <form:select path="rout" id="comboboxRout" name="rout" class="form-control">
+                            <label>Select route </label>
+                            <form:select path="rout" id="comboboxRout" name="rout" class="form-control"
+                                         required="required">
                                 <option></option>
                                 <c:forEach items="${routs}" var="rout">
                                     <option value="${rout.routName}">${rout.routName}
@@ -59,13 +62,13 @@
                     <div class="col-md-2 pt-3">
                         <label>Select date </label>
                         <form:input type="date" id="date" path="date" class="form-control" value="${finalRoutForm.date}"
-                                    max="2020-06-04" min="2018-10-25"></form:input>
+                                    max="2020-06-04" min="2018-10-25" placeholder="Date" required="required"></form:input>
                     </div>
                 </spring:bind>
 
                 <div class="col-md-3">
                     <button type="submit" id="btnSaveFinal">Save</button>
-                    <button type="submit" id="btnClearFinal">Clear</button>
+                    <button type="button" id="btnClearFinal">Clear</button>
                 </div>
             </form:form>
         </div>

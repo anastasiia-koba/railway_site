@@ -26,18 +26,26 @@ function routDelete(index) {
     var object = {routId: rout};
 
     $.post(contextPath+"/admin/routs?delete", object).done(function (result) {
-        $('#routMessage').empty().text("Rout " + result + " was deleted");
+        if (result.toString().startsWith("Error:")) {
+            $('#routMessage').empty().text(result);
+        } else {
+            $('#routMessage').empty().text("Route " + result + " was deleted");
+        }
         getRoutList();
     }).fail(function () {
         $('#routMessage').text('Delete route failed');
     });
 }
 
-$('#btnAddRout').click(function () {
+$('#routForm').submit(function (event) {
     event.preventDefault();
 
     $.post(contextPath+"/admin/routs?save", $('#routForm').serialize()).done(function (result) {
-        $('#routMessage').empty().text("Rout " + result + " was saved");
+        if (result.toString().startsWith("Error:")) {
+            $('#routMessage').empty().text(result);
+        } else {
+            $('#routMessage').empty().text("Route " + result + " was saved");
+        }
         getRoutList();
     }).fail(function () {
         $('#routMessage').text('Save rout failed');

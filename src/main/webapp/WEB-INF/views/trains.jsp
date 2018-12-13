@@ -11,7 +11,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-
+    <script type="text/javascript" src="${contextPath}/resources/js/trains.js"></script>
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
     <title>Trains</title>
 </head>
 <body>
@@ -28,22 +29,21 @@
                             <div class="form-group ${status.error ? 'has-error' : ''}">
                                 <form:input path="id" id="idForm" type="hidden"></form:input>
                                 <form:input type="text" id="trainName" placeholder="New Train" class="form-control"
-                                            path="trainName"></form:input>
+                                            path="trainName" required="required"></form:input>
                                 <form:errors path="trainName"></form:errors>
                             </div>
                         </spring:bind>
                     </div>
                     <div class="col-md-3">
                         <spring:bind path="placesNumber">
-
-                            <form:input type="text" id="placesNumber" placeholder="Count" class="form-control"
-                                        path="placesNumber"></form:input>
+                            <form:input type="number" id="placesNumber" placeholder="Count" class="form-control"
+                                        path="placesNumber" required="required"></form:input>
                             <form:errors path="placesNumber"></form:errors>
-
                         </spring:bind>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" id="btnAddTrain">Save</button>
+                        <button type="button" id="btnClearTrain">Save</button>
                     </div>
                 </form:form>
             </div>

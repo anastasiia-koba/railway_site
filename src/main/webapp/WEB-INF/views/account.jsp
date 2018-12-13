@@ -8,13 +8,11 @@
 <html lang="en">
 <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/registration.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 
-    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/registration.css">
     <script type="text/javascript" src="${contextPath}/resources/js/registration.js"></script>
 
     <title>User profile</title>
@@ -37,7 +35,7 @@
                             <form:input type="text" id="username" placeholder="Username"
                                         class="form-control"
                                         autofocus="true"
-                                        path="username"></form:input>
+                                        path="username"  required="required"></form:input>
                             <form:errors path="username"></form:errors>
                         </div>
                     </div>
@@ -47,7 +45,7 @@
                         <label for="password" class="col-sm-3 control-label">Password</label>
                         <div class="col-sm-9">
                             <form:input type="password" path="password" class="form-control"
-                                        placeholder="Password"></form:input>
+                                        placeholder="Password"  required="required"></form:input>
                             <form:errors path="password"></form:errors>
                         </div>
                     </div>
@@ -57,7 +55,7 @@
                         <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
                         <div class="col-sm-9">
                             <form:input type="password" path="confirmPassword" class="form-control"
-                                        placeholder="Confirm your password"></form:input>
+                                        placeholder="Confirm your password"  required="required"></form:input>
                             <form:errors path="validPasswords"></form:errors>
                         </div>
                     </div>
@@ -68,7 +66,7 @@
     </div>
 </div>
 <script>
-    $('#btnSave').click(function () {
+    $('#userForm').submit(function (event) {
         event.preventDefault();
 
         $.post("${contextPath}/user/account", $('#userForm').serialize()).done(function (result) {

@@ -32,7 +32,7 @@ function trainDelete(index) {
     });
 }
 
-$('#btnAddTrain').click(function () {
+$('#trainForm').submit(function (event) {
     event.preventDefault();
 
     $.post(contextPath+"/admin/trains?save", $('#trainForm').serialize()).done(function (result) {

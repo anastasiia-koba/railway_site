@@ -7,12 +7,12 @@
 <html lang="en">
 <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
     <script type="text/javascript" src="${contextPath}/resources/js/sections.js"></script>
-    <title>Sections in routs</title>
+    <link type="text/css" rel="stylesheet" href="${contextPath}/resources/css/common.css">
+    <title>Sections in routes</title>
 </head>
 <body>
 <jsp:include page="navbar.jsp"></jsp:include>
@@ -140,7 +140,8 @@
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select from where </label>
-                        <form:select id="comboboxSecFrom" name="departure" path="departure" onchange="fromSelect()">
+                        <form:select id="comboboxSecFrom" name="departure" path="departure" onchange="fromSelect()"
+                                     required="required">
                             <option></option>
                             <c:forEach items="${stationsFrom}" var="station">
                                 <option value="${station.stationName}">${station.stationName}</option>
@@ -153,7 +154,8 @@
                 <spring:bind path="destination">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label>Select to where </label>
-                        <form:select id="comboboxSecTo" name="destination" path="destination" onchange="toSelect()">
+                        <form:select id="comboboxSecTo" name="destination" path="destination" onchange="toSelect()"
+                                     required="required">
                             <option></option>
                             <c:forEach items="${stationsTo}" var="station">
                                 <option value="${station.stationName}">${station.stationName}</option>

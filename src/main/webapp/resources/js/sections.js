@@ -1,39 +1,3 @@
-$().ready(function () {
-    $.validator.setDefaults({
-        highlight: function (element) {
-            $(element)
-                .closest('.form-group')
-                .addClass('has-error')
-        },
-        unhighlight: function (element) {
-            $(element)
-                .closest('.form-group')
-                .removeClass('has-error')
-        }
-    });
-
-    $('#sectionForm').validate({
-        rules: {
-            departure: "required",
-            destination: "required",
-            departureTime: "required",
-            arrivalTime: "required",
-            distance: "required",
-            price: "required"
-        },
-        messages: {
-            surname: "Please enter ",
-            departure: "Please enter departure station",
-            destination: "Please enter destination station",
-            departureTime: "Please enter departure time",
-            arrivalTime: "Please enter arrival time",
-            distance: "Please enter distance",
-            price: "Please enter price"
-        }
-    });
-});
-
-
 function searchRout() {
     event.preventDefault();
 
@@ -58,7 +22,7 @@ function formBackRout() {
         $('#errorBackMessage').empty().text(result);
         getSectionList(rout);
     }).fail(function () {
-        $('#sectionMessage').text('Delete rout failed');
+        $('#sectionMessage').text('Form back route failed');
     });
 }
 
@@ -95,21 +59,29 @@ function sectionDelete(index) {
     var object = {sectionId: section, routId: rout};
 
     $.post(contextPath+"/admin/sections?delete", object).done(function (result) {
-        $('#sectionMessage').empty().text("Section "+result+" was deleted");
+        if (result.toString().startsWith("Error:")) {
+            $('#sectionMessage').empty().text(result);
+        } else {
+            $('#sectionMessage').empty().text("Section " + result + " was deleted");
+        }
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
-        $('#sectionMessage').text('Delete rout failed');
+        $('#sectionMessage').text('Delete section failed');
     });
 }
 
-$('#btnSaveSection').click(function () {
+$('#sectionForm').submit(function (event) {
     event.preventDefault();
 
     var rout = $('#routId').val();
 
     $.post(contextPath+"/admin/sections?save", $('#sectionForm').serialize()+"&routId="+rout).done(function (result) {
-        $('#sectionMessage').empty().text("Section "+result+" was saved");
+        if (result.toString().startsWith("Error:")) {
+            $('#sectionMessage').empty().text(result);
+        } else {
+            $('#sectionMessage').empty().text("Section " + result + " was saved");
+        }
         $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
@@ -135,7 +107,6 @@ function getSectionList(rout) {
     $.get(contextPath+"/admin/sections/rout?list", {routForSearch: rout}).done(function (result) {
         var data = JSON.parse(result);
         $("#buildMessage").empty().text(data.buildMessage);
-        $('#errorBackMessage').text('');
 
         var rs = {sections : JSON.parse(data.sections)};
         var template = Handlebars.compile($('#templateSections').html());
@@ -177,7 +148,11 @@ function sectionAdd(index) {
     var object = {sectionId: section, routId: rout};
 
     $.post(contextPath+"/admin/sections/all?add", object).done(function (result) {
-        $('#sectionMessage').empty().text("Section "+result+" was saved");
+        if (result.toString().startsWith("Error:")) {
+            $('#sectionMessage').empty().text(result);
+        } else {
+            $('#sectionMessage').empty().text("Section " + result + " was saved");
+        }
         $('#errorBackMessage').text('');
         getSectionList(rout);
     }).fail(function () {
@@ -194,7 +169,11 @@ function sectionDeleteFromAll(index) {
     var object = {sectionId: section};
 
     $.post(contextPath+"/admin/sections/all?delete", object).done(function (result) {
-        $('#sectionMessage').empty().text("Section "+result+" was deleted from all routs");
+        if (result.toString().startsWith("Error:")) {
+            $('#sectionMessage').empty().text(result);
+        } else {
+            $('#sectionMessage').empty().text("Section " + result + " was deleted from all routs");
+        }
         $('#errorBackMessage').text('');
         getSectionList(rout);
         getSearchList();
