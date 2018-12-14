@@ -32,10 +32,10 @@
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
                         <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
                             <li class="dropdown">
-                                <a href="${contextPath}/admin/stations" data-toggle="dropdown">Admin <span class="caret"></span></a>
+                                <a href="${contextPath}/admin/stations" data-toggle="dropdown" id="aAdmin">Admin <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="${contextPath}/admin/passengers">Passengers</a></li>
-                                    <li><a href="${contextPath}/admin/stations">Build routes</a></li>
+                                    <li><a href="${contextPath}/admin/stations" id="aBuild">Build routes</a></li>
                                     <li><a href="${contextPath}/admin/schedule">Real schedule</a></li>
                                 </ul>
                             </li>

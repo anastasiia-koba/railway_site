@@ -1,4 +1,5 @@
 .navbar-brand { position: relative; z-index: 2; }
+.navbar {font-size: 20px;}
 
 .navbar-nav.navbar-right .btn { position: relative; z-index: 2; padding: 4px 20px; margin: 10px auto; }
 
@@ -11,7 +12,7 @@
 .navbar .nav-collapse .navbar-form { border-width: 0; box-shadow: none; }
 .nav-collapse>li { float: right; }
 
-.btn.btn-circle { border-radius: 50px; }
+.btn.btn-circle { border-radius: 50px; font-size:20px;}
 .btn.btn-outline { background-color: transparent; }
 
 @media screen and (max-width: 767px) {
