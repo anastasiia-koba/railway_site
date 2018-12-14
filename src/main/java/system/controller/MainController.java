@@ -256,9 +256,7 @@ public class MainController {
         if (tickets == null)
             return "Error: no users in order";
 
-        String result = ticketService.save(tickets);
-
-        return result;
+        return ticketService.save(tickets);
     }
 
     @Secured(value={"ROLE_USER"})
@@ -271,9 +269,8 @@ public class MainController {
         Station end = stationService.findById(stationToId);
         FinalRout finalRout = finalRoutService.findById(routId);
 
-        List<RoutSection> result = routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
+        return routService.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                 start, end);
-        return result;
     }
 
 }

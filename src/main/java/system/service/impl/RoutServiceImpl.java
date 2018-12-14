@@ -13,10 +13,7 @@ import system.entity.RoutSection;
 import system.entity.Station;
 import system.service.api.RoutService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -92,7 +89,7 @@ public class RoutServiceImpl implements RoutService {
         } catch (DaoException e) {
             log.error("Find All Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -109,7 +106,7 @@ public class RoutServiceImpl implements RoutService {
         } catch (DaoException e) {
             log.error("Find All Valid Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -130,7 +127,7 @@ public class RoutServiceImpl implements RoutService {
             log.error("Find Rout by Departure {} and Destination {} failed: {}: {} ", start.getStationName(),
                     end.getStationName(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -140,7 +137,7 @@ public class RoutServiceImpl implements RoutService {
         } catch (DaoException e) {
             log.error("Find Rout by routSection {} failed: {}: {} ", routSection.getId(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -158,7 +155,7 @@ public class RoutServiceImpl implements RoutService {
             log.error("Find Rout Section by Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
                     rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -197,7 +194,7 @@ public class RoutServiceImpl implements RoutService {
             log.error("Find Rout Sections in Rout {}, Departure {} And Destination {} failed: {}: {} ", rout.getRoutName(),
                     departure.getStationName(), destination.getStationName(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

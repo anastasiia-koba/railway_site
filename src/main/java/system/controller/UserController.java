@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import system.entity.Ticket;
 import system.entity.UserData;
 import system.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +32,15 @@ public class UserController {
     @Autowired
     private TicketService ticketService;
 
+    private String attrForm = "userForm";
+    private String regView = "registration";
+    private String tab = "selectedTab";
+
     @GetMapping(value = "/registration")
     public String register(Model model){
-        model.addAttribute("userForm", new UserData());
+        model.addAttribute(attrForm, new UserData());
 
-        return "registration";
+        return regView;
     }
 
     @PostMapping(value = "/registration")
@@ -45,10 +48,10 @@ public class UserController {
                                BindingResult bindingResult, Model model){
 
         if (bindingResult.hasErrors()){
-            return "registration";
+            return regView;
         } else if (userService.findByUsername(userData.getUsername()) != null) {
             bindingResult.rejectValue("username", "username.duplicate","Such username already exists.");
-            return "registration";
+            return regView;
         }
 
         userService.createUser(userData);
@@ -56,8 +59,8 @@ public class UserController {
 
         securityService.autoLogin(userData.getUsername(), userData.getPassword());
 
-        model.addAttribute("userForm", new UserProfile());
-        model.addAttribute("selectedTab", "profile-tab");
+        model.addAttribute(attrForm, new UserProfile());
+        model.addAttribute(tab, "profile-tab");
         return "userprofile";
     }
 
@@ -85,8 +88,8 @@ public class UserController {
             profile.setUserData(user);
         }
 
-        model.addAttribute("userForm", profile);
-        model.addAttribute("selectedTab", "profile-tab");
+        model.addAttribute(attrForm, profile);
+        model.addAttribute(tab, "profile-tab");
 
         return "userprofile";
     }
@@ -113,8 +116,8 @@ public class UserController {
     @GetMapping(value = "/user/account")
     public String getAccountPage(@AuthenticationPrincipal User activeUser, Model model) {
         UserData user = userService.findByUsername(activeUser.getUsername());
-        model.addAttribute("userForm", user);
-        model.addAttribute("selectedTab", "account-tab");
+        model.addAttribute(attrForm, user);
+        model.addAttribute(tab, "account-tab");
 
         return "account";
     }

@@ -86,6 +86,6 @@ public class StationServiceImpl implements StationService {
         } catch (DaoException e) {
             log.error("Find All Stations failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 }

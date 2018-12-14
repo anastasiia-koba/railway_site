@@ -85,7 +85,7 @@ public class TicketServiceImpl implements TicketService {
             }
             //check departure train
             if (finalRoutService.isDepartureTimeIn10Minutes(ticket.getFinalRout(), ticket.getStartStation())) {
-                return "Train's departure in less than 10 minutes";
+                return "Train's departure is in less than 10 minutes";
             }
 
             try {
@@ -138,7 +138,7 @@ public class TicketServiceImpl implements TicketService {
         } catch (DaoException e) {
             log.error("Find Ticket by User {} {} failed: {}: {} ", user.getSurname(), user.getFirstname(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class TicketServiceImpl implements TicketService {
             log.error("Find Tickets by Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
                     finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptySet();
     }
 
     @Override

@@ -21,18 +21,17 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
     @Override
     public Set<Ticket> findByUser(UserData user) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
-                    "inner join fetch t.profile tk WHERE t.userData = :user ");
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t inner join fetch t.profile tk " +
+                    "WHERE t.userData = :user ");
             q.setParameter("user", user);
 
-            Set<Ticket> tickets = new HashSet<>(q.getResultList());
-            return tickets;
+            return new HashSet<>(q.getResultList());
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find Ticket by User Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find Ticket by User Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by User  Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find Ticket by User  Failed: " + e.getMessage());
         }
     }
 
@@ -42,32 +41,30 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
             Query q = entityManager.createQuery("SELECT t FROM Ticket t WHERE t.profile = :user");
             q.setParameter("user", user);
 
-            Set<Ticket> tickets = new HashSet<>(q.getResultList());
-            return tickets;
+            return new HashSet<>(q.getResultList());
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find Ticket by Profile Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find Ticket by Profile Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by Profile  Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find Ticket by Profile  Failed: " + e.getMessage());
         }
     }
 
     @Override
     public Set<Ticket> findByFinalRout(FinalRout finalRout) throws DaoException {
         try {
-            Query q = entityManager.createQuery("SELECT t FROM Ticket t " +
-                    "inner join fetch t.profile user WHERE t.finalRout = :finalRout");
+            Query q = entityManager.createQuery("SELECT t FROM Ticket t inner join fetch t.profile user " +
+                    "WHERE t.finalRout = :finalRout");
             q.setParameter("finalRout", finalRout);
 
-            Set<Ticket> tickets = new HashSet<>(q.getResultList());
-            return tickets;
+            return new HashSet<>(q.getResultList());
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by FinalRout Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by FinalRout Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by FinalRout Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by FinalRout Failed: " + e.getMessage());
         }
     }
 
@@ -109,11 +106,11 @@ public class TicketDaoImpl extends JpaDao<Long, Ticket> implements TicketDao {
                 return true;
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find Ticket by FinalRout and User Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find Ticket by FinalRout and User Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find Ticket by FinalRout and User Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find Ticket by FinalRout and User Failed: " + e.getMessage());
         }
     }
 }

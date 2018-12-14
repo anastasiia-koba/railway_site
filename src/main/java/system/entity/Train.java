@@ -1,5 +1,6 @@
 package system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * Simple JavaBean domain object that represents a Train.
@@ -31,6 +33,10 @@ public class Train extends BaseEntity {
     @Digits(integer=4, fraction = 0, message = "This field must be four-digit number or less.")
     @Column(name = "places_number")
     private Integer placesNumber;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "train", orphanRemoval = true)
+    private Set<FinalRout> finalRouts;
 
     public Train(String trainName) {
         this.trainName = trainName;

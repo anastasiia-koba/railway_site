@@ -29,11 +29,11 @@ public class UserDaoImpl extends JpaDao<Long, UserData> implements UserDao {
                 return (UserData) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by Name Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by Name Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Name Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by Name Failed: " + e.getMessage());
         }
     }
 }

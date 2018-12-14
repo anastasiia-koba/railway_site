@@ -91,7 +91,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
         } catch (DaoException e) {
             log.error("Find All Final Routs failed: {}: {} ", e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
         } catch (DaoException e) {
             log.error("Find Final Rout by Date {} failed: {}: {} ", date, e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             log.error("Find Final Rout by Station {} and Date {} failed: {}: {} ", station.getStationName(), date,
                     e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
             log.error("Find Final Rout by Start Station {} and End Station {} and Date {} failed: {}: {} ", start.getStationName(),
                     end.getStationName(), date, e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptySet();
     }
 
     @Override

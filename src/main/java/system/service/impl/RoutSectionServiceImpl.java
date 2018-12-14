@@ -11,6 +11,7 @@ import system.entity.RoutSection;
 import system.entity.Station;
 import system.service.api.RoutSectionService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -87,7 +88,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             log.error("Find Rout Section by Departure {} failed: {}: {} ", departure.getStationName(), e.getErrorCode(), e.getMessage());
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -98,7 +99,7 @@ public class RoutSectionServiceImpl implements RoutSectionService {
             log.error("Find Rout Section by Destination {} failed: {}: {} ", destination.getStationName(), e.getErrorCode(), e.getMessage());
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -110,6 +111,6 @@ public class RoutSectionServiceImpl implements RoutSectionService {
                     destination.getStationName(), e.getErrorCode(), e.getMessage());
         }
 
-        return null;
+        return Collections.emptyList();
     }
 }

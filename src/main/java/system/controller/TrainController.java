@@ -61,9 +61,7 @@ public class TrainController {
     @RequestMapping(method = RequestMethod.POST, params = "change")
     @ResponseBody
     public Train changeTrain(@RequestParam("trainId") Long trainId) {
-        Train trainForChange = trainService.findById(trainId);
-
-        return trainForChange;
+        return trainService.findById(trainId);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "delete")

@@ -32,7 +32,7 @@ function ontimeSend(index) {
 
     var object = {station: station, date: date, rout: rout};
     $.post(contextPath+"/admin/schedule/sendOnTime", object).done(function (result) {
-        $('#message').empty().text(result);
+        $('#message').empty().text("Send 'On Time' to Tablo for station "+result+" on date "+date);
     }).fail(function () {
         $('#message').empty().text('Error during send "On Time"');
     });
@@ -48,7 +48,7 @@ function delaySend(index) {
 
     var object = {station: station, date: date, rout: rout};
     $.post(contextPath+"/admin/schedule/sendDelayed", object).done(function (result) {
-        $('#message').empty().text(result);
+        $('#message').empty().text("Send 'Delayed' to Tablo for station "+result+" on date "+date);
     }).fail(function () {
         $('#message').empty().text('Error during send "Delayed"');
     });
@@ -64,7 +64,7 @@ function cancelSend(index) {
 
     var object = {station: station, date: date, rout: rout};
     $.post(contextPath+"/admin/schedule/sendCanceled", object).done(function (result) {
-        $('#message').empty().text(result);
+        $('#message').empty().text("Send 'Canceled' to Tablo for station "+result+" on date "+date);
     }).fail(function () {
         $('#message').empty().text('Error during send "Cancel"');
     });

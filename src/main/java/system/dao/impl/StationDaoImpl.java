@@ -30,11 +30,11 @@ public class StationDaoImpl extends JpaDao<Long, Station> implements StationDao 
                 return (Station) results.get(0);
             }
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by StationName Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by StationName Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by StationName Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by StationName Failed: " + e.getMessage());
         }
     }
 

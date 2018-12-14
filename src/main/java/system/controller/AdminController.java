@@ -36,11 +36,13 @@ public class AdminController {
     @Autowired
     private RoutService routService;
 
+    private String tab = "selectedTab";
+
     @GetMapping(value = "/stations")
     public String getStationsPage(Model model) {
         model.addAttribute("stationForm", new Station());
         model.addAttribute("stations", stationService.findAll());
-        model.addAttribute("selectedTab", "station-tab");
+        model.addAttribute(tab, "station-tab");
 
         return "stations";
     }
@@ -52,7 +54,7 @@ public class AdminController {
 
         model.addAttribute("routForm", new Rout());
         model.addAttribute("routs", routService.findAll());
-        model.addAttribute("selectedTab", "rout-tab");
+        model.addAttribute(tab, "rout-tab");
 
         return "routes";
     }
@@ -60,16 +62,13 @@ public class AdminController {
     @GetMapping(value = "/sections")
     public String getSectionsPage(Model model) {
         model.addAttribute("routs", routService.findAll());
-        model.addAttribute("sections", null);
-        model.addAttribute("searchSections", null);
         model.addAttribute("stationsFrom", stationService.findAll());
         model.addAttribute("stationsTo", stationService.findAll());
         model.addAttribute("sectionForm", new RoutSection());
-        model.addAttribute("routForSection", null);
 
-        model.addAttribute("selectedTab", "section-tab");
+        model.addAttribute(tab, "section-tab");
 
-        return "sections";
+        return "routeSections";
     }
 
     @GetMapping(value = "/stations", params = "list")
@@ -81,9 +80,7 @@ public class AdminController {
     @PostMapping(value = "/stations", params = "change")
     @ResponseBody
     public Station changeStation(@RequestParam("stationId") Long stationId) {
-        Station stationForChange = stationService.findById(stationId);
-
-        return stationForChange;
+        return stationService.findById(stationId);
     }
 
     @PostMapping(value = "/stations", params = "delete")
@@ -101,9 +98,9 @@ public class AdminController {
     public String saveStation(@Valid @ModelAttribute("stationForm") Station station,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "Save station " + station.getStationName() + " failed: name must be not empty.";
+            return "Error: Save station " + station.getStationName() + " failed: name must be not empty.";
         } else if (stationService.findByName(station.getStationName()) != null) {
-            return "Save station " + station.getStationName() + " failed: such name already exists.";
+            return "Error: Save station " + station.getStationName() + " failed: such name already exists.";
         }
 
         stationService.save(station);
@@ -120,9 +117,7 @@ public class AdminController {
     @PostMapping(value = "/routs", params = "change")
     @ResponseBody
     public Rout changeRout(@RequestParam("routId") Long routId) {
-        Rout routForChange = routService.findById(routId);
-
-        return routForChange;
+        return routService.findById(routId);
     }
 
     @PostMapping(value = "/routs", params = "delete")
@@ -140,7 +135,7 @@ public class AdminController {
     public String saveRout(@Valid @ModelAttribute("routForm") Rout rout,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "Fields are required";
+            return "Error: Fields are required";
         }
 
         rout.setStartStation(stationService.findByName(rout.getStartStation().getStationName()));
@@ -190,16 +185,13 @@ public class AdminController {
         Rout rout = routService.findById(routId);
         Rout back = routService.findById(backId);
 
-        String result = routService.formBackRout(rout, back);
-
-        return result;
+        return routService.formBackRout(rout, back);
     }
 
     @PostMapping(value = "/sections", params = "change")
     @ResponseBody
     public RoutSection changeRoutSection(@RequestParam("sectionId") Long sectionId) {
-        RoutSection sectionForChange = routSectionService.findById(sectionId);
-        return sectionForChange;
+        return routSectionService.findById(sectionId);
     }
 
     @PostMapping(value = "/sections", params = "delete")
@@ -222,7 +214,7 @@ public class AdminController {
                                  @RequestParam("routId") Long routId,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "Fields are required";
+            return "Error: Fields are required";
         }
         Rout rout = routService.findById(routId);
 
@@ -233,16 +225,16 @@ public class AdminController {
 
         if (routSection.getId() == null) {
             if (routService.getRoutSectionByRoutAndDepartureStation(rout, departure) != null) {
-                return "Such departure already exists in rout.";
+                return "Error: Such departure already exists in route.";
             }
             if (routService.getRoutSectionByRoutAndDestinationStation(rout, destination) != null) {
-                return "Such destination already exists in rout.";
+                return "Error: Such destination already exists in route.";
             }
         }
 
         routSectionService.save(routSection);
 
-        if (!rout.getRoutSections().stream().map(e->e.getId()).collect(Collectors.toList()).contains(routSection.getId())) {
+        if (!rout.getRoutSections().stream().map(RoutSection::getId).collect(Collectors.toList()).contains(routSection.getId())) {
             rout.getRoutSections().add(routSection);
             routService.save(rout);
         }
@@ -257,9 +249,7 @@ public class AdminController {
         Station departure = stationService.findByName(sectionFrom.getStationName());
         Station destination = stationService.findByName(sectionTo.getStationName());
 
-        List<RoutSection> searchSections = routSectionService.findByDepartureAndDestination(departure, destination);
-
-        return searchSections;
+        return routSectionService.findByDepartureAndDestination(departure, destination);
     }
 
     @PostMapping(value = "/sections/all", params = "add")
@@ -271,10 +261,10 @@ public class AdminController {
         Rout rout = routService.findById(routId);
 
         if (routService.getRoutSectionByRoutAndDepartureStation(rout, sectionForAdd.getDeparture()) != null) {
-            return "Such departure already exists in rout.";
+            return "Error: Such departure already exists in route.";
         }
         if (routService.getRoutSectionByRoutAndDestinationStation(rout, sectionForAdd.getDestination()) != null) {
-            return "Such destination already exists in rout.";
+            return "Error: Such destination already exists in route.";
         }
 
         rout.getRoutSections().add(sectionForAdd);

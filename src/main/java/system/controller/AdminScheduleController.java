@@ -103,7 +103,7 @@ public class AdminScheduleController {
         JsonObject json = formMessage(station.getId(), routId, date, STATUS_ON_TIME);
 
         scheduleSender.sendMessage(json.toString());
-        return "Send 'On Time' to Tablo for station "+station.getStationName()+" on date "+date;
+        return station.getStationName();
     }
 
     @PostMapping(value = "/schedule/sendDelayed")
@@ -117,7 +117,7 @@ public class AdminScheduleController {
         JsonObject json = formMessage(station.getId(), routId, date, STATUS_DELAYED);
 
         scheduleSender.sendMessage(json.toString());
-        return "Send 'Delayed' to Tablo for station "+station.getStationName()+" on date "+date;
+        return station.getStationName();
     }
 
     @PostMapping(value = "/schedule/sendCanceled")
@@ -131,6 +131,6 @@ public class AdminScheduleController {
         JsonObject json = formMessage(station.getId(), routId, date, STATUS_CANCELED);
 
         scheduleSender.sendMessage(json.toString());
-        return "Send 'Canceled' to Tablo for station "+station.getStationName()+" on date "+date;
+        return station.getStationName();
     }
 }

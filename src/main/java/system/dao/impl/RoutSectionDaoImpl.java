@@ -20,14 +20,13 @@ public class RoutSectionDaoImpl extends JpaDao<Long, RoutSection> implements Rou
             Query q = entityManager.createQuery("SELECT r FROM RoutSection r WHERE r.departure = :station");
             q.setParameter("station", departure);
 
-            List<RoutSection> routSection = (List<RoutSection>) q.getResultList();
-            return routSection;
+            return (List<RoutSection>) q.getResultList();
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by Departure Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by Departure Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by Departure Failed: " + e.getMessage());
         }
     }
 
@@ -37,14 +36,13 @@ public class RoutSectionDaoImpl extends JpaDao<Long, RoutSection> implements Rou
             Query q = entityManager.createQuery("SELECT r FROM RoutSection r WHERE r.destination = :station");
             q.setParameter("station", destination);
 
-            List<RoutSection> routSection = (List<RoutSection>) q.getResultList();
-            return routSection;
+            return (List<RoutSection>) q.getResultList();
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by Destination Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by Destination Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by Destination Failed: " + e.getMessage());
         }
     }
 
@@ -56,14 +54,13 @@ public class RoutSectionDaoImpl extends JpaDao<Long, RoutSection> implements Rou
             q.setParameter("station1", departure);
             q.setParameter("station2", destination);
 
-            List<RoutSection> routSection = (List<RoutSection>) q.getResultList();
-            return routSection;
+            return (List<RoutSection>) q.getResultList();
         } catch (IllegalStateException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure and Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by Departure and Destination Failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure and Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "IllegalArgumentException: Find by Departure and Destination Failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new DaoException(DaoException.SQL_ERROR, "Find by Departure and Destination Failed: " + e.getMessage());
+            throw new DaoException(DaoException.SQL_ERROR, "Exception: Find by Departure and Destination Failed: " + e.getMessage());
         }
     }
 }

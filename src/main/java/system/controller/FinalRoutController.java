@@ -53,16 +53,16 @@ public class FinalRoutController {
 
     @GetMapping(params = "list")
     @ResponseBody
-    public String getListFinalRoutsByPage(@RequestParam("page_id") int page_id) {
+    public String getListFinalRoutsByPage(@RequestParam("page_id") int pageId) {
         JsonArray jsonValues = new JsonArray();
 
         int total = 10;
 
-        if (page_id != 1) {
-            page_id= (page_id-1)*total+1;
+        if (pageId != 1) {
+            pageId= (pageId-1)*total+1;
         }
 
-        List<FinalRout> finalRouts = finalRoutService.findAllByPage(page_id);
+        List<FinalRout> finalRouts = finalRoutService.findAllByPage(pageId);
         Map<Long, LocalTime> mapDeparture = finalRoutService.getMapDeparture(finalRouts);
         Map<Long, LocalTime> mapArrival = finalRoutService.getMapArrival(finalRouts);
 
@@ -88,8 +88,7 @@ public class FinalRoutController {
     @PostMapping(params = "change")
     @ResponseBody
     public FinalRout changeFinalRout(@RequestParam("finalRoutId") Long finalId) {
-        FinalRout currentFinalRout = finalRoutService.findById(finalId);
-        return currentFinalRout;
+        return finalRoutService.findById(finalId);
     }
 
     @PostMapping(params = "delete")

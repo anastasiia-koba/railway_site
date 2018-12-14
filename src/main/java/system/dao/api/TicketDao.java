@@ -6,7 +6,6 @@ import system.entity.Ticket;
 import system.entity.UserData;
 import system.entity.UserProfile;
 
-import java.util.List;
 import java.util.Set;
 
 public interface TicketDao extends Dao<Long, Ticket> {
