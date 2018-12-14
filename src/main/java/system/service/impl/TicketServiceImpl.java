@@ -158,7 +158,7 @@ public class TicketServiceImpl implements TicketService {
             List<RoutSection> routSections = routDao.getRoutSectionsInRoutBetweenDepartureAndDestination(finalRout.getRout(),
                     start, end);
 
-            if (routSections == null)
+            if (routSections.isEmpty())
                 return null;
 
             Set<Ticket> tickets = ticketDao.findByFinalRout(finalRout);
