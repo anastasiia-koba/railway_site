@@ -138,13 +138,13 @@ public class RoutDaoImpl extends JpaDao<Long, Rout> implements RoutDao {
             q.setParameter("rout", rout);
             q.setParameter("destination", destinationStation);
 
-            List results = q.getResultList();
+            List res = q.getResultList();
 
-            if (results.isEmpty()) {
+            if (res.isEmpty()) {
                 log.info("RoutSection in rout {} with destination {} is not founded", rout.getRoutName(), destinationStation);
                 return null; // handle no-results case
             } else {
-                return (RoutSection) results.get(0);
+                return (RoutSection) res.get(0);
             }
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException.SQL_ERROR, "IllegalStateException: Find by Route And Destination Failed: " + e.getMessage());

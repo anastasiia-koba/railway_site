@@ -221,7 +221,7 @@ public class RoutServiceImpl implements RoutService {
         List<RoutSection> prep = routSections;
         Station startStation = start;
         int idx;
-        while ((idx = prep.stream().map(e -> e.getDeparture()).collect(Collectors.toList()).indexOf(startStation)) != -1) {
+        while ((idx = prep.stream().map(RoutSection::getDeparture).collect(Collectors.toList()).indexOf(startStation)) != -1) {
             result.add(prep.get(idx));
             startStation = prep.get(idx).getDestination();
             prep.remove(idx);

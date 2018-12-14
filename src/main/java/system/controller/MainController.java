@@ -56,8 +56,6 @@ public class MainController {
                                   @RequestParam("to") String to,
                                   @RequestParam("date")
                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
-        //TODO check input
-
         Station stationFrom = stationService.findByName(from);
         Station stationTo = stationService.findByName(to);
 

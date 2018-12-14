@@ -40,26 +40,26 @@ public class Station extends BaseEntity {
 
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "departure",
+    @OneToMany(mappedBy = "departure", cascade = CascadeType.ALL,
                orphanRemoval = true)
     private Set<RoutSection> sectionsFrom;
 
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "destination",
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL,
                orphanRemoval = true)
     private Set<RoutSection> sectionsTo;
 
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "startStation",
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "startStation", cascade = CascadeType.ALL,
+               orphanRemoval = true)
     private Set<Rout> routsFrom;
 
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "endStation",
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "endStation", cascade = CascadeType.ALL,
+               orphanRemoval = true)
     private Set<Rout> routsTo;
 
     public Station(String stationName) {

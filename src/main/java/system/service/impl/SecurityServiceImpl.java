@@ -1,8 +1,6 @@
 package system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +41,8 @@ public class SecurityServiceImpl implements SecurityService{
 
         try {
             authenticationManager.authenticate(authenticationToken);
-        } catch (Exception e){
+        } catch (Exception e) {
+            log.error("Auto registration has errors");
         }
 
         if (authenticationToken.isAuthenticated()){

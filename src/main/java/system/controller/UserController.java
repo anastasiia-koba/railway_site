@@ -129,7 +129,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "Errors in fields";
         }
-//TODO Error during managed flush [Validation failed
+
         userService.saveUser(userData);
 
         return "Changes were saved";

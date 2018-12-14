@@ -61,8 +61,7 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
     @Override
     public E findById(K id) throws DaoException {
         try {
-            E obj = entityManager.find(entityClass, id);
-            return obj;
+            return entityManager.find(entityClass, id);
         } catch (IllegalStateException e) {
             throw new DaoException(DaoException.SQL_ERROR, e.getMessage());
         }

@@ -106,7 +106,6 @@ public class FinalRoutController {
     public String saveFinalRout(@Valid @ModelAttribute("finalRoutForm") FinalRout finalRout,
                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            //TODO validation
             return "Fields are required";
         }
 

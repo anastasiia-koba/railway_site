@@ -1,6 +1,7 @@
 package system.pdf;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.web.servlet.view.AbstractView;
@@ -21,7 +22,7 @@ public abstract class AbstractITextPdfView extends AbstractView {
                                              Document document,
                                              PdfWriter writer,
                                              HttpServletRequest request,
-                                             HttpServletResponse response) throws Exception;
+                                             HttpServletResponse response) throws DocumentException;
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model,

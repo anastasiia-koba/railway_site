@@ -10,6 +10,7 @@ import system.dao.api.TrainDao;
 import system.entity.Train;
 import system.service.api.TrainService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,6 +85,6 @@ public class TrainServiceImpl implements TrainService {
         } catch (DaoException e) {
             log.error("Find All Trains failed : {}: {}", e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 }

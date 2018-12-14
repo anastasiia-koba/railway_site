@@ -49,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> formTickets(List<UserProfile> userProfiles, Station start, Station end, FinalRout finalRout, Integer price) {
         if (userProfiles.isEmpty())
-            return null;
+            return Collections.emptyList();
 
         List<Ticket> tickets = new ArrayList<>();
         UserData userData = userProfiles.get(0).getUserData();

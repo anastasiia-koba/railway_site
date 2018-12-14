@@ -102,7 +102,7 @@ public class FinalRoutServiceImpl implements FinalRoutService {
         } catch (DaoException e) {
             log.error("Find All Final Rout by Page {} failed: {}: {} ", pageid, e.getErrorCode(), e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -176,17 +176,14 @@ public class FinalRoutServiceImpl implements FinalRoutService {
 
     @Override
     public LocalTime getTimeDepartureByStation(FinalRout finalRout, Station station) {
-        LocalTime timeDeparture = routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
+        return routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station) != null ?
                 routService.getRoutSectionByRoutAndDepartureStation(finalRout.getRout(), station).getDepartureTime() : null;
-
-        return timeDeparture;
     }
 
     @Override
     public LocalTime getTimeArrivalByStation(FinalRout finalRout, Station station) {
-        LocalTime timeArrival = routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
+        return routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station) != null ?
                 routService.getRoutSectionByRoutAndDestinationStation(finalRout.getRout(), station).getArrivalTime(): null ;
-        return timeArrival;
     }
 
     @Override
