@@ -39,7 +39,7 @@
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <label for="password" class="col-sm-3 control-label">Password</label>
                     <div class="col-sm-9">
-                        <form:input type="password" path="password" class="form-control"
+                        <form:input type="password" path="password" class="form-control" id="password"
                                     placeholder="Password"></form:input>
                         <form:errors path="password"></form:errors>
                     </div>

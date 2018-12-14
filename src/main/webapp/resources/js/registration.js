@@ -29,7 +29,7 @@ $().ready(function () {
             confirmPassword: {
                 required: true,
                 minlength: 8,
-                equalTo: "password"
+                equalTo: "#password"
             }
         },
         messages: {
