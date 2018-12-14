@@ -72,7 +72,7 @@ function searchRout() {
             };
         })
     }).fail(function () {
-        $('#buildMessage').empty().text('Search rout failed');
+        $('#buildMessage').empty().text('Search route failed');
     });
 }
 

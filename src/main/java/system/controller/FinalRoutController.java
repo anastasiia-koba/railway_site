@@ -98,7 +98,7 @@ public class FinalRoutController {
 
         finalRoutService.delete(currentFinalRout);
 
-        return "Final rout " + currentFinalRout.getRout().getRoutName() + " " + currentFinalRout.getDate() + " was deleted";
+        return "Final route " + currentFinalRout.getRout().getRoutName() + " " + currentFinalRout.getDate() + " was deleted";
     }
 
     @PostMapping(params = "save")
@@ -114,6 +114,6 @@ public class FinalRoutController {
 
         finalRoutService.save(finalRout);
 
-        return "Final rout " + finalRout.getRout().getRoutName() + " " + finalRout.getDate() + " was saved";
+        return "Final route " + finalRout.getRout().getRoutName() + " " + finalRout.getDate() + " was saved";
     }
 }
