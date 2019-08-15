@@ -60,7 +60,7 @@ public class RoutSectionServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        routSectionService.delete(routSection);
+        routSectionService.delete(routSection.getId());
 
         verify(routSectionDao, times(1)).remove(routSection);
     }

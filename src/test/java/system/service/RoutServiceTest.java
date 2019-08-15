@@ -104,7 +104,7 @@ public class RoutServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        routService.delete(rout);
+        routService.delete(rout.getId());
 
         verify(routDao, times(1)).remove(rout);
     }

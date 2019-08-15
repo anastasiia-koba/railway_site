@@ -47,7 +47,7 @@ public class StationServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        stationService.delete(station);
+        stationService.delete(station.getId());
 
         verify(stationDao, times(1)).remove(station);
     }

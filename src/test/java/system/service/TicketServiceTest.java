@@ -128,7 +128,7 @@ public class TicketServiceTest {
 
     @Test
     public void delete() throws DaoException {
-        ticketService.delete(ticket);
+        ticketService.delete(ticket.getId());
 
         verify(ticketDao, times(1)).remove(ticket);
     }

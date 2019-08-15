@@ -47,7 +47,7 @@ public class TrainServiceTest {
 
     @Test
     public void testDelete() throws DaoException {
-        trainService.delete(train);
+        trainService.delete(train.getId());
 
         verify(trainDao, times(1)).remove(train);
     }

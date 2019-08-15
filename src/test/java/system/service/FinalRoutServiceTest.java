@@ -95,7 +95,7 @@ public class FinalRoutServiceTest {
 
     @Test
     public void delete() throws DaoException {
-        finalRoutService.delete(finalRout);
+        finalRoutService.delete(finalRout.getId());
 
         verify(finalRoutDao, times(1)).remove(finalRout);
     }
