@@ -61,14 +61,16 @@ public class RoutServiceImpl implements RoutService {
 
     @Transactional
     @Override
-    public void delete(Rout rout) {
+    public String delete(Long routId) {
+        Optional<Rout> rout = Optional.empty();
         try {
+            rout = Optional.ofNullable(routId);
             routDao.remove(rout);
-            log.info("Deleted Rout from {} to {} ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName());
+            log.info("Deleted Rout from {} to {} ", routId.getStartStation().getStationName(),
+                    routId.getEndStation().getStationName());
         } catch (DaoException e) {
-            log.error("Delete Rout from {} to {} failed: {}: {} ", rout.getStartStation().getStationName(),
-                    rout.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Rout from {} to {} failed: {}: {} ", routId.getStartStation().getStationName(),
+                    routId.getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
     }
 

@@ -30,6 +30,7 @@ public class LoginSeleniumTest {
         browser.findElement(By.id("password")).sendKeys("useruser");
 
         browser.findElement(By.id("loginButton")).click();
+        new WebDriverWait(browser, 50).until(ExpectedConditions.visibilityOfElementLocated(By.id("profile")));
         browser.findElement(By.id("profile")).click();
 
         assertEquals("Ivan", browser.findElement(By.id("firstname")).getAttribute("value"));

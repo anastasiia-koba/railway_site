@@ -12,16 +12,16 @@
     <nav>
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" class="${selectedTab == 'station-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/stations">Stations</a>
+                <a href="${contextPath}/admin/stations" id="aStation">Stations</a>
             </li>
             <li role="presentation" class="${selectedTab == 'rout-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/routs">Routes</a>
+                <a href="${contextPath}/admin/routs" id="aRoute">Routes</a>
             </li>
             <li role="presentation" class="${selectedTab == 'section-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/sections">Sections in routs</a>
+                <a href="${contextPath}/admin/sections" id="aSection">Sections in routes</a>
             </li>
             <li role="presentation" class="${selectedTab == 'train-tab' ? 'active' : '' }">
-                <a href="${contextPath}/admin/trains">Trains</a>
+                <a href="${contextPath}/admin/trains" id="Trains">Trains</a>
             </li>
             <li role="presentation" class="${selectedTab == 'finalrout-tab' ? 'active' : '' }">
                 <a href="${contextPath}/admin/finalrouts">Train's route</a>

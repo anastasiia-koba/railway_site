@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface StationService {
     void save(Station station);
-    void delete(Station station);
+    String delete(Long stationId);
     Station findByName(String stationName);
     Station findById(Long id);
     List<Station> findAll();

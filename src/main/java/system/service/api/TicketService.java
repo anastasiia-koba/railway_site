@@ -16,7 +16,7 @@ public interface TicketService {
     void create(Ticket ticket);
     List<Ticket> formTickets(List<UserProfile> userProfiles, Station start, Station end, FinalRout finalRout, Integer price);
     String save(List<Ticket> tickets);
-    void delete(Ticket ticket);
+    void delete(Long ticketId);
     Ticket findById(Long id);
     List<Ticket> findByUser(UserProfile user);
     Set<Ticket> findByFinalRout(FinalRout finalRout);

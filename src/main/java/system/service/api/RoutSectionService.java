@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface RoutSectionService {
     void save(RoutSection routSection);
-    void delete(RoutSection routSection);
+    void delete(Long routSectionId);
     RoutSection findById(Long id);
     List<RoutSection> findByDeparture(Station departure);
     List<RoutSection> findByDestination(Station destination);

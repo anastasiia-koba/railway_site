@@ -103,13 +103,13 @@ public class TicketServiceImpl implements TicketService {
 
     @Transactional
     @Override
-    public void delete(Ticket ticket) {
+    public void delete(Long ticketId) {
         try {
-            ticketDao.remove(ticket);
-            log.info("Delete Ticket for User {} {}", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());
+            ticketDao.remove(ticketId);
+            log.info("Delete Ticket for User {} {}", ticketId.getProfile().getSurname(), ticketId.getProfile().getFirstname());
         } catch (DaoException e) {
-            log.error("Delete Ticket for User {} {} failed: {}: {} ", ticket.getProfile().getSurname(),
-                    ticket.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Ticket for User {} {} failed: {}: {} ", ticketId.getProfile().getSurname(),
+                    ticketId.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
         }
     }
 

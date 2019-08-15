@@ -12,6 +12,7 @@ import system.service.api.StationService;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementation of {@link StationService} interface.
@@ -48,13 +49,17 @@ public class StationServiceImpl implements StationService {
 
     @Transactional
     @Override
-    public void delete(Station station) {
+    public String delete(Long stationId) {
+        Optional<Station> station = Optional.empty();
         try {
-            stationDao.remove(station);
-            log.info("Deleted Station {} ", station.getStationName());
+            station = Optional.ofNullable(stationDao.findById(stationId));
+            stationDao.remove(station.get());
+
+            log.info("Deleted Station {} ", station.get().getStationName());
         } catch (DaoException e) {
-            log.error("Delete Station {} failed: {}: {} ", station.getStationName(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Station {} failed: {}: {} ", station.get().getStationName(), e.getErrorCode(), e.getMessage());
         }
+        return "Station '" + station.get().getStationName() + "' was deleted.";
     }
 
     @Override

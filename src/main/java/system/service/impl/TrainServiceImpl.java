@@ -49,12 +49,12 @@ public class TrainServiceImpl implements TrainService {
 
     @Transactional
     @Override
-    public void delete(Train train) {
+    public void delete(Long trainId) {
         try {
-            trainDao.remove(train);
-            log.info("Deleted Train {} ", train.getTrainName());
+            trainDao.remove(trainId);
+            log.info("Deleted Train {} ", trainId.getTrainName());
         } catch (DaoException e) {
-            log.error("Delete Train {} failed: {}: {} ", train.getTrainName(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Train {} failed: {}: {} ", trainId.getTrainName(), e.getErrorCode(), e.getMessage());
         }
     }
 

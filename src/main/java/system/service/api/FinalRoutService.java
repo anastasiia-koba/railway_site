@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public interface FinalRoutService {
     void save(FinalRout finalRout);
-    void delete(FinalRout finalRout);
+    void delete(Long finalRoutId);
     FinalRout findById(Long id);
     Set<FinalRout> findAll();
     List<FinalRout> findAllByPage(int pageid);

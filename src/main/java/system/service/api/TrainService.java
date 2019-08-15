@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface TrainService {
     void save(Train train);
-    void delete(Train train);
+    void delete(Long trainId);
     Train findById(Long id);
     Train findByName(String trainName);
     List<Train> findAll();

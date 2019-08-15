@@ -63,14 +63,16 @@ public class FinalRoutServiceImpl implements FinalRoutService {
 
     @Transactional
     @Override
-    public void delete(FinalRout finalRout) {
+    public void delete(Long finalRoutId) {
+        Optional<FinalRout> finalRout = Optional.empty();
         try {
-            finalRoutDao.remove(finalRout);
-            log.info("Deleted Final Rout from {} to {} ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName());
+            finalRout = Optional.ofNullable(finalRoutDao.findById(finalRoutId));
+            finalRoutDao.remove(finalRout.get());
+            log.info("Deleted Final Rout from {} to {} ", finalRout.get().getRout().getStartStation().getStationName(),
+                    finalRout.get().getRout().getEndStation().getStationName());
         } catch (DaoException e) {
-            log.error("Delete Final Rout from {} to {} failed: {}: {} ", finalRout.getRout().getStartStation().getStationName(),
-                    finalRout.getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Final Rout from {} to {} failed: {}: {} ", finalRout.get().getRout().getStartStation().getStationName(),
+                    finalRout.get().getRout().getEndStation().getStationName(), e.getErrorCode(), e.getMessage());
         }
     }
 

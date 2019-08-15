@@ -86,11 +86,7 @@ public class AdminController {
     @PostMapping(value = "/stations", params = "delete")
     @ResponseBody
     public String deleteStation(@RequestParam("stationId") Long stationId) {
-        Station stationForDelete = stationService.findById(stationId);
-
-        stationService.delete(stationForDelete);
-
-        return stationForDelete.getStationName();
+        return stationService.delete(stationId);
     }
 
     @PostMapping(value = "/stations", params = "save")
@@ -123,11 +119,7 @@ public class AdminController {
     @PostMapping(value = "/routs", params = "delete")
     @ResponseBody
     public String deleteRout(@RequestParam("routId") Long routId) {
-        Rout routForChange = routService.findById(routId);
-
-        routService.delete(routForChange);
-
-        return routForChange.getRoutName();
+        return routService.delete(routId);
     }
 
     @PostMapping(value = "/routs", params = "save")

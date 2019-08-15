@@ -58,14 +58,14 @@ public class RoutSectionServiceImpl implements RoutSectionService {
 
     @Transactional
     @Override
-    public void delete(RoutSection routSection) {
+    public void delete(Long routSectionId) {
         try {
-            routSectionDao.remove(routSection);
-            log.info("Deleted Rout Section from {} to {} ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName());
+            routSectionDao.remove(routSectionId);
+            log.info("Deleted Rout Section from {} to {} ", routSectionId.getDeparture().getStationName(),
+                    routSectionId.getDestination().getStationName());
         } catch (DaoException e) {
-            log.error("Delete Rout Section from {} to {} failed: {}: {} ", routSection.getDeparture().getStationName(),
-                    routSection.getDestination().getStationName(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Rout Section from {} to {} failed: {}: {} ", routSectionId.getDeparture().getStationName(),
+                    routSectionId.getDestination().getStationName(), e.getErrorCode(), e.getMessage());
         }
     }
 
