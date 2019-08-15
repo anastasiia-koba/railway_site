@@ -94,11 +94,9 @@ public class FinalRoutController {
     @PostMapping(params = "delete")
     @ResponseBody
     public String deleteFinalRout(@RequestParam("finalRoutId") Long finalId) {
-        FinalRout currentFinalRout = finalRoutService.findById(finalId);
+        finalRoutService.delete(finalId);
 
-        finalRoutService.delete(currentFinalRout);
-
-        return "Final route " + currentFinalRout.getRout().getRoutName() + " " + currentFinalRout.getDate() + " was deleted";
+        return "Final route was deleted";
     }
 
     @PostMapping(params = "save")

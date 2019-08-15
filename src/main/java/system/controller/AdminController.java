@@ -118,8 +118,8 @@ public class AdminController {
 
     @PostMapping(value = "/routs", params = "delete")
     @ResponseBody
-    public String deleteRout(@RequestParam("routId") Long routId) {
-        return routService.delete(routId);
+    public void deleteRout(@RequestParam("routId") Long routId) {
+        routService.delete(routId);
     }
 
     @PostMapping(value = "/routs", params = "save")
@@ -269,11 +269,8 @@ public class AdminController {
     @PostMapping(value = "/sections/all", params = "delete")
     @ResponseBody
     public String deleteRoutSection(@RequestParam("sectionId") Long routSectionId) {
-        RoutSection sectionForDelete = routSectionService.findById(routSectionId);
+        routSectionService.delete(routSectionId);
 
-        routSectionService.delete(sectionForDelete);
-
-        return sectionForDelete.getDeparture().getStationName()+" "+
-                sectionForDelete.getDestination().getStationName();
+        return "Success";
     }
 }

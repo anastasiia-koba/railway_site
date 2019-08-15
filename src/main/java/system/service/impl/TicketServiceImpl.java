@@ -105,11 +105,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void delete(Long ticketId) {
         try {
-            ticketDao.remove(ticketId);
-            log.info("Delete Ticket for User {} {}", ticketId.getProfile().getSurname(), ticketId.getProfile().getFirstname());
+            Ticket ticket = ticketDao.findById(ticketId);
+            ticketDao.remove(ticket);
+            log.info("Delete Ticket for User {} {}", ticket.getProfile().getSurname(), ticket.getProfile().getFirstname());
         } catch (DaoException e) {
-            log.error("Delete Ticket for User {} {} failed: {}: {} ", ticketId.getProfile().getSurname(),
-                    ticketId.getProfile().getFirstname(), e.getErrorCode(), e.getMessage());
+            log.error("Delete Ticket for UserId = {} failed: {}: {} ", ticketId, e.getErrorCode(), e.getMessage());
         }
     }
 

@@ -67,11 +67,9 @@ public class TrainController {
     @RequestMapping(method = RequestMethod.POST, params = "delete")
     @ResponseBody
     public String deleteTrain(@RequestParam("trainId") Long trainId) {
-        Train trainForDelete = trainService.findById(trainId);
+        trainService.delete(trainId);
 
-        trainService.delete(trainForDelete);
-
-        return "Train " + trainForDelete.getTrainName() + " was deleted";
+        return "Train was deleted";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "save")

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface RoutService {
     void save(Rout rout);
-    String delete(Long routId);
+    void delete(Long routId);
     Rout findById(Long id);
     List<Rout> findAll();
     List<Rout> findAllValid();
